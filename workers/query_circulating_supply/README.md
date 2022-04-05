@@ -15,7 +15,3 @@ BigDipper's GraphQL API is used to pull `total supply` and account balances.
     "cheqd1vxfyppcnu6lz72mdc706mlv7kx8434jaknhgt6",
     "cheqd17wrwqxsfwy4rqlltjhj6jxtz68tvxm0ykge5dr"]
     ```
-
-## Assumptions
-
-* Delayed versing accounts that wasn't unlocked are not counted because BigDipper returns `0` total balance for them.
