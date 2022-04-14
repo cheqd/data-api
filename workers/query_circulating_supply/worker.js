@@ -103,22 +103,17 @@ async function get_circulating_supply(non_circulating_addresses) {
   let gql_client = new GraphQLClient(BIG_DIPPER_GRAPHQL_URL);
   let bd_api = new BigDipperApi(gql_client);
 
-  console.log("Loading non circulating accounts...");
   let non_circulating_accounts = await bd_api.get_accounts(non_circulating_addresses);
-  console.log(`Loaded ${non_circulating_accounts.length} entities`);
 
+  // Calculate total balance of watchlist accounts
   let non_circulating_supply_ncheq = non_circulating_accounts.map(a => total_balance_ncheq(a)).reduce((a, b) => a + b, 0);
-  console.log(`Non circulating supply: ${non_circulating_supply_ncheq}ncheq`)
-
-
-  console.log("Loading total supply...")
+  
+  // Get total supply
   let total_supply = await bd_api.get_total_supply();
   let total_supply_ncheq = total_supply.find(c => c.denom === "ncheq").amount;
-  console.log(`Total supply: ${total_supply_ncheq}ncheq`)
 
+  // Calculate circulating supply
   let circulating_supply_ncheq = total_supply_ncheq - non_circulating_supply_ncheq
-  console.log(`Circulating supply: ${circulating_supply_ncheq}`)
-  console.log(`${circulating_supply_ncheq / total_supply_ncheq} of tokens is circulating`)
 
   return circulating_supply_ncheq;
 }
@@ -128,10 +123,7 @@ addEventListener("fetch", (event) => {
 });
 
 async function handleRequest(request) {
-  console.log("Loading deny list...");
   let non_circulating_addresses = JSON.parse(DENY_LIST);
-  console.log(`Loadid ${non_circulating_addresses.length} entities`);
-
   let circulating_supply = await get_circulating_supply(non_circulating_addresses);
 
   return new Response(circulating_supply);
