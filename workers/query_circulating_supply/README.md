@@ -8,7 +8,7 @@ BigDipper's GraphQL API is used to pull `total supply` and account balances.
 
 ## Environment variables
 
-* `watchlist` - a list of addresses. Balances of that addresses will be subtracted from total supply. Format:
+* `DENY_LIST` - a list of addresses. Balances of that addresses will be subtracted from total supply. Format:
 
 ```json
 ["cheqd13wvtjk3v5g4q7pema74nv9lrarr8e6vlx93zat",
