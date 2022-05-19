@@ -19,8 +19,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '14'
-          cache: 'yarn'
-          cache-dependency-path: '**/package-lock.json'
 
       - name: Publish to Cloudflare
         uses: cloudflare/wrangler-action@1.3.0
