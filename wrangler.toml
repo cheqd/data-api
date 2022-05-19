@@ -1,3 +1,5 @@
 name = "data-api"
 main = "src/index.ts"
 compatibility_date = "2022-03-16"
+type = "typescript"
+workers_dev = true
