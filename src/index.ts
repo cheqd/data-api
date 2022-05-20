@@ -1,15 +1,28 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `wrangler dev src/index.ts` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `wrangler publish src/index.ts --name my-worker` to publish your worker
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
+import { Router, Request, IHTTPMethods } from 'itty-router'
+import { handler as totalSupplyHandler } from "./handlers/totalSupply";
+import { handler as totalBalanceHandler } from "./handlers/totalBalance";
+import { handler as circulatingSupplyHandler } from "./handlers/circulatingSupply";
+import { handler as liquidBalanceHandler } from "./handlers/liquidBalance";
+import { handler as vestingBalanceHandler } from "./handlers/vestingBalance";
 
-export default {
-  async fetch(request: Request): Promise<Response> {
-    return new Response("Hello World!");
-  },
-};
+addEventListener('fetch', (event: FetchEvent) => {
+    const router = Router<Request, IHTTPMethods>()
+    registerRoutes(router);
+
+    event.respondWith(router.handle(event.request).catch(handleError))
+})
+
+function registerRoutes(router: Router) {
+    router.get('/supply/total', totalSupplyHandler);
+    router.get('/supply/circulating', circulatingSupplyHandler);
+    router.get('/balances/total/:address', totalBalanceHandler);
+    router.get('/balances/liquid/:address', liquidBalanceHandler);
+    router.get('/balances/vesting/:address', vestingBalanceHandler);
+
+    // 404 for all other requests
+    router.all('*', () => new Response('Not Found.', {status: 404}))
+}
+
+function handleError(error: Error): Response {
+    return new Response(error.message || 'Server Error', {status: 500})
+}
