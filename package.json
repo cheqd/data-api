@@ -1,6 +1,6 @@
 {
-  "name": "my-worker",
-  "version": "0.0.0",
+  "name": "data-api",
+  "version": "0.1.0",
   "devDependencies": {
     "@cloudflare/workers-types": "^3.10.0",
     "typescript": "^4.6.4",
