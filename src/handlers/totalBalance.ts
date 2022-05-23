@@ -1,8 +1,10 @@
 import { Request } from "itty-router";
-import { ANEKA_API_URL } from "../helpers/constants";
-import { AnekaApi } from "../api/anekaApi";
+import { BIG_DIPPER_GRAPHQL_URL } from "../helpers/constants";
 import { validate_cheqd_address} from "../helpers/validate";
 import { ncheq_to_cheq_fixed } from "../helpers/currency";
+import { BigDipperApi } from "../api/bigDipperApi";
+import { GraphQLClient } from "../helpers/graphql";
+import { total_balance_ncheq } from "../helpers/node";
 
 export async function handler(request: Request): Promise<Response> {
     const address = request.params?.['address'];
@@ -11,8 +13,11 @@ export async function handler(request: Request): Promise<Response> {
         throw new Error("No address specified or wrong address format.");
     }
 
-    let anekaApi = new AnekaApi(ANEKA_API_URL)
-    let totalBalance = await anekaApi.fetch_total_account_balance(address)
+    let gql_client = new GraphQLClient(BIG_DIPPER_GRAPHQL_URL);
+    let bd_api = new BigDipperApi(gql_client);
 
-    return new Response(ncheq_to_cheq_fixed(totalBalance))
+    let account = await bd_api.get_acocunt(address);
+    let balance =  total_balance_ncheq(account);
+
+    return new Response(ncheq_to_cheq_fixed(balance))
 }

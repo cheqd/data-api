@@ -1,5 +1,6 @@
 import { GraphQLClient } from "../helpers/graphql";
-import { Account, Coin } from "../types/bigDipper";
+import { Account } from "../types/bigDipper";
+import { Coin } from "../types/node";
 
 export class BigDipperApi {
     constructor(public readonly graphql_client: GraphQLClient) {
@@ -36,6 +37,11 @@ export class BigDipperApi {
 
         let resp = await this.graphql_client.query<{ account: Account[] }>(query, params);
         return resp.account;
+    }
+
+    async get_acocunt(address: string): Promise<Account> {
+        let accounts =  await this.get_accounts([address]);
+        return accounts[0];
     }
 
     async get_total_supply(): Promise<Coin[]> {

@@ -1,4 +1,4 @@
-import { NODE_RPC_API_URL, TOKEN_DECIMALS } from "../helpers/constants";
+import { NODE_RPC_API_URL} from "../helpers/constants";
 import { NodeApi } from "../api/nodeApi";
 import { Request } from "itty-router";
 import { ncheq_to_cheq_fixed } from "../helpers/currency";
