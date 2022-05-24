@@ -4,9 +4,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-
 jobs:
-
   call-lint:
-    name: "Lint"
+    name: 'Lint'
     uses: ./.github/workflows/lint.yml
