@@ -1,7 +1,7 @@
 import { Request } from "itty-router";
 import { is_vesting_account_type, validate_cheqd_address } from "../helpers/validate";
 import { NodeApi } from "../api/nodeApi";
-import { NODE_RPC_API_URL } from "../helpers/constants";
+import { REST_API } from "../helpers/constants";
 import { calculate_liquid_coins } from "../helpers/vesting";
 import { ncheq_to_cheq_fixed } from "../helpers/currency";
 
@@ -12,7 +12,7 @@ export async function handler(request: Request): Promise<Response> {
         throw new Error("No address specified or wrong address format.");
     }
 
-    let api = new NodeApi(NODE_RPC_API_URL);
+    let api = new NodeApi(REST_API);
     const account = await api.auth_get_account(address)
 
     if (!is_vesting_account_type(account["@type"])) {
