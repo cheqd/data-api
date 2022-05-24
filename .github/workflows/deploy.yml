@@ -36,6 +36,7 @@ jobs:
         with:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: 'src'
           wranglerVersion: '2.0.6'
         env:
           CF_ZONE_NAME: ${{ secrets.CF_ZONE_NAME }}
