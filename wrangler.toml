@@ -4,6 +4,10 @@ name = "data-api"
 # Entrypoint/path to the file that will be executed
 main = "src/index.ts"
 
+# Date in yyyy-mm-dd to determine which version of Workers runtime to use
+# Details: https://developers.cloudflare.com/workers/platform/compatibility-dates/ 
+compatibility_date = "2021-11-12"
+
 # Deploy to `<NAME>.<SUBDOMAIN>.workers.dev` for testing?
 # @default `true`
 workers_dev = true
@@ -13,9 +17,9 @@ workers_dev = true
 usage_model = "bundled"
 
 # List of routes to publish the Worker to
-routes = [
-	{ pattern = "*", zone_id = "CF_ZONE_ID" }
-]
+# routes = [
+# 	{ pattern = "*", zone_id = "CF_ZONE_ID" }
+# ]
 
 
 # Map of environment variables to set when deploying the Worker
@@ -38,18 +42,18 @@ GRAPHQL_API = "https://explorer-gql.cheqd.io"
 #   preview_id = ""
 #   }]
 
+
 # Optional custom build step when using Wrangler CLI for build
 # Details: https://developers.cloudflare.com/workers/wrangler/custom-builds/
 # @default {}
 [build]
   # Custom build command. On Linux and macOS, the command is executed in the `sh` shell and the `cmd` shell for Windows.
   # The `&&` and `||` shell operators may be used.
-  command = "yarn build"
+  command = ""
   # The directory in which the command is executed.
-  cwd = "./src"
+  cwd = ""
   # The directory to watch for changes while using `wrangler dev`, defaults to the current working directory
   watch_dir = ""
-
 
 # Configuration options for local development via Wrangler
 [dev]
@@ -63,14 +67,19 @@ GRAPHQL_API = "https://explorer-gql.cheqd.io"
   # @default `http`
   local_protocol = "http"
   # Host to forward requests to. Defaults to host of first route of project
-  host = "/"
+  host = ""
 
+
+# List of data files that the Worker should be bound to. This is
+# the legacy way of binding to a data file. ES module Workers should
+# do proper module imports.
+[data_blobs]
+  DATA = ""
 # Path to custom tsconfig (optional)
 tsconfig = "./tsconfig.json"
 
 # Minify before uploading?
-minify = false
+minify = "false"
 
-# Date in yyyy-mm-dd to determine which version of Workers runtime to use
-# Details: https://developers.cloudflare.com/workers/platform/compatibility-dates/ 
-compatibility_date = "2021-11-12"
+# Add polyfills for node builtin modules and globals?
+node_compat = "false"
