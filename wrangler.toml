@@ -2,3 +2,10 @@ name = "data-api"
 main = "src/index.ts"
 compatibility_date = "2022-03-16"
 workers_dev = true
+
+# All of these environment variables are being set by wrangler CLI
+# [vars]
+# TOKEN_EXPONENT = 9
+# NODE_RPC_API_URL = ''
+# ANEKA_API_URL = ''
+# BIG_DIPPER_GRAPHQL_URL = ''
