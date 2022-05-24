@@ -31,12 +31,7 @@ jobs:
 
       - name: Install dependencies not in cache
         if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn
-
-      - name: Build
-        run: yarn build
-        env:
-          NITRO_PRESET: cloudflare
+        run: yarn install
 
       - name: Publish to Cloudflare
         uses: cloudflare/wrangler-action@2.0.0

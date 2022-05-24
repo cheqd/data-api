@@ -17,9 +17,9 @@ workers_dev = true
 usage_model = "bundled"
 
 # List of routes to publish the Worker to
-# routes = [
-# 	{ pattern = "*", zone_id = "CF_ZONE_ID" }
-# ]
+routes = [
+	{ pattern = "*", zone_id = "CF_ZONE_ID" }
+]
 
 
 # Map of environment variables to set when deploying the Worker
