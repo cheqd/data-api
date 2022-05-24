@@ -17,7 +17,7 @@ async function get_circulating_supply(non_circulating_addresses: string[]): Prom
 
     // Get total supply
     let total_supply = await bd_api.get_total_supply();
-    let total_supply_ncheq = parseInt(total_supply.find(c => c.denom === "ncheq")?.amount || '0');
+    let total_supply_ncheq = Number(total_supply.find(c => c.denom === "ncheq")?.amount || '0');
     console.log(`Total supply: ${total_supply_ncheq}`);
 
     // Calculate circulating supply

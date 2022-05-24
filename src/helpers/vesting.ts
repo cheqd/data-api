@@ -18,5 +18,5 @@ export function calculate_liquid_coins(account: Account): number {
 }
 
 export function calculate_vesting_coins(account: Account): number {
-    return parseInt(account.base_vesting_account.original_vesting[0].amount) - calculate_liquid_coins(account);
+    return Number(account.base_vesting_account.original_vesting[0].amount) - calculate_liquid_coins(account);
 }
