@@ -37,9 +37,6 @@ jobs:
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           apiToken: ${{ secrets.CF_API_TOKEN }}
           wranglerVersion: '2.0.6'
-          secrets: |
-            CF_ZONE_NAME
-            CF_ROUTE_PATTERN
         env:
           CF_ZONE_NAME: ${{ secrets.CF_ZONE_NAME }}
           CF_ROUTE_PATTERN: ${{ secrets.CF_ROUTE_PATTERN }}
