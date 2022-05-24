@@ -19,10 +19,8 @@ workers_dev = true
 # Details: https://developers.cloudflare.com/workers/platform/limits
 usage_model = "bundled"
 
-# List of routes to publish the Worker to
-routes = [
-	{ pattern = "*", zone_id = "CF_ZONE_ID" }
-]
+# Route to publish the Worker to
+route = { pattern = "$CF_ROUTE_PATTERN", zone_name = "$CF_ZONE_NAME" }
 
 
 # Map of environment variables to set when deploying the Worker
