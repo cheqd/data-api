@@ -13,7 +13,7 @@ compatibility_date = "2021-11-12"
 
 # Deploy to `<NAME>.<SUBDOMAIN>.workers.dev` for testing?
 # @default `true`
-workers_dev = true
+workers_dev = false
 
 # Usage model for the Worker
 # Details: https://developers.cloudflare.com/workers/platform/limits
@@ -44,18 +44,6 @@ GRAPHQL_API = "https://explorer-gql.cheqd.io"
 #   }]
 
 
-# Optional custom build step when using Wrangler CLI for build
-# Details: https://developers.cloudflare.com/workers/wrangler/custom-builds/
-# @default {}
-[build]
-  # Custom build command. On Linux and macOS, the command is executed in the `sh` shell and the `cmd` shell for Windows.
-  # The `&&` and `||` shell operators may be used.
-  command = ""
-  # The directory in which the command is executed.
-  cwd = ""
-  # The directory to watch for changes while using `wrangler dev`, defaults to the current working directory
-  watch_dir = ""
-
 # Configuration options for local development via Wrangler
 [dev]
   # IP address for the local dev server to listen on
@@ -84,3 +72,7 @@ minify = "false"
 
 # Add polyfills for node builtin modules and globals?
 node_compat = "false"
+
+## Staging Environment
+[env.staging]
+workers_dev = true
