@@ -8,8 +8,3 @@ jobs:
   call-lint:
     name: 'Lint'
     uses: ./.github/workflows/lint.yml
-
-  call-deploy:
-    name: 'Build'
-    needs: call-lint
-    uses: ./.github/workflows/deploy.yml
