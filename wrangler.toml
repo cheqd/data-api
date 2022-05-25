@@ -1,26 +1,26 @@
 # Worker name
 name = "data-api"
 
-# Cloudflare Account ID
-account_id = ""
-
 # Entrypoint/path to the file that will be executed
 main = "src/index.ts"
 
+# Cloudflare Account ID
+account_id = "99b9572de9d3c33774965949416b82c9"
+
 # Date in yyyy-mm-dd to determine which version of Workers runtime to use
 # Details: https://developers.cloudflare.com/workers/platform/compatibility-dates/ 
-compatibility_date = "2021-11-12"
+compatibility_date = "2022-05-24"
 
-# Deploy to `<NAME>.<SUBDOMAIN>.workers.dev` for testing?
+# Deploy to NAME.SUBDOMAIN.workers.dev for testing?
 # @default `true`
-workers_dev = false
+workers_dev = true
 
 # Usage model for the Worker
 # Details: https://developers.cloudflare.com/workers/platform/limits
 usage_model = "bundled"
 
-# Route to publish the Worker to
-route = { pattern = "$CF_ROUTE_PATTERN", zone_name = "$CF_ZONE_NAME" }
+# Route to publish the Worker
+route = "data-api.cheqd.io/*"
 
 
 # Map of environment variables to set when deploying the Worker
@@ -29,7 +29,7 @@ route = { pattern = "$CF_ROUTE_PATTERN", zone_name = "$CF_ZONE_NAME" }
 # Token lowest denom exponent. 1 CHEQ = 10^9 ncheq
 TOKEN_EXPONENT = 9
 # Standard Cosmosd SDK REST API endpoint for a node on target network
-REST_API = "https://rpc.cheqd.net"
+REST_API = "https://api.cheqd.net"
 # GraphQL API endpoint for target network. Can be sourced from a BigDipper instance.
 GRAPHQL_API = "https://explorer-gql.cheqd.io"
 
@@ -44,6 +44,19 @@ GRAPHQL_API = "https://explorer-gql.cheqd.io"
 #   }]
 
 
+# Optional custom build step when using Wrangler CLI for build
+# Details: https://developers.cloudflare.com/workers/wrangler/custom-builds/
+# @default {}
+# [build]
+#   # Custom build command. On Linux and macOS, the command is executed in the `sh` shell and the `cmd` shell for Windows.
+#   # The `&&` and `||` shell operators may be used.
+#   command = ""
+#   # The directory in which the command is executed.
+#   cwd = "./src"
+#   # The directory to watch for changes while using `wrangler dev`, defaults to the current working directory
+#   watch_dir = ""
+
+
 # Configuration options for local development via Wrangler
 [dev]
   # IP address for the local dev server to listen on
@@ -51,12 +64,10 @@ GRAPHQL_API = "https://explorer-gql.cheqd.io"
   ip = "localhost"
   # Port for the local dev server to listen on
   # @default `3000`
-  port = 3000
+  port = 8787
   # Protocol that local wrangler dev server listens to requests on
   # @default `http`
   local_protocol = "http"
-  # Host to forward requests to. Defaults to host of first route of project
-  host = ""
 
 
 # List of data files that the Worker should be bound to. This is
@@ -64,6 +75,7 @@ GRAPHQL_API = "https://explorer-gql.cheqd.io"
 # do proper module imports.
 [data_blobs]
   DATA = ""
+
 # Path to custom tsconfig (optional)
 tsconfig = "./tsconfig.json"
 
@@ -74,5 +86,5 @@ minify = "false"
 node_compat = "false"
 
 ## Staging Environment
-[env.staging]
-workers_dev = true
+# [env.staging]
+# workers_dev = true
