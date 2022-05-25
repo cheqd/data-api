@@ -15,29 +15,13 @@ jobs:
         with:
           node-version: '16.x'
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - uses: actions/cache@v3
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Install dependencies not in cache
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install
-
       - name: Publish to Cloudflare
         uses: cloudflare/wrangler-action@2.0.0
         with:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          workingDirectory: 'src'
+          # workingDirectory: 'src'
           wranglerVersion: '2.0.6'
-        env:
-          CF_ZONE_NAME: ${{ secrets.CF_ZONE_NAME }}
-          CF_ROUTE_PATTERN: ${{ secrets.CF_ROUTE_PATTERN }}
+        # env:
+        #   CF_ZONE_NAME: ${{ secrets.CF_ZONE_NAME }}
+        #   CF_ROUTE_PATTERN: ${{ secrets.CF_ROUTE_PATTERN }}

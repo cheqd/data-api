@@ -77,7 +77,7 @@ GRAPHQL_API = "https://explorer-gql.cheqd.io"
   DATA = ""
 
 # Path to custom tsconfig (optional)
-tsconfig = "./tsconfig.json"
+tsconfig = "src/tsconfig.json"
 
 # Minify before uploading?
 minify = "false"
