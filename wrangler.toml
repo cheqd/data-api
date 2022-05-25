@@ -20,18 +20,18 @@ workers_dev = true
 usage_model = "bundled"
 
 # Route to publish the Worker
-route = "data-api.cheqd.io/*"
+# route = "data-api.cheqd.io/*"
 
 
 # Map of environment variables to set when deploying the Worker
 # Not inherited. @default `{}`
 [vars]
 # Token lowest denom exponent. 1 CHEQ = 10^9 ncheq
-TOKEN_EXPONENT = 9
+_TOKEN_EXPONENT = 9
 # Standard Cosmosd SDK REST API endpoint for a node on target network
-REST_API = "https://api.cheqd.net"
+_REST_API = "https://api.cheqd.net"
 # GraphQL API endpoint for target network. Can be sourced from a BigDipper instance.
-GRAPHQL_API = "https://explorer-gql.cheqd.io"
+_GRAPHQL_API = "https://explorer-gql.cheqd.io"
 
 
 # KV Namespaces accessible from the Worker
@@ -73,18 +73,15 @@ GRAPHQL_API = "https://explorer-gql.cheqd.io"
 # List of data files that the Worker should be bound to. This is
 # the legacy way of binding to a data file. ES module Workers should
 # do proper module imports.
-[data_blobs]
-  DATA = ""
-
-# Path to custom tsconfig (optional)
-tsconfig = "src/tsconfig.json"
+# [data_blobs]
+#  DATA = ""
 
 # Minify before uploading?
-minify = "false"
+# minify = "false"
 
 # Add polyfills for node builtin modules and globals?
-node_compat = "false"
+# node_compat = "false"
 
-## Staging Environment
+# Staging Environment
 # [env.staging]
 # workers_dev = true
