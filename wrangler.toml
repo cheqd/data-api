@@ -74,7 +74,7 @@ _GRAPHQL_API = "https://explorer-gql.cheqd.io"
 # the legacy way of binding to a data file. ES module Workers should
 # do proper module imports.
 [data_blobs]
- DATA = ""
+# DATA = ""
 
 # Minify before uploading?
 minify = "false"
