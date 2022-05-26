@@ -73,11 +73,11 @@ _GRAPHQL_API = "https://explorer-gql.cheqd.io"
 # List of data files that the Worker should be bound to. This is
 # the legacy way of binding to a data file. ES module Workers should
 # do proper module imports.
-[data_blobs]
+#[data_blobs]
 # DATA = ""
 
 # Minify before uploading?
-minify = "false"
+#minify = "false"
 
 # Add polyfills for node builtin modules and globals?
-node_compat = "false"
+#node_compat = "false"
