@@ -20,7 +20,7 @@ workers_dev = true
 usage_model = "bundled"
 
 # Route to publish the Worker
-# route = "data-api.cheqd.io/*"
+route = "data-api.cheqd.io/*"
 
 # KV Namespaces accessible from the Worker
 # Details: https://developers.cloudflare.com/workers/learning/how-kv-works
