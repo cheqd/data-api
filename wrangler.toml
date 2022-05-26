@@ -52,7 +52,48 @@ GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"
 
 
 ###############################################################
-###             SECTION 3: Build Configuration              ###
+###             SECTION 3: Local Development                ###
+###############################################################
+
+# Configuration options for local development via Wrangler
+[dev]
+  # IP address for the local dev server to listen on
+  # @default `localhost`
+  ip = "localhost"
+  # Port for the local dev server to listen on
+  # @default `8787`
+  port = 8787
+  # Protocol that local wrangler dev server listens to requests on
+  # @default `http`
+  local_protocol = "http"
+
+
+###############################################################
+###             SECTION 4: Staging Environment              ###
+###############################################################
+
+[env.staging]
+# Worker name - Staging Environment
+name = "cosmos-data-api-staging"
+
+# Deploy to NAME.SUBDOMAIN.workers.dev?
+# @default `true`
+workers_dev = true
+
+# Map of environment variables to set when deploying the Worker
+# Not inherited. @default `{}`
+vars = { ENVIRONMENT = "staging", TOKEN_EXPONENT = 9, REST_API = "https://api.cheqd.net", GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql" }
+
+# KV Namespaces accessible from the Worker
+# Details: https://developers.cloudflare.com/workers/learning/how-kv-works
+# @default `[]`
+kv_namespaces = [
+  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "e9a853db072d42ebb256660c8cbe405a", preview_id = "6173542c176e4bb4b6c47ae1f88f103c" }
+]
+
+
+###############################################################
+###               OPTIONAL: Build Configuration             ###
 ###############################################################
 
 # Optional custom build step when using Wrangler CLI for build
@@ -76,41 +117,7 @@ GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"
 # DATA = ""
 
 # Minify before uploading?
-minify = "false"
+# minify = "false"
 
 # Add polyfills for node builtin modules and globals?
-node_compat = "false"
-
-
-###############################################################
-###             SECTION 4: Local Development                ###
-###############################################################
-
-# Configuration options for local development via Wrangler
-[dev]
-  # IP address for the local dev server to listen on
-  # @default `localhost`
-  ip = "localhost"
-  # Port for the local dev server to listen on
-  # @default `8787`
-  port = 8787
-  # Protocol that local wrangler dev server listens to requests on
-  # @default `http`
-  local_protocol = "http"
-
-
-###############################################################
-###             SECTION 5: Staging Environment              ###
-###############################################################
-
-[env.staging]
-# Worker name - Staging Environment
-name = "cosmos-data-api-staging"
-
-# Deploy to NAME.SUBDOMAIN.workers.dev?
-# @default `true`
-workers_dev = true
-
-# Map of environment variables to set when deploying the Worker
-# Not inherited. @default `{}`
-vars = { ENVIRONMENT = "staging", TOKEN_EXPONENT = 9, REST_API = "https://api.cheqd.net", GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql" }
+# node_compat = "false"
