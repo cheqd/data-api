@@ -1,12 +1,19 @@
 name: "Deploy"
 on:
-  push:
-    # branches:
-    #   - main
+  workflow_call:
+defaults:
+  run:
+    shell: bash
 
 jobs:
-  cloudflare-deploy:
+  
+  staging-deploy:
+    if: github.ref_name != 'main'
+    name: "Cloudflare - Staging"
     runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://data-api-staging.cheqd.io/
 
     steps:
       - uses: actions/checkout@v3
@@ -20,10 +27,30 @@ jobs:
         with:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          # workingDirectory: 'src'
+          wranglerVersion: '2.0.6'
+          preCommands: yarn install
+          command: publish --env staging
+
+  production-deploy:
+    if: github.ref_name == 'main'
+    name: "Cloudflare - Production"
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://data-api.cheqd.io/
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+
+      - name: Publish to Cloudflare
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           wranglerVersion: '2.0.6'
           preCommands: yarn install
           command: publish
-        # env:
-        #   CF_ZONE_NAME: ${{ secrets.CF_ZONE_NAME }}
-        #   CF_ROUTE_PATTERN: ${{ secrets.CF_ROUTE_PATTERN }}
