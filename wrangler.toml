@@ -1,3 +1,7 @@
+###############################################################
+###           SECTION 1: General Configuration              ###
+###############################################################
+
 # Worker name
 name = "cosmos-data-api"
 
@@ -11,9 +15,14 @@ account_id = "99b9572de9d3c33774965949416b82c9"
 # Details: https://developers.cloudflare.com/workers/platform/compatibility-dates/ 
 compatibility_date = "2022-05-24"
 
+
+###############################################################
+###           SECTION 2: Production Environment             ###
+###############################################################
+
 # Deploy to NAME.SUBDOMAIN.workers.dev for testing?
 # @default `true`
-workers_dev = true
+workers_dev = false
 
 # Usage model for the Worker
 # Details: https://developers.cloudflare.com/workers/platform/limits
@@ -21,7 +30,6 @@ usage_model = "bundled"
 
 # Route to publish the Worker
 route = "data-api.cheqd.io/*"
-
 
 # Map of environment variables to set when deploying the Worker
 # Not inherited. @default `{}`
@@ -33,7 +41,6 @@ _REST_API = "https://api.cheqd.net"
 # GraphQL API endpoint for target network. Can be sourced from a BigDipper instance.
 _GRAPHQL_API = "https://explorer-gql.cheqd.io"
 
-
 # KV Namespaces accessible from the Worker
 # Details: https://developers.cloudflare.com/workers/learning/how-kv-works
 # @default `[]`
@@ -43,6 +50,10 @@ _GRAPHQL_API = "https://explorer-gql.cheqd.io"
 #   preview_id = ""
 #   }]
 
+
+###############################################################
+###             SECTION 3: Build Configuration              ###
+###############################################################
 
 # Optional custom build step when using Wrangler CLI for build
 # Details: https://developers.cloudflare.com/workers/wrangler/custom-builds/
@@ -56,6 +67,22 @@ _GRAPHQL_API = "https://explorer-gql.cheqd.io"
 #   # The directory to watch for changes while using `wrangler dev`, defaults to the current working directory
 #   watch_dir = ""
 
+# List of data files that the Worker should be bound to. This is
+# the legacy way of binding to a data file. ES module Workers should
+# do proper module imports.
+#[data_blobs]
+# DATA = ""
+
+# Minify before uploading?
+minify = "false"
+
+# Add polyfills for node builtin modules and globals?
+node_compat = "false"
+
+
+###############################################################
+###             SECTION 3: Local development                ###
+###############################################################
 
 # Configuration options for local development via Wrangler
 [dev]
@@ -68,16 +95,3 @@ _GRAPHQL_API = "https://explorer-gql.cheqd.io"
   # Protocol that local wrangler dev server listens to requests on
   # @default `http`
   local_protocol = "http"
-
-
-# List of data files that the Worker should be bound to. This is
-# the legacy way of binding to a data file. ES module Workers should
-# do proper module imports.
-#[data_blobs]
-# DATA = ""
-
-# Minify before uploading?
-minify = "false"
-
-# Add polyfills for node builtin modules and globals?
-node_compat = "false"

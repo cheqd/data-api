@@ -20,10 +20,6 @@ jobs:
         with:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          # workingDirectory: 'src'
           wranglerVersion: '2.0.6'
           preCommands: yarn install
           command: publish
-        # env:
-        #   CF_ZONE_NAME: ${{ secrets.CF_ZONE_NAME }}
-        #   CF_ROUTE_PATTERN: ${{ secrets.CF_ROUTE_PATTERN }}
