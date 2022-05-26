@@ -29,7 +29,7 @@ usage_model = "bundled"
 workers_dev = true
 
 # Route to publish the Worker
-route = "data-api.cheqd.io/*"
+route = { pattern = "data-api.cheqd.io/*", zone_id = "afe3b66243382f27140e6feeaae848b5" }
 
 # KV Namespaces accessible from the Worker
 # Details: https://developers.cloudflare.com/workers/learning/how-kv-works
@@ -81,7 +81,7 @@ name = "cosmos-data-api-staging"
 workers_dev = true
 
 # Route to publish the Worker
-route = "data-api-staging.cheqd.io/*"
+route = { pattern = "data-api-staging.cheqd.io/*", zone_id = "afe3b66243382f27140e6feeaae848b5" }
 
 # Map of environment variables to set when deploying the Worker
 # Not inherited. @default `{}`
