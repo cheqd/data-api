@@ -4,11 +4,11 @@ import { Request } from "itty-router";
 import { ncheq_to_cheq_fixed } from "../helpers/currency";
 import { total_balance_ncheq } from "../helpers/node";
 
-async function get_circulating_supply(non_circulating_addresses: string[]): Promise<number> {
+async function get_circulating_supply(circulating_supply_watchlist: string[]): Promise<number> {
     let gql_client = new GraphQLClient(GRAPHQL_API);
     let bd_api = new BigDipperApi(gql_client);
 
-    let non_circulating_accounts = await bd_api.get_accounts(non_circulating_addresses);
+    let non_circulating_accounts = await bd_api.get_accounts(circulating_supply_watchlist);
 
     // Calculate total balance of watchlist accounts
     let non_circulating_supply_ncheq = non_circulating_accounts.map(total_balance_ncheq).reduce((a, b) => a + b, 0);
@@ -24,7 +24,7 @@ async function get_circulating_supply(non_circulating_addresses: string[]): Prom
 }
 
 export async function handler(request: Request): Promise<Response> {
-    let addresses_to_exclude: string[] = (await NON_CIRCULATING_ADDRESSES.list()).keys.map(k => k.name);
+    let addresses_to_exclude: string[] = (await CIRCULATING_SUPPLY_WATCHLIST.list()).keys.map(k => k.name);
 
     let circulating_supply = await get_circulating_supply(addresses_to_exclude);
 
