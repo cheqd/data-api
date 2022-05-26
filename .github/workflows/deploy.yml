@@ -8,7 +8,6 @@ defaults:
 jobs:
   
   staging-deploy:
-    if: github.ref_name != 'main'
     name: "Cloudflare - Staging"
     runs-on: ubuntu-latest
     environment:
@@ -32,7 +31,8 @@ jobs:
           command: publish --env staging
 
   production-deploy:
-    if: github.ref_name == 'main'
+    if: ${{ success() }} && ( github.ref_name == 'main' )
+    needs: staging-deploy
     name: "Cloudflare - Production"
     runs-on: ubuntu-latest
     environment:
