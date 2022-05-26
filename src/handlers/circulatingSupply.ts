@@ -1,6 +1,5 @@
 import { GraphQLClient } from "../helpers/graphql";
 import { BigDipperApi } from "../api/bigDipperApi";
-import { GRAPHQL_API, TOKEN_DECIMALS } from "../helpers/constants";
 import { Request } from "itty-router";
 import { ncheq_to_cheq_fixed } from "../helpers/currency";
 import { total_balance_ncheq } from "../helpers/node";
@@ -25,8 +24,8 @@ async function get_circulating_supply(non_circulating_addresses: string[]): Prom
 }
 
 export async function handler(request: Request): Promise<Response> {
-    // TODO: Read from KV pairs
-    let addresses_to_exclude: string[] = ['cheqd1jpudw0avtdd6lay7v3mvsj0nj7ln0v8zw64434'];
+    let addresses_to_exclude: string[] = (await NON_CIRCULATING_ADDRESSES.list()).keys.map(k => k.name);
+    console.log(`Excluding addresses: ${addresses_to_exclude.join(', ')}`);
 
     let circulating_supply = await get_circulating_supply(addresses_to_exclude);
 

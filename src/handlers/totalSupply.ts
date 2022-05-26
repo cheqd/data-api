@@ -1,4 +1,3 @@
-import { REST_API} from "../helpers/constants";
 import { NodeApi } from "../api/nodeApi";
 import { Request } from "itty-router";
 import { ncheq_to_cheq_fixed } from "../helpers/currency";

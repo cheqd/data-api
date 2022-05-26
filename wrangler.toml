@@ -27,21 +27,19 @@ usage_model = "bundled"
 # Not inherited. @default `{}`
 [vars]
 # Token lowest denom exponent. 1 CHEQ = 10^9 ncheq
-_TOKEN_EXPONENT = 9
+TOKEN_EXPONENT = 9
 # Standard Cosmosd SDK REST API endpoint for a node on target network
-_REST_API = "https://api.cheqd.net"
-# GraphQL API endpoint for target network. Can be sourced from a BigDipper instance.
-_GRAPHQL_API = "https://explorer-gql.cheqd.io"
+REST_API = "https://api.cheqd.net"
+# GraphQL API endpoint for target network. Must be sourced from a BigDipper instance.
+GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"
 
 
 # KV Namespaces accessible from the Worker
 # Details: https://developers.cloudflare.com/workers/learning/how-kv-works
 # @default `[]`
-# kv_namespaces = [{
-#   binding = "KV_NAMESPACE",
-#   id = "KV_NAMESPACE_ID",
-#   preview_id = ""
-#   }]
+kv_namespaces = [
+    { binding = "NON_CIRCULATING_ADDRESSES", id = "d71c0574b2484647ab744c6f7fa33c8e"}
+]
 
 
 # Optional custom build step when using Wrangler CLI for build
