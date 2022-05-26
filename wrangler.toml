@@ -73,7 +73,7 @@ GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"
 # DATA = ""
 
 # Minify before uploading?
-#minify = "false"
+minify = "false"
 
 # Add polyfills for node builtin modules and globals?
-#node_compat = "false"
+node_compat = "false"
