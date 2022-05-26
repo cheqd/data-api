@@ -25,7 +25,6 @@ async function get_circulating_supply(non_circulating_addresses: string[]): Prom
 
 export async function handler(request: Request): Promise<Response> {
     let addresses_to_exclude: string[] = (await NON_CIRCULATING_ADDRESSES.list()).keys.map(k => k.name);
-    console.log(`Excluding addresses: ${addresses_to_exclude.join(', ')}`);
 
     let circulating_supply = await get_circulating_supply(addresses_to_exclude);
 
