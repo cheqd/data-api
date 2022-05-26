@@ -42,17 +42,19 @@ jobs:
       url: https://data-api.cheqd.io/
 
     steps:
-      - uses: actions/checkout@v3
-      
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16.x'
-
       - name: Initialise CodeQL
         uses: github/codeql-action/init@v2
         with:
           languages: 'javascript'
           queries: security-and-quality
+      
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
 
       - name: Publish to Cloudflare
         uses: cloudflare/wrangler-action@2.0.0
