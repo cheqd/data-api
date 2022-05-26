@@ -15,18 +15,18 @@ account_id = "99b9572de9d3c33774965949416b82c9"
 # Details: https://developers.cloudflare.com/workers/platform/compatibility-dates/ 
 compatibility_date = "2022-05-24"
 
-
-###############################################################
-###           SECTION 2: Production Environment             ###
-###############################################################
-
-# Deploy to NAME.SUBDOMAIN.workers.dev for testing?
-# @default `true`
-workers_dev = false
-
 # Usage model for the Worker
 # Details: https://developers.cloudflare.com/workers/platform/limits
 usage_model = "bundled"
+
+
+###############################################################
+###            SECTION 2: Production Environment            ###
+###############################################################
+
+# Deploy to NAME.SUBDOMAIN.workers.dev?
+# @default `true`
+workers_dev = false
 
 # Route to publish the Worker
 route = "data-api.cheqd.io/*"
@@ -38,16 +38,18 @@ kv_namespaces = [
   { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "a87b0460147d4460b95a61d35ab99d09", preview_id = "48665d27889d4b729bdc4e6667bc2e57" }
 ]
 
-
 # Map of environment variables to set when deploying the Worker
 # Not inherited. @default `{}`
 [vars]
+# Token lowest denom exponent. 1 CHEQ = 10^9 ncheq
+ENVIRONMENT = "production"
 # Token lowest denom exponent. 1 CHEQ = 10^9 ncheq
 TOKEN_EXPONENT = 9
 # Standard Cosmosd SDK REST API endpoint for a node on target network
 REST_API = "https://api.cheqd.net"
 # GraphQL API endpoint for target network. Must be sourced from a BigDipper instance.
 GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"
+
 
 ###############################################################
 ###             SECTION 3: Build Configuration              ###
@@ -57,12 +59,14 @@ GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"
 # Details: https://developers.cloudflare.com/workers/wrangler/custom-builds/
 # @default {}
 # [build]
-#   # Custom build command. On Linux and macOS, the command is executed in the `sh` shell and the `cmd` shell for Windows.
+#   # Custom build command. On Linux and macOS, the command is executed in 
+#   # the `sh` shell and the `cmd` shell for Windows.
 #   # The `&&` and `||` shell operators may be used.
 #   command = ""
 #   # The directory in which the command is executed.
 #   cwd = "./src"
-#   # The directory to watch for changes while using `wrangler dev`, defaults to the current working directory
+#   # The directory to watch for changes while using `wrangler dev`, 
+#   # defaults to the current working directory
 #   watch_dir = ""
 
 # List of data files that the Worker should be bound to. This is
@@ -79,7 +83,7 @@ node_compat = "false"
 
 
 ###############################################################
-###             SECTION 3: Local development                ###
+###             SECTION 4: Local Development                ###
 ###############################################################
 
 # Configuration options for local development via Wrangler
@@ -88,8 +92,33 @@ node_compat = "false"
   # @default `localhost`
   ip = "localhost"
   # Port for the local dev server to listen on
-  # @default `3000`
+  # @default `8787`
   port = 8787
   # Protocol that local wrangler dev server listens to requests on
   # @default `http`
   local_protocol = "http"
+
+
+###############################################################
+###             SECTION 5: Staging Environment              ###
+###############################################################
+
+[env.staging]
+# Worker name - Staging Environment
+name = "cosmos-data-api-staging"
+
+# Deploy to NAME.SUBDOMAIN.workers.dev?
+# @default `true`
+workers_dev = true
+
+# Map of environment variables to set when deploying the Worker
+# Not inherited. @default `{}`
+[vars]
+# Token lowest denom exponent. 1 CHEQ = 10^9 ncheq
+ENVIRONMENT = "staging"
+# Token lowest denom exponent. 1 CHEQ = 10^9 ncheq
+TOKEN_EXPONENT = 9
+# Standard Cosmosd SDK REST API endpoint for a node on target network
+REST_API = "https://api.cheqd.net"
+# GraphQL API endpoint for target network. Must be sourced from a BigDipper instance.
+GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"

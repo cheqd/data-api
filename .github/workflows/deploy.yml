@@ -1,10 +1,12 @@
 name: "Deploy"
 on:
-  push:
-    # branches:
-    #   - main
+  workflow_call:
+defaults:
+  run:
+    shell: bash
 
 jobs:
+  
   cloudflare-deploy:
     runs-on: ubuntu-latest
 
