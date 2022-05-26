@@ -1,3 +1,5 @@
+export {}
+
 declare global {
   const TOKEN_EXPONENT: number;
   const REST_API: string;
