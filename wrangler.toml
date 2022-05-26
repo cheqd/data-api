@@ -74,7 +74,7 @@ GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"
 
 [env.staging]
 # Worker name - Staging Environment
-name = "cosmos-data-api-staging"
+name = "cosmos-data-api"
 
 # Deploy to NAME.SUBDOMAIN.workers.dev?
 # @default `true`
@@ -96,6 +96,7 @@ kv_namespaces = [
 ###               OPTIONAL: Build Configuration             ###
 ###############################################################
 
+# NOTE: THIS IS A TOP-LEVEL CONFIGURATION AND NEEDS TO BE MOVED IF USED
 # Optional custom build step when using Wrangler CLI for build
 # Details: https://developers.cloudflare.com/workers/wrangler/custom-builds/
 # @default {}
