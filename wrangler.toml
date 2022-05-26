@@ -26,8 +26,9 @@ usage_model = "bundled"
 # Details: https://developers.cloudflare.com/workers/learning/how-kv-works
 # @default `[]`
 kv_namespaces = [
-    { binding = "NON_CIRCULATING_ADDRESSES", id = "d71c0574b2484647ab744c6f7fa33c8e"}
+  { binding = "circulating_supply_watchlist", id = "b50f9e6429dd4767909c3e706e62804f", preview_id = "ab16efd00c1642a79b55bbd5ae891884" }
 ]
+
 
 # Map of environment variables to set when deploying the Worker
 # Not inherited. @default `{}`
