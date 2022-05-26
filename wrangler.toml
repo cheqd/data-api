@@ -26,7 +26,7 @@ route = "data-api.cheqd.io/*"
 # Details: https://developers.cloudflare.com/workers/learning/how-kv-works
 # @default `[]`
 kv_namespaces = [
-  { binding = "circulating_supply_watchlist", id = "b50f9e6429dd4767909c3e706e62804f", preview_id = "ab16efd00c1642a79b55bbd5ae891884" }
+  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "a87b0460147d4460b95a61d35ab99d09", preview_id = "48665d27889d4b729bdc4e6667bc2e57" }
 ]
 
 
