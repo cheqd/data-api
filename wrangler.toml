@@ -9,7 +9,7 @@ name = "cosmos-data-api"
 main = "src/index.ts"
 
 # Cloudflare Account ID
-account_id = "99b9572de9d3c33774965949416b82c9"
+account_id = ""
 
 # Date in yyyy-mm-dd to determine which version of Workers runtime to use
 # Details: https://developers.cloudflare.com/workers/platform/compatibility-dates/ 
