@@ -28,16 +28,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Initalise CodeQL
+      - name: Initialise CodeQL
         uses: github/codeql-action/init@v2
         with:
           languages: 'javascript'
           queries: security-and-quality
 
-      - name: Build
-        run: |
-          yarn install
-          yarn build
+      - name: Build for CodeQL
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          wranglerVersion: '2.0.6'
+          preCommands: yarn install
+          command: dev
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
