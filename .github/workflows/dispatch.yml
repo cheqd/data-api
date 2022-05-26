@@ -12,5 +12,4 @@ jobs:
 
   call-deploy:
     name: 'Deploy'
-    needs: call-lint
     uses: ./.github/workflows/deploy.yml
