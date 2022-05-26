@@ -26,7 +26,7 @@ usage_model = "bundled"
 
 # Deploy to NAME.SUBDOMAIN.workers.dev?
 # @default `true`
-workers_dev = false
+workers_dev = true
 
 # Route to publish the Worker
 route = "data-api.cheqd.io/*"
@@ -74,11 +74,14 @@ GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"
 
 [env.staging]
 # Worker name - Staging Environment
-name = "cosmos-data-api"
+name = "cosmos-data-api-staging"
 
 # Deploy to NAME.SUBDOMAIN.workers.dev?
 # @default `true`
 workers_dev = true
+
+# Route to publish the Worker
+route = "data-api-staging.cheqd.io/*"
 
 # Map of environment variables to set when deploying the Worker
 # Not inherited. @default `{}`
