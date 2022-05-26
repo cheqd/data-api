@@ -13,6 +13,7 @@ addEventListener('fetch', (event: FetchEvent) => {
 })
 
 function registerRoutes(router: Router) {
+    router.get('/', totalSupplyHandler);
     router.get('/supply/total', totalSupplyHandler);
     router.get('/supply/circulating', circulatingSupplyHandler);
     router.get('/balances/total/:address', totalBalanceHandler);
