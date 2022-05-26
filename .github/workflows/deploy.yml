@@ -35,6 +35,8 @@ jobs:
     needs: staging-deploy
     name: "Cloudflare - Production"
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write
     environment:
       name: production
       url: https://data-api.cheqd.io/
@@ -46,6 +48,12 @@ jobs:
         with:
           node-version: '16.x'
 
+      - name: Initialise CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: 'javascript'
+          queries: security-and-quality
+
       - name: Publish to Cloudflare
         uses: cloudflare/wrangler-action@2.0.0
         with:
@@ -54,3 +62,7 @@ jobs:
           wranglerVersion: '2.0.6'
           preCommands: yarn install
           command: publish
+      
+      - name: Perform CodeQL Analysis
+        continue-on-error: true
+        uses: github/codeql-action/analyze@v2
