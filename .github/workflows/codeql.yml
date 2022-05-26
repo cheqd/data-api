@@ -1,8 +1,9 @@
 name: "CodeQL"
 on:
-  pull_request_target:
-    branches:
-      - main
+  push:
+    branches: main
+  pull_request:
+    branches: main
     types:
       - closed
   schedule:
