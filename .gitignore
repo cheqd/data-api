@@ -1,5 +1,7 @@
 ### APP-SPECIFIC EXCLUSIONS ###
 wrangler.dev.toml
+watchlist.json
+
 
 ### GENERAL EXCLUSIONS ###
 

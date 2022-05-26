@@ -1,8 +1,7 @@
 import { Request } from "itty-router";
 import { is_vesting_account_type, validate_cheqd_address } from "../helpers/validate";
 import { NodeApi } from "../api/nodeApi";
-import { REST_API } from "../helpers/constants";
-import { calculate_liquid_coins, calculate_vesting_coins } from "../helpers/vesting";
+import { calculate_vesting_coins } from "../helpers/vesting";
 import { ncheq_to_cheq_fixed } from "../helpers/currency";
 
 export async function handler(request: Request): Promise<Response> {

@@ -20,29 +20,25 @@ workers_dev = true
 usage_model = "bundled"
 
 # Route to publish the Worker
-# route = "data-api.cheqd.io/*"
+route = "data-api.cheqd.io/*"
+
+# KV Namespaces accessible from the Worker
+# Details: https://developers.cloudflare.com/workers/learning/how-kv-works
+# @default `[]`
+kv_namespaces = [
+  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "a87b0460147d4460b95a61d35ab99d09", preview_id = "48665d27889d4b729bdc4e6667bc2e57" }
+]
 
 
 # Map of environment variables to set when deploying the Worker
 # Not inherited. @default `{}`
 [vars]
 # Token lowest denom exponent. 1 CHEQ = 10^9 ncheq
-_TOKEN_EXPONENT = 9
+TOKEN_EXPONENT = 9
 # Standard Cosmosd SDK REST API endpoint for a node on target network
-_REST_API = "https://api.cheqd.net"
-# GraphQL API endpoint for target network. Can be sourced from a BigDipper instance.
-_GRAPHQL_API = "https://explorer-gql.cheqd.io"
-
-
-# KV Namespaces accessible from the Worker
-# Details: https://developers.cloudflare.com/workers/learning/how-kv-works
-# @default `[]`
-# kv_namespaces = [{
-#   binding = "KV_NAMESPACE",
-#   id = "KV_NAMESPACE_ID",
-#   preview_id = ""
-#   }]
-
+REST_API = "https://api.cheqd.net"
+# GraphQL API endpoint for target network. Must be sourced from a BigDipper instance.
+GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"
 
 # Optional custom build step when using Wrangler CLI for build
 # Details: https://developers.cloudflare.com/workers/wrangler/custom-builds/

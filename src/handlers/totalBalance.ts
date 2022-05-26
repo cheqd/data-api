@@ -1,5 +1,4 @@
 import { Request } from "itty-router";
-import { GRAPHQL_API } from "../helpers/constants";
 import { validate_cheqd_address} from "../helpers/validate";
 import { ncheq_to_cheq_fixed } from "../helpers/currency";
 import { BigDipperApi } from "../api/bigDipperApi";
