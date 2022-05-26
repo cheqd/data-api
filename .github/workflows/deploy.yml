@@ -1,6 +1,6 @@
 name: "Deploy"
 on:
-  workflow_call:
+  push:
 defaults:
   run:
     shell: bash
