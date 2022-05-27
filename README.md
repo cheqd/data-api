@@ -36,7 +36,7 @@ Circulating token supply, in main token denomination (CHEQ instead of `ncheq` in
 
 #### Rationale
 
-Cryptocurrency tracking websites such as [CoinMarketCap]([https://www.](https://coinmarketcap.com/currencies/cheqd/)) and [CoinGecko](https://www.coingecko.com/en/coins/cheqd-network) require an API endpoint for reporting the circulating supply of tokens in the main/primary token denomination.
+Cryptocurrency tracking websites such as [CoinMarketCap](https://coinmarketcap.com/currencies/cheqd/) and [CoinGecko](https://www.coingecko.com/en/coins/cheqd-network) require an API endpoint for reporting the circulating supply of tokens in the main/primary token denomination.
 
 This figure is *not* available from any Cosmos SDK API, because the [criteria for determining circulating vs "non-circulating" accounts is defined by CoinMarketCap](https://support.coinmarketcap.com/hc/en-us/articles/360043396252-Supply-Circulating-Total-Max-).
 
