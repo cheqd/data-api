@@ -20,6 +20,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
+          cache: 'yarn'
 
       - name: Publish to Cloudflare
         uses: cloudflare/wrangler-action@2.0.0
@@ -42,12 +43,6 @@ jobs:
       url: https://data-api.cheqd.io/
 
     steps:
-      - name: Initialise CodeQL
-        uses: github/codeql-action/init@v2
-        with:
-          languages: 'javascript'
-          queries: security-and-quality
-      
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
@@ -55,6 +50,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
+          cache: 'yarn'
 
       - name: Publish to Cloudflare
         uses: cloudflare/wrangler-action@2.0.0
@@ -64,7 +60,3 @@ jobs:
           wranglerVersion: '2.0.6'
           preCommands: yarn install
           command: publish
-      
-      - name: Perform CodeQL Analysis
-        continue-on-error: true
-        uses: github/codeql-action/analyze@v2
