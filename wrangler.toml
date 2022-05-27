@@ -35,7 +35,7 @@ route = { pattern = "data-api.cheqd.io/*", zone_id = "afe3b66243382f27140e6feeaa
 # Details: https://developers.cloudflare.com/workers/learning/how-kv-works
 # @default `[]`
 kv_namespaces = [
-  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "a87b0460147d4460b95a61d35ab99d09", preview_id = "48665d27889d4b729bdc4e6667bc2e57" }
+  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "ce2e547de27f467c86afa67996b8784a", preview_id = "a9b6ebe3d1b44671acafb0ed5b7f8919" }
 ]
 
 # Map of environment variables to set when deploying the Worker
@@ -78,10 +78,10 @@ name = "data-api-staging"
 
 # Deploy to NAME.SUBDOMAIN.workers.dev?
 # @default `true`
-workers_dev = false
+workers_dev = true
 
 # Route to publish the Worker
-# route = { pattern = "data-api-staging.cheqd.io/*", zone_id = "afe3b66243382f27140e6feeaae848b5" }
+route = { pattern = "data-api-staging.cheqd.io/*", zone_id = "afe3b66243382f27140e6feeaae848b5" }
 
 # Map of environment variables to set when deploying the Worker
 # Not inherited. @default `{}`
@@ -91,7 +91,7 @@ vars = { ENVIRONMENT = "staging", TOKEN_EXPONENT = 9, REST_API = "https://api.ch
 # Details: https://developers.cloudflare.com/workers/learning/how-kv-works
 # @default `[]`
 kv_namespaces = [
-  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "e9a853db072d42ebb256660c8cbe405a", preview_id = "6173542c176e4bb4b6c47ae1f88f103c" }
+  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "b30ca7ebb2ae4dcd888a345475d661a8", preview_id = "517983610407482ba1beafab168c734a" }
 ]
 
 
