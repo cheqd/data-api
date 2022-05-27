@@ -3,7 +3,7 @@
 ###############################################################
 
 # Worker name
-name = "cosmos-data-api"
+name = "data-api"
 
 # Entrypoint/path to the file that will be executed
 main = "src/index.ts"
@@ -74,14 +74,14 @@ GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"
 
 [env.staging]
 # Worker name - Staging Environment
-name = "cosmos-data-api-staging"
+name = "data-api-staging"
 
 # Deploy to NAME.SUBDOMAIN.workers.dev?
 # @default `true`
-workers_dev = true
+workers_dev = false
 
 # Route to publish the Worker
-route = { pattern = "data-api-staging.cheqd.io/*", zone_id = "afe3b66243382f27140e6feeaae848b5" }
+# route = { pattern = "data-api-staging.cheqd.io/*", zone_id = "afe3b66243382f27140e6feeaae848b5" }
 
 # Map of environment variables to set when deploying the Worker
 # Not inherited. @default `{}`
