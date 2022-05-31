@@ -39,7 +39,7 @@ export class BigDipperApi {
         return resp.account;
     }
 
-    async get_acocunt(address: string): Promise<Account> {
+    async get_account(address: string): Promise<Account> {
         let accounts =  await this.get_accounts([address]);
         return accounts[0];
     }
