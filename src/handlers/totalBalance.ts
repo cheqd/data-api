@@ -15,7 +15,7 @@ export async function handler(request: Request): Promise<Response> {
     let gql_client = new GraphQLClient(GRAPHQL_API);
     let bd_api = new BigDipperApi(gql_client);
 
-    let account = await bd_api.get_acocunt(address);
+    let account = await bd_api.get_account(address);
     let balance =  total_balance_ncheq(account);
 
     return new Response(ncheq_to_cheq_fixed(balance))
