@@ -32,7 +32,7 @@ jobs:
           command: publish --env staging
 
   production-deploy:
-    if: ${{ success() }} && ( github.ref == 'refs/heads/main' )
+    if: github.ref == 'refs/heads/main'
     needs: staging-deploy
     name: "Cloudflare - Production"
     runs-on: ubuntu-latest
