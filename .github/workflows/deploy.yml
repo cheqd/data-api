@@ -32,9 +32,9 @@ jobs:
           command: publish --env staging
 
   production-deploy:
-    if: ${{ success() && ( github.ref == 'refs/heads/main' ) }}
-    needs: staging-deploy
     name: "Cloudflare - Production"
+    needs: staging-deploy
+    if: ${{ success() && ( github.ref_name == 'main' ) }}
     runs-on: ubuntu-latest
     permissions:
       security-events: write
