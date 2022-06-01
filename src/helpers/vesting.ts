@@ -5,7 +5,7 @@ import { Account } from "../types/node";
 //  Here is the explanation of how to do it properly:
 //  https://docs.cosmos.network/master/modules/auth/05_vesting.html#transferring-sending
 export function calculate_liquid_coins(account: Account): number {
-    if(account?.["@type"] === "/cosmos.vesting.v1beta1.DelayedVestingAccount") return 0
+    if(account?.["@type"] === "/cosmos.vesting.v1beta1.DelayedVestingAccount" && (Date.now() < account?.base_vesting_account?.end_time * 1000) ) return 0
 
     const start_time = new Date(account.start_time * 1000).getTime();
     const end_time = new Date(account.base_vesting_account.end_time * 1000).getTime();
