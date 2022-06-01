@@ -1,7 +1,7 @@
 export type Account ={
     '@type': string;
     start_time: number;
-    base_vesting_account: { original_vesting: Coin[], end_time: number };
+    base_vesting_account: { original_vesting: Coin[], delegated_free?: Coin[], delegated_vesting?: Coin[], end_time: number };
 }
 
 export class Coin {
