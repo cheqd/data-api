@@ -12,7 +12,7 @@ This collection of custom APIs can be deployed as a [Cloudflare Worker](https://
 
 #### Endpoints
 
-`/` or `/supply/total`
+`/` or `/supply/total` (available at [data-api.cheqd.io/supply/total](https://data-api.cheqd.io/supply/total))
 
 #### Response
 
@@ -28,7 +28,7 @@ While this figure is available from Cosmos SDK's built-in [`/cosmos/bank/v1beta1
 
 #### Endpoint
 
-`/` or `/supply/circulating`
+`/supply/circulating` (available at [data-api.cheqd.io/supply/circulating](https://data-api.cheqd.io/supply/circulating))
 
 #### Response
 
@@ -46,7 +46,7 @@ This API calculates the circulating supply by **subtracting** the account balanc
 
 #### Endpoint
 
-`/balances/vesting/<address>`
+`/balances/vesting/<address>` (e.g., [data-api.cheqd.io/balances/vesting/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg](https://data-api.cheqd.io/balances/vesting/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg))
 
 #### Response
 
@@ -60,7 +60,7 @@ There is no Cosmos SDK API that returns balances that are yet to be vested for [
 
 #### Endpoint
 
-`/balances/liquid/<address>`
+`/balances/liquid/<address>` (e.g., [data-api.cheqd.io/balances/liquid/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg](https://data-api.cheqd.io/balances/liquid/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg))
 
 #### Response
 
@@ -74,7 +74,7 @@ Tokens in [continuous or delayed vesting accounts](https://docs.cosmos.network/m
 
 #### Endpoint
 
-`/balances/total/<address>`
+`/balances/total/<address>` (e.g., [data-api.cheqd.io/balances/total/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg](https://data-api.cheqd.io/balances/total/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg))
 
 #### Response
 
