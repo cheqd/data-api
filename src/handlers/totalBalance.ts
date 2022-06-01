@@ -17,9 +17,9 @@ export async function handler(request: Request): Promise<Response> {
     let auth_account = await node_api.auth_get_account(address);
 
     if(is_delayed_vesting_account_type(auth_account?.["@type"])) {
-        let balance = Number(await (await node_api.bank_get_account_balances(address)).find(b => b.denom === "ncheq")?.amount) ?? 0;
-        let rewards = Number(await (await node_api.distribution_get_total_rewards(address))) ?? 0;
-        let delegated = Number(auth_account?.base_vesting_account?.delegated_vesting?.find(d => d.denom === "ncheq")?.amount) ?? 0;
+        let balance = Number(await (await node_api.bank_get_account_balances(address)).find(b => b.denom === "ncheq")?.amount ?? '0');
+        let rewards = Number(await (await node_api.distribution_get_total_rewards(address)) ?? '0');
+        let delegated = Number(auth_account?.base_vesting_account?.delegated_vesting?.find(d => d.denom === "ncheq")?.amount ?? '0');
 
         return new Response(ncheq_to_cheq_fixed(balance + rewards + delegated));
     }
