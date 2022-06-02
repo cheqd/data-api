@@ -1,10 +1,6 @@
 ### APP-SPECIFIC EXCLUSIONS ###
 wrangler.dev.toml
 watchlist.json
-_/delayed/input/*
-!_/delayed/input/README.md
-_/delayed/output/*
-!_/delayed/output/README.md
 
 
 ### GENERAL EXCLUSIONS ###

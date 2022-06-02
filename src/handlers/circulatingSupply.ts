@@ -15,7 +15,7 @@ async function get_circulating_supply(circulating_supply_watchlist: string[]): P
 
     let non_circulating_accounts = await bd_api.get_accounts(filtered_accounts.other);
 
-    let non_circulating_accounts_delayed = await Promise.all(filtered_accounts?.delayed?.map(address => node_api.auth_get_account(address)));
+    let non_circulating_accounts_delayed = await Promise.all(filtered_accounts?.delayed?.map(address => node_api.bank_get_account_balances(address)));
 
     // Calculate total balance of watchlist accounts
     let non_circulating_supply_ncheq = non_circulating_accounts.map(total_balance_ncheq).reduce((a, b) => a + b, 0);

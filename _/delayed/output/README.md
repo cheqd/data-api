@@ -1,4 +1,0 @@
-# Produces a csv of a single column of addresses that need to be marked as delayed
-e.g.
-`cheqd...`
-`cheqd....`

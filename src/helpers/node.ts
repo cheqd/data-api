@@ -1,5 +1,5 @@
 import { Account } from "../types/bigDipper";
-import { Account as AccountCosmos } from "../types/node";
+import { Coin } from "../types/node";
 
 export function total_balance_ncheq(account: Account): number {
     let balance = Number(account?.accountBalances[0]?.coins.find(c => c.denom === "ncheq")?.amount || '0');
@@ -23,6 +23,6 @@ export function total_balance_ncheq(account: Account): number {
     return balance + delegations + unbonding + rewards;
 }
 
-export function delayed_balance_ncheq(account: AccountCosmos): number {
-    return Number(account?.base_vesting_account.original_vesting.find(c => c.denom === "ncheq")?.amount || '0');
+export function delayed_balance_ncheq(balance: Coin[]): number {
+    return Number(balance.find(c => c.denom === "ncheq")?.amount || '0');
 }
