@@ -4,6 +4,7 @@ import { handler as totalBalanceHandler } from "./handlers/totalBalance";
 import { handler as circulatingSupplyHandler } from "./handlers/circulatingSupply";
 import { handler as liquidBalanceHandler } from "./handlers/liquidBalance";
 import { handler as vestingBalanceHandler } from "./handlers/vestingBalance";
+import { handler as vestedBalanceHandler } from "./handlers/vestedBalance";
 
 addEventListener('fetch', (event: FetchEvent) => {
     const router = Router<Request, IHTTPMethods>()
@@ -19,6 +20,7 @@ function registerRoutes(router: Router) {
     router.get('/balances/total/:address', totalBalanceHandler);
     router.get('/balances/liquid/:address', liquidBalanceHandler);
     router.get('/balances/vesting/:address', vestingBalanceHandler);
+    router.get('/balances/vested/:address', vestedBalanceHandler);
 
     // 404 for all other requests
     router.all('*', () => new Response('Not Found.', {status: 404}))

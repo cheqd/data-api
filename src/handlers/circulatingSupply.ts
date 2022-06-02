@@ -1,6 +1,6 @@
 import { GraphQLClient } from "../helpers/graphql";
 import { BigDipperApi } from "../api/bigDipperApi";
-import { NodeApi } from '../api/nodeApi'
+import { NodeApi } from '../api/nodeApi';
 import { Request } from "itty-router";
 import { ncheq_to_cheq_fixed } from "../helpers/currency";
 import { delayed_balance_ncheq, total_balance_ncheq } from "../helpers/node";
