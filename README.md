@@ -12,7 +12,7 @@ This collection of custom APIs can be deployed as a [Cloudflare Worker](https://
 
 #### Endpoints
 
-`/` or `/supply/total` (available at [data-api.cheqd.io/supply/total](https://data-api.cheqd.io/supply/total))
+[`data-api.cheqd.io/supply/total`](https://data-api.cheqd.io/supply/total) (also has an API endpoint alias on `/`)
 
 #### Response
 
@@ -28,11 +28,11 @@ While this figure is available from Cosmos SDK's built-in [`/cosmos/bank/v1beta1
 
 #### Endpoint
 
-`/supply/circulating` (available at [data-api.cheqd.io/supply/circulating](https://data-api.cheqd.io/supply/circulating))
+[`data-api.cheqd.io/supply/circulating`](https://data-api.cheqd.io/supply/circulating)
 
 #### Response
 
-Circulating token supply, in main token denomination (CHEQ instead of `ncheq` in our case)
+Circulating token supply, in main token denomination (CHEQ instead of *ncheq* in our case)
 
 #### Rationale
 
@@ -40,13 +40,18 @@ Cryptocurrency tracking websites such as [CoinMarketCap](https://coinmarketcap.c
 
 This figure is *not* available from any Cosmos SDK API, because the [criteria for determining circulating vs "non-circulating" accounts is defined by CoinMarketCap](https://support.coinmarketcap.com/hc/en-us/articles/360043396252-Supply-Circulating-Total-Max-).
 
-This API calculates the circulating supply by **subtracting** the account balances of a defined list of wallet addresses ("circulating supply watchlist").
+This API calculates the circulating supply by **subtracting** the account balances of a defined list of wallet addresses ("circulating supply watchlist"). Different types of accounts defined in the watchlist are handled as follows:
+
+1. **Base accounts and Continuous Vesting accounts**: These will always have an entry in BigDipper block explorer, since these accounts have transactions that trigger indexing.
+2. **Delayed Vesting accounts**: These accounts present a complex scenario since BigDipper does *not* index all delayed vesting accounts by default.
+   1. **If there have been ANY transactions involving the delayed vesting account**: Delayed vesting accounts can still stake their original vesting allowance, or the account holder may have transferred additional funds into the account. In this scenario, the account *will* be indexed by BigDipper and the account balance can be fetched via the GraphQL API.
+   2. **If there have been NO transactions involving the delayed vesting account**: Delayed vesting accounts with no other transactions beyond the original creation are *not* indexed by BigDipper. Balances for these accounts are fetched using the standard Cosmos SDK `/cosmos/bank/v1beta1/balances/<address>` REST API endpoint.
 
 ### 🔐 Vesting Account Balance
 
 #### Endpoint
 
-`/balances/vesting/<address>` (e.g., [data-api.cheqd.io/balances/vesting/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg](https://data-api.cheqd.io/balances/vesting/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg))
+[`data-api.cheqd.io/balances/vesting/<address>`](https://data-api.cheqd.io/balances/vesting/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg)
 
 #### Response
 
@@ -56,25 +61,43 @@ Tokens that are still vesting for continuous/delayed vesting accounts, in CHEQ.
 
 There is no Cosmos SDK API that returns balances that are yet to be vested for [continuous or delayed vesting accounts](https://docs.cosmos.network/master/modules/auth/05_vesting.html#vesting-account-types).
 
+### 🔒 Vested Account Balance
+
+#### Endpoint
+
+[`data-api.cheqd.io/balances/vested/<address>`](https://data-api.cheqd.io/balances/vesting/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg)
+
+#### Response
+
+Tokens that have already vested for continuous/delayed vesting accounts, in CHEQ.
+
+#### Rationale
+
+There is no Cosmos SDK API that returns balances that are already vested for [continuous or delayed vesting accounts](https://docs.cosmos.network/master/modules/auth/05_vesting.html#vesting-account-types).
+
 ### 💸 Liquid Account Balance
 
 #### Endpoint
 
-`/balances/liquid/<address>` (e.g., [data-api.cheqd.io/balances/liquid/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg](https://data-api.cheqd.io/balances/liquid/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg))
+[`data-api.cheqd.io/balances/liquid/<address>`](https://data-api.cheqd.io/balances/vesting/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg)
 
 #### Response
 
-Tokens in continuous/delayed vesting accounts that can actually be spent/transferred with no wait time, in CHEQ.
+Tokens in continuous/delayed vesting accounts that can be converted to liquid balances, in CHEQ.
 
 #### Rationale
 
-Tokens in [continuous or delayed vesting accounts](https://docs.cosmos.network/master/modules/auth/05_vesting.html#vesting-account-types) can be delegated even if they are not yet vested. This results in a scenario where an account might be able to stake a large part of their vesting balance, but the liquid amount available (e.g., to pay for transaction fees) is not easily available from Cosmos SDK's built-in REST APIs.
+Tokens in [continuous or delayed vesting accounts](https://docs.cosmos.network/master/modules/auth/05_vesting.html#vesting-account-types) that can be converted to liquid balances. This is calculated as the sum of the following figures:
+
+1. "Delegated free" balance (from the `/cosmos/auth/v1beta1/accounts/<address>` REST API) *or* vested balance, whichever is higher
+2. "Available" balance (if applicable)
+3. "Reward" balance (if applicable)
 
 ### 💰 Total Account Balance
 
 #### Endpoint
 
-`/balances/total/<address>` (e.g., [data-api.cheqd.io/balances/total/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg](https://data-api.cheqd.io/balances/total/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg))
+[`data-api.cheqd.io/balances/total/<address>`](https://data-api.cheqd.io/balances/total/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg)
 
 #### Response
 
@@ -112,6 +135,8 @@ Wrangler CLI uses [`wrangler.toml` for configuring](https://developers.cloudflar
 
 For the circulating supply API endpoint, Cloudflare Workers will expect to find a Cloudflare KV namespace called `CIRCULATING_SUPPLY_WATCHLIST` with a list of addresses in the `key`. The application *only* uses the key, so value can be anything.
 
+Delayed vesting accounts that have never been involved in a transaction (as described above) should be prefixed with a `delayed:` prefix in the JSON file. Cloudflare allows [filtering KV pair `key`s by prefixes](https://developers.cloudflare.com/workers/runtime-apis/kv/#more-detail) when using a list operation.
+
 ```jsonc
 // Sample watchlist JSON file structure
 [
@@ -119,15 +144,29 @@ For the circulating supply API endpoint, Cloudflare Workers will expect to find 
     "key": "cheqd1...xxx",
     "value": "26-May-2022" // This can be any value
   },
+  {
+    "key": "delayed:cheqd1...xxx", // This is a delayed account that won't be indexed by BigDipper
+    "value": "26-May-2022"
+  },
 ]
 ```
 
 Tip: There are online converter tools to [transform CSV files to JSON files](https://csvjson.com/csv2json), which is an easy way of converting spreadsheets to JSON.
 
-Entries can bulk-uploaded to Cloudflare KV using Wrangler CLI (see [Wrangler CLI documentation for understanding the `kv:bulk` command](https://developers.cloudflare.com/workers/wrangler/commands/#kvbulk) parameters):
+#### Bulk-uploading to Cloudflare KV
+
+Entries can [bulk-uploaded to Cloudflare KV using Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/commands/#kvbulk):
 
 ```bash
 wrangler kv:bulk put <watchlist-file.json> --binding "CIRCULATING_SUPPLY_WATCHLIST" --preview false
+```
+
+#### Bulk-deleting from Cloudflare KV
+
+Entries can [bulk-deleted from Cloudflare KV using Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/commands/#kvbulk) by providing a JSON file with list of keys to delete. This JSON file should be in the form `["key1", "key2", ...]`.
+
+```bash
+wrangler kv:bulk delete <watchlist-delete.json> --binding "CIRCULATING_SUPPLY_WATCHLIST" --preview false
 ```
 
 ### Local Development
