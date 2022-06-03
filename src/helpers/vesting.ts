@@ -11,10 +11,10 @@ export function calculate_vested_coins(account: Account): number {
     const end_time = new Date(account.base_vesting_account.end_time * 1000).getTime();
     const now = new Date().getTime();
 
-    const time_elapsed_in_days = Math.abs(now - start_time) / 1000;
-    const time_vested_in_days = Math.abs(end_time - start_time) / 1000;
+    const time_elapsed = Math.abs(now - start_time) / 1000;
+    const time_vested = Math.abs(end_time - start_time) / 1000;
 
-    const ratio = Number(time_elapsed_in_days / time_vested_in_days);
+    const ratio = Number(time_elapsed / time_vested);
 
     return ratio * Number(account.base_vesting_account.original_vesting[0].amount);
 }
