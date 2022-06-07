@@ -24,8 +24,6 @@ function registerRoutes(router: Router) {
 	router.get('/balances/vesting/:address', vestingBalanceHandler);
 	router.get('/balances/vested/:address', vestedBalanceHandler);
 	router.get('/staking/delegators/:validator_address', delegatorCount);
-
-
 	router.get('/supply/staked', totalStakedCoins);
 
 	// 404 for all other requests
