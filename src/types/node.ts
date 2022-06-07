@@ -47,3 +47,12 @@ export interface ValidatorAggregateCountResponse {
 		}
 	]
 }
+
+export interface ValidatorDetailResponse {
+	validator: [
+		{
+			validatorStatuses: [{ jailed: boolean }],
+			delegations: [{ delegatorAddress: string }]
+		}
+	]
+}

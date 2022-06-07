@@ -1,6 +1,6 @@
 import { GraphQLClient } from "../helpers/graphql";
 import { Account } from "../types/bigDipper";
-import { Coin, ValidatorAggregateCountResponse } from "../types/node";
+import { Coin, Delegation, ValidatorAggregateCountResponse, ValidatorDetailResponse } from "../types/node";
 
 export class BigDipperApi {
 	constructor(public readonly graphql_client: GraphQLClient) {
@@ -77,5 +77,30 @@ export class BigDipperApi {
 		}
 
 		return resp.validator[0].delegations_aggregate.aggregate.count;
+	}
+
+	get_total_delegator_count = async (): Promise<Number> => {
+		const query = `query ValidatorDetails {
+			validator {
+				validatorStatuses: validator_statuses(order_by: {height: desc}, limit: 1) {
+					jailed
+				}
+				delegations {
+					delegatorAddress: delegator_address
+				}
+			}
+		}`
+
+		const resp = await this.graphql_client.query<ValidatorDetailResponse>(query);
+		const map = new Map();
+		resp.validator.forEach((obj, i) => {
+			if (!obj.validatorStatuses[0]?.jailed) {
+				obj.delegations.forEach(delegation => {
+					map.set(delegation.delegatorAddress, true)
+				})
+			}
+		})
+
+		return map.size
 	}
 }
