@@ -92,15 +92,15 @@ export class BigDipperApi {
 		}`
 
 		const resp = await this.graphql_client.query<ValidatorDetailResponse>(query);
-		const map = new Map();
+		const set = new Set();
 		resp.validator.forEach((obj, i) => {
 			if (!obj.validatorStatuses[0]?.jailed) {
 				obj.delegations.forEach(delegation => {
-					map.set(delegation.delegatorAddress, true)
+					set.add(delegation.delegatorAddress)
 				})
 			}
 		})
 
-		return map.size
+		return set.size
 	}
 }
