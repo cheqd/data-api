@@ -103,4 +103,15 @@ export class BigDipperApi {
 
 		return set.size
 	}
+
+	get_total_staked_coins = async (): Promise<string> => {
+		let query = `query StakingInfo{
+			staking_pool {
+				bonded_tokens
+			}
+		}`
+
+		const resp = await this.graphql_client.query<{ staking_pool: [{ "bonded_tokens": string }] }>(query);
+		return resp.staking_pool[0].bonded_tokens;
+	}
 }
