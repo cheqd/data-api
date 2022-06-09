@@ -1,6 +1,6 @@
 import { GraphQLClient } from "../helpers/graphql";
 import { Account } from "../types/bigDipper";
-import { Coin, ValidatorAggregateCountResponse } from "../types/node";
+import { Coin, Delegation, ValidatorAggregateCountResponse, ValidatorDetailResponse } from "../types/node";
 
 export class BigDipperApi {
 	constructor(public readonly graphql_client: GraphQLClient) {
@@ -77,5 +77,41 @@ export class BigDipperApi {
 		}
 
 		return resp.validator[0].delegations_aggregate.aggregate.count;
+	}
+
+	get_total_delegator_count = async (): Promise<Number> => {
+		const query = `query ValidatorDetails {
+			validator {
+				validatorStatuses: validator_statuses(order_by: {height: desc}, limit: 1) {
+					jailed
+				}
+				delegations {
+					delegatorAddress: delegator_address
+				}
+			}
+		}`
+
+		const resp = await this.graphql_client.query<ValidatorDetailResponse>(query);
+		const set = new Set();
+		resp.validator.forEach((obj, i) => {
+			if (!obj.validatorStatuses[0]?.jailed) {
+				obj.delegations.forEach(delegation => {
+					set.add(delegation.delegatorAddress)
+				})
+			}
+		})
+
+		return set.size
+	}
+
+	get_total_staked_coins = async (): Promise<string> => {
+		let query = `query StakingInfo{
+			staking_pool {
+				bonded_tokens
+			}
+		}`
+
+		const resp = await this.graphql_client.query<{ staking_pool: [{ "bonded_tokens": string }] }>(query);
+		return resp.staking_pool[0].bonded_tokens;
 	}
 }
