@@ -14,8 +14,6 @@ export class CoinGeckoApi {
     }
 
     calculate_difference_percentage(a: number, b: number): number {
-        let difference = 100 * Math.abs( ( a - b ) / ( (a+b)/2 ) );
-        console.log(difference);
-        return difference;
+        return 100 * Math.abs( ( a - b ) / ( (a+b)/2 ) );
     }
 }
