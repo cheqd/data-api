@@ -17,27 +17,20 @@ export async function handler(request: Request): Promise<Response> {
                 prices.gate_io = coingecko.tickers[i].converted_last.usd;
             break;
             case 'Osmosis':
-                if (coingecko.tickers[i].target_coin_id === "osmosis") {
+                if (coingecko.tickers[i].target_coin_id === "osmosis" && coingecko.tickers[i].coin_id === "cheqd-network") {
                     prices.osmosis_osmo = coingecko.tickers[i].converted_last.usd;
-                } else {
+                } else if (coingecko.tickers[i].target_coin_id === "cheqd-network" && coingecko.tickers[i].coin_id === "cosmos") {
                     prices.osmosis_atom = coingecko.tickers[i].converted_last.usd;
                 }
             break;
         }
     }
 
-    // Check if there is an arbitrage opportunity. 
-    if (
-        coinGeckoApi.calculate_difference_percentage(prices.bit_mart, prices.gate_io) < 4 &&
-        coinGeckoApi.calculate_difference_percentage(prices.bit_mart, prices.osmosis_atom) < 4 &&
-        coinGeckoApi.calculate_difference_percentage(prices.bit_mart, prices.osmosis_osmo) < 4 &&
-        coinGeckoApi.calculate_difference_percentage(prices.gate_io, prices.osmosis_atom) < 4 &&
-        coinGeckoApi.calculate_difference_percentage(prices.gate_io, prices.osmosis_osmo) < 4 &&
-        coinGeckoApi.calculate_difference_percentage(prices.osmosis_atom, prices.osmosis_osmo) < 4) {
-            prices.arbitrage_possible = false;
-    } else {
-        prices.arbitrage_possible = true;
-    }
-
-    return new Response(JSON.stringify(prices));
+    prices.arbitrage_opportunity = coinGeckoApi.arbitrage_opportunity(prices.bit_mart, prices.gate_io, prices.osmosis_atom, prices.osmosis_osmo);
+    
+    return new Response(JSON.stringify(prices), {
+        headers: {
+          'content-type': 'application/json;charset=UTF-8',
+        },
+      });
 }

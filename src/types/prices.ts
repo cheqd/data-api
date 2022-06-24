@@ -47,5 +47,5 @@ export interface Prices {
     bit_mart: number;
     osmosis_atom: number;
     gate_io: number;
-    arbitrage_possible: boolean;
+    arbitrage_opportunity: boolean;
 }
