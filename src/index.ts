@@ -8,6 +8,7 @@ import { handler as vestedBalanceHandler } from "./handlers/vestedBalance";
 import { handler as delegatorCount } from './handlers/delegatorCount';
 import { handler as totalDelegators } from './handlers/totalDelegators';
 import { handler as totalStakedCoins } from "./handlers/totalStakedCoins";
+import { handler as coinGeckoApi } from "./handlers/coinPrice"
 
 addEventListener('fetch', (event: FetchEvent) => {
 	const router = Router<Request, IHTTPMethods>()
@@ -27,6 +28,7 @@ function registerRoutes(router: Router) {
 	router.get('/balances/vested/:address', vestedBalanceHandler);
 	router.get('/staking/delegators/:validator_address', delegatorCount);
 	router.get('/supply/staked', totalStakedCoins);
+	router.get('/prices', coinGeckoApi);
 
 	// 404 for all other requests
 	router.all('*', () => new Response('Not Found.', { status: 404 }))
