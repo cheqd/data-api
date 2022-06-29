@@ -1,6 +1,6 @@
 {
   "name": "data-api",
-  "version": "1.0.1",
+  "version": "1.22.19",
   "licence": "Apache-2.0",
   "source": "src/index.ts",
   "repository": "git://github.com/cheqd/data-api.git",
@@ -17,6 +17,7 @@
     "publish": "npx wrangler publish"
   },
   "dependencies": {
-    "itty-router": "^2.6.1"
+    "itty-router": "^2.6.1",
+    "ts-node": "^10.8.1"
   }
 }
