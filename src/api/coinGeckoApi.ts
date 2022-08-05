@@ -1,4 +1,4 @@
-import { Prices, RootObject } from "../types/prices";
+import { Price, RootObject } from "../types/prices";
 
 export class CoinGeckoApi {
 
@@ -16,7 +16,7 @@ export class CoinGeckoApi {
 		return 100 * Math.abs((a - b) / ((a + b) / 2));
 	}
 
-	arbitrage_opportunity(prices: Prices): boolean {
+	arbitrage_opportunity(prices: Price[]): boolean {
 		const arbitrage_percentage = 4;
 		var arbitrage_opportunity = false;
 
@@ -29,7 +29,6 @@ export class CoinGeckoApi {
 				}
 			}
 		}
-		
 		return arbitrage_opportunity;
 	}
 }
