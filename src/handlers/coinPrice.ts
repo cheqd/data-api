@@ -1,32 +1,28 @@
 import { Request } from "itty-router";
-import { Prices } from "../types/prices";
+import { Price, Payload } from "../types/prices";
 import { CoinGeckoApi } from "../api/coinGeckoApi";
 
 export async function handler(request: Request): Promise<Response> {
-	let coinGeckoApi = new CoinGeckoApi(COINGECKO_API);
+	let coinGeckoApi = new CoinGeckoApi("https://api.coingecko.com/api/v3");
 	let coingecko = await coinGeckoApi.get_coingecko_data();
-	let prices = {} as Prices;
+	var prices = new Array<Price>();
+	var arbitrage_opportunity: boolean;
 
-	coingecko.tickers.forEach((ticker) => {
-		switch (ticker.market.name) {
-			case 'BitMart':
-				prices.bit_mart = ticker.converted_last.usd;
-				break;
-			case 'Gate.io':
-				prices.gate_io = ticker.converted_last.usd;
-				break;
-			case 'Osmosis':
-				if (ticker.target_coin_id === "osmosis" && ticker.coin_id === "cheqd-network") {
-					prices.osmosis_osmo = ticker.converted_last.usd;
-				} else if (ticker.target_coin_id === "cheqd-network" && ticker.coin_id === "cosmos") {
-					prices.osmosis_atom = ticker.converted_last.usd;
-				}
-				break;
-		}
+	coingecko.tickers.forEach((ticker, index) => {
+		let coin_pair: Price = {
+			market: ticker.market.name,
+			coin_pair: ticker.coin_id === "cheqd-network" ? ticker.target_coin_id : ticker.coin_id,
+			price: ticker.converted_last.usd,
+		};
+		prices.push(coin_pair);
 	})
 
-	prices.arbitrage_opportunity = coinGeckoApi.arbitrage_opportunity(prices.bit_mart, prices.gate_io, prices.osmosis_atom, prices.osmosis_osmo);
-	return new Response(JSON.stringify(prices), {
+	arbitrage_opportunity = coinGeckoApi.arbitrage_opportunity(prices);
+	var payload: Payload = {
+		markets: prices,
+		arbitrage_oportunity: arbitrage_opportunity,
+	};
+	return new Response(JSON.stringify(payload, null, 2), {
 		headers: {
 			'content-type': 'application/json;charset=UTF-8',
 		},

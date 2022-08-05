@@ -1,5 +1,4 @@
-// import { Account, Coin } from "../types/node";
-import { RootObject } from "../types/prices";
+import { Prices, RootObject } from "../types/prices";
 
 export class CoinGeckoApi {
 
@@ -17,22 +16,20 @@ export class CoinGeckoApi {
 		return 100 * Math.abs((a - b) / ((a + b) / 2));
 	}
 
-	arbitrage_opportunity(bit_mart: number, gate_io: number, osmosis_atom: number, osmosis_osmo: number): boolean {
+	arbitrage_opportunity(prices: Prices): boolean {
 		const arbitrage_percentage = 4;
-		let arbitrage_opportunity = false;
+		var arbitrage_opportunity = false;
 
-		if (
-			this.calculate_difference_percentage(bit_mart, gate_io) > arbitrage_percentage ||
-			this.calculate_difference_percentage(bit_mart, osmosis_atom) > arbitrage_percentage ||
-			this.calculate_difference_percentage(bit_mart, osmosis_osmo) > arbitrage_percentage ||
-			this.calculate_difference_percentage(gate_io, osmosis_atom) > arbitrage_percentage ||
-			this.calculate_difference_percentage(gate_io, osmosis_osmo) > arbitrage_percentage ||
-			this.calculate_difference_percentage(osmosis_atom, osmosis_osmo) > arbitrage_percentage) {
-			arbitrage_opportunity = true
-		} else {
-			arbitrage_opportunity = false
+		for (let i=0; i<prices.length; i++) {
+			for (let j=i+1; j<prices.length; j++) {
+				if (this.calculate_difference_percentage(prices[i].price, prices[j].price) > arbitrage_percentage) {
+					arbitrage_opportunity = true;
+				} else {
+					arbitrage_opportunity = false;
+				}
+			}
 		}
-
+		
 		return arbitrage_opportunity;
 	}
 }
