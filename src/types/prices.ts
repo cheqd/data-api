@@ -42,10 +42,13 @@ export interface RootObject {
     tickers: Ticker[];
 }
 
-export interface Prices {
-    osmosis_osmo: number;
-    bit_mart: number;
-    osmosis_atom: number;
-    gate_io: number;
-    arbitrage_opportunity: boolean;
+export interface Price {
+    price: number;
+    coin_pair: string;
+    market: string;
+}
+
+export interface Payload {
+    markets: Price[];
+    arbitrage_oportunity: boolean;
 }
