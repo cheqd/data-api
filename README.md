@@ -1,5 +1,7 @@
 # Cosmos SDK: Custom Data APIs
 
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/cheqd/data-api/Workflow%20Dispatch/main?label=workflows&style=flat-square)](https://github.com/cheqd/data-api/actions/workflows/dispatch.yml) [![GitHub contributors](https://img.shields.io/github/contributors/cheqd/data-api?style=flat-square)](https://github.com/cheqd/data-api/graphs/contributors) ![GitHub repo size](https://img.shields.io/github/repo-size/cheqd/data-api?style=flat-square)
+
 ## ℹ️ Overview
 
 Cosmos SDK offers [APIs for built-in modules using gRPC, REST, and Tendermint RPC](https://docs.cosmos.network/master/core/grpc_rest.html). This project aims to provide simple REST APIs for data that default Cosmos SDK APIs can't provide.
@@ -202,3 +204,17 @@ wrangler publish --env staging
 ```
 
 CI/CD deployments can be achieved using the [`wrangler` Github Action](https://github.com/cloudflare/wrangler-action). The [`deploy.yml` Github Action in this repo](https://github.com/cheqd/data-api/blob/main/.github/workflows/deploy.yml) provides an example of this can be achieved in practice.
+
+## 🐞 Bug reports & 🤔 feature requests
+
+If you notice anything not behaving how you expected, or would like to make a suggestion / request for a new feature, please create a [**new issue**](https://github.com/cheqd/data-api/issues/new/choose) and let us know.
+
+## 💬 Community
+
+The [**cheqd Community Slack**](http://cheqd.link/join-cheqd-slack) is our primary chat channel for the open-source community, software developers, and node operators.
+
+Please reach out to us there for discussions, help, and feedback on the project.
+
+## 🙋 Find us elsewhere
+
+[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/cheqd) [![Discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](http://cheqd.link/discord-github) [![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/intent/follow?screen_name=cheqd_io) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](http://cheqd.link/linkedin) [![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)](http://cheqd.link/join-cheqd-slack) [![Medium](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://blog.cheqd.io) [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/channel/UCBUGvvH6t3BAYo5u41hJPzw/)
