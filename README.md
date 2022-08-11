@@ -1,5 +1,7 @@
 # Cosmos SDK: Custom Data APIs
 
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/cheqd/data-api/Workflow%20Dispatch/main?label=workflows&style=flat-square)](https://github.com/cheqd/data-api/actions/workflows/dispatch.yml) [![GitHub contributors](https://img.shields.io/github/contributors/cheqd/data-api?style=flat-square)](https://github.com/cheqd/data-api/graphs/contributors) ![GitHub repo size](https://img.shields.io/github/repo-size/cheqd/data-api?style=flat-square)
+
 ## ℹ️ Overview
 
 Cosmos SDK offers [APIs for built-in modules using gRPC, REST, and Tendermint RPC](https://docs.cosmos.network/master/core/grpc_rest.html). This project aims to provide simple REST APIs for data that default Cosmos SDK APIs can't provide.
