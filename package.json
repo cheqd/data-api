@@ -1,10 +1,14 @@
 {
   "name": "data-api",
   "version": "1.0.1",
-  "licence": "Apache-2.0",
+  "license": "Apache-2.0",
   "source": "src/index.ts",
-  "repository": "git://github.com/cheqd/data-api.git",
   "author": "Cheqd Foundation Limited (https://github.com/cheqd)",
+  "repository": "https://github.com/cheqd/data-api.git",
+  "bugs": {
+    "url": "https://github.com/cheqd/data-api/issues"
+  },
+  "homepage": "https://github.com/cheqd/data-api#readme",
   "devDependencies": {
     "@cloudflare/workers-types": "^3.14.1",
     "@types/node": "^17.0.45",
