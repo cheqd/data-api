@@ -40,7 +40,7 @@ route = { pattern = "data-api.cheqd.io/*", zone_id = "afe3b66243382f27140e6feeaa
 # Not inherited. @default `{}`
 [vars]
 # Token lowest denom exponent. 1 CHEQ = 10^9 ncheq
-TOKEN_EXPONENT = 9
+TOKEN_EXPONENT = "9"
 # Standard Cosmosd SDK REST API endpoint for a node on target network
 REST_API = "https://api.cheqd.net"
 # GraphQL API endpoint for target network. Must be sourced from a BigDipper instance.
@@ -78,7 +78,7 @@ route = { pattern = "data-api-staging.cheqd.io/*", zone_id = "afe3b66243382f2714
 
 # Map of environment variables to set when deploying the Worker
 # Not inherited. @default `{}`
-vars = { TOKEN_EXPONENT = 9, REST_API = "https://api.cheqd.net", GRAPHQL_API = "https://gql.cheqd.io/v1/graphql" }
+vars = { TOKEN_EXPONENT = "9", REST_API = "https://api.cheqd.net", GRAPHQL_API = "https://gql.cheqd.io/v1/graphql" }
 
 # KV Namespaces accessible from the Worker
 # Details: https://developers.cloudflare.com/workers/learning/how-kv-works
