@@ -61,7 +61,7 @@ Tokens that are still vesting for continuous/delayed vesting accounts, in CHEQ.
 
 #### Rationale
 
-There is no Cosmos SDK API that returns balances that are yet to be vested for [continuous or delayed vesting accounts](https://docs.cosmos.network/master/modules/auth/05_vesting.html#vesting-account-types).
+There is no Cosmos SDK API that returns balances that are yet to be vested for [continuous or delayed vesting accounts](https://docs.cosmos.network/v0.45/modules/auth/05_vesting.html#vesting-account-types).
 
 ### 🔒 Vested Account Balance
 
@@ -75,7 +75,7 @@ Tokens that have already vested for continuous/delayed vesting accounts, in CHEQ
 
 #### Rationale
 
-There is no Cosmos SDK API that returns balances that are already vested for [continuous or delayed vesting accounts](https://docs.cosmos.network/master/modules/auth/05_vesting.html#vesting-account-types).
+There is no Cosmos SDK API that returns balances that are already vested for [continuous or delayed vesting accounts](https://docs.cosmos.network/v0.45/modules/auth/05_vesting.html#vesting-account-types).
 
 ### 💸 Liquid Account Balance
 
@@ -89,7 +89,7 @@ Tokens in continuous/delayed vesting accounts that can be converted to liquid ba
 
 #### Rationale
 
-Tokens in [continuous or delayed vesting accounts](https://docs.cosmos.network/master/modules/auth/05_vesting.html#vesting-account-types) that can be converted to liquid balances. This is calculated as the sum of the following figures:
+Tokens in [continuous or delayed vesting accounts](https://docs.cosmos.network/v0.45/modules/auth/05_vesting.html#vesting-account-types) that can be converted to liquid balances. This is calculated as the sum of the following figures:
 
 1. "Delegated free" balance (from the `/cosmos/auth/v1beta1/accounts/<address>` REST API) *or* vested balance, whichever is higher
 2. "Available" balance (if applicable)
