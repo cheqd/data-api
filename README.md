@@ -63,6 +63,20 @@ Overall tokens staked, in CHEQ.
 
 Provides the overall amount staked pulled from the block explorer.
 
+### ➕ Overall number of delegators
+
+#### Endpoint
+
+[`data-api.cheqd.io/staking/delegators/total`](https://data-api.cheqd.io/staking/delegators/total)
+
+#### Response
+
+Total number of delegators across every validator on the network.
+
+#### Rationale
+
+The only way to derive this figure from the Cosmos SDK APIs is by iterating over every validator and counting the number of delegators.
+
 ### 🗳 Delegator count by validator
 
 #### Endpoint
