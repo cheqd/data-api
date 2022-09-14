@@ -44,7 +44,7 @@ TOKEN_EXPONENT = "9"
 # Standard Cosmosd SDK REST API endpoint for a node on target network
 REST_API = "https://api.cheqd.net"
 # GraphQL API endpoint for target network. Must be sourced from a BigDipper instance.
-GRAPHQL_API = "https://gql.cheqd.io/v1/graphql"
+GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"
 
 
 ###############################################################
