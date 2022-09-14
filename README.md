@@ -49,6 +49,34 @@ This API calculates the circulating supply by **subtracting** the account balanc
    1. **If there have been ANY transactions involving the delayed vesting account**: Delayed vesting accounts can still stake their original vesting allowance, or the account holder may have transferred additional funds into the account. In this scenario, the account *will* be indexed by BigDipper and the account balance can be fetched via the GraphQL API.
    2. **If there have been NO transactions involving the delayed vesting account**: Delayed vesting accounts with no other transactions beyond the original creation are *not* indexed by BigDipper. Balances for these accounts are fetched using the standard Cosmos SDK `/cosmos/bank/v1beta1/balances/<address>` REST API endpoint.
 
+### 🥩 Total staked supply
+
+#### Endpoints
+
+[`data-api.cheqd.io/supply/staked`](https://data-api.cheqd.io/supply/staked)
+
+#### Response
+
+Overall tokens staked, in CHEQ.
+
+#### Rationale
+
+Provides the overall amount staked pulled from the block explorer.
+
+### 🗳 Delegator count by validator
+
+#### Endpoint
+
+[`data-api.cheqd.io/staking/balances/<validator-address>`](https://data-api.cheqd.io/staking/balances/cheqdvaloper1lg0vwuu888hu4arnt9egtqrm2662kcrtf2unrs)
+
+#### Response
+
+Number of delegators who delegate to a specific validator.
+
+#### Rationale
+
+There is no simple Cosmos SDK API to fetch the number of delegators for a given validator.
+
 ### 🔐 Vesting Account Balance
 
 #### Endpoint
