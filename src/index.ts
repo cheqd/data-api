@@ -20,13 +20,13 @@ function registerRoutes(router: Router) {
 	router.get('/', totalSupplyHandler);
 	router.get('/supply/total', totalSupplyHandler);
 	router.get('/supply/circulating', circulatingSupplyHandler);
-	router.get('/staking/delegators/total', totalDelegators);
+	router.get('/supply/staked', totalStakedCoins);
 	router.get('/balances/total/:address', totalBalanceHandler);
 	router.get('/balances/liquid/:address', liquidBalanceHandler);
 	router.get('/balances/vesting/:address', vestingBalanceHandler);
 	router.get('/balances/vested/:address', vestedBalanceHandler);
+	router.get('/staking/delegators/total', totalDelegators);
 	router.get('/staking/delegators/:validator_address', delegatorCount);
-	router.get('/supply/staked', totalStakedCoins);
 
 	// 404 for all other requests
 	router.all('*', () => new Response('Not Found.', { status: 404 }))
