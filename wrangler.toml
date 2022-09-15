@@ -85,8 +85,8 @@ vars = { TOKEN_EXPONENT = "9", REST_API = "https://api.cheqd.net", GRAPHQL_API =
 # @default `[]`
 [[env.staging.kv_namespaces]]
   binding = "CIRCULATING_SUPPLY_WATCHLIST"
-  id = "b30ca7ebb2ae4dcd888a345475d661a8"
-  preview_id = "517983610407482ba1beafab168c734a"
+  id = "afb34dd4b9374cc4a7ae7c3aaf6e5ce2"
+  preview_id = "1e1032cbf6854d88b12317da8a792928"
 
 
 ###############################################################
