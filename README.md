@@ -168,7 +168,7 @@ The recommended method of interacting with this repository is using [Cloudflare 
 Dependencies can be installed using Yarn or any other package manager.
 
 ```bash
-yarn install
+npm install
 ```
 
 While our deployment uses Cloudflare Wrangler, the application itself could be modified to run on other platforms with some refactoring.
