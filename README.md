@@ -30,7 +30,7 @@ While this figure is available from Cosmos SDK's built-in [`/cosmos/bank/v1beta1
 
 #### Endpoint
 
-[`data-api.cheqd.io/supply/circulating`](https://data-api.cheqd.io/supply/circulating)
+`data-api.cheqd.io/supply/circulating`
 
 #### Response
 
@@ -49,6 +49,48 @@ This API calculates the circulating supply by **subtracting** the account balanc
    1. **If there have been ANY transactions involving the delayed vesting account**: Delayed vesting accounts can still stake their original vesting allowance, or the account holder may have transferred additional funds into the account. In this scenario, the account *will* be indexed by BigDipper and the account balance can be fetched via the GraphQL API.
    2. **If there have been NO transactions involving the delayed vesting account**: Delayed vesting accounts with no other transactions beyond the original creation are *not* indexed by BigDipper. Balances for these accounts are fetched using the standard Cosmos SDK `/cosmos/bank/v1beta1/balances/<address>` REST API endpoint.
 
+### 🥩 Total staked supply
+
+#### Endpoints
+
+[`data-api.cheqd.io/supply/staked`](https://data-api.cheqd.io/supply/staked)
+
+#### Response
+
+Overall tokens staked, in CHEQ.
+
+#### Rationale
+
+Provides the overall amount staked pulled from the block explorer.
+
+### ➕ Overall number of delegators
+
+#### Endpoint
+
+[`data-api.cheqd.io/staking/delegators/total`](https://data-api.cheqd.io/staking/delegators/total)
+
+#### Response
+
+Total number of delegators across every validator on the network.
+
+#### Rationale
+
+The only way to derive this figure from the Cosmos SDK APIs is by iterating over every validator and counting the number of delegators.
+
+### 🗳 Delegator count by validator
+
+#### Endpoint
+
+[`data-api.cheqd.io/staking/balances/<validator-address>`](https://data-api.cheqd.io/staking/balances/cheqdvaloper1lg0vwuu888hu4arnt9egtqrm2662kcrtf2unrs)
+
+#### Response
+
+Number of delegators who delegate to a specific validator.
+
+#### Rationale
+
+There is no simple Cosmos SDK API to fetch the number of delegators for a given validator.
+
 ### 🔐 Vesting Account Balance
 
 #### Endpoint
@@ -61,7 +103,7 @@ Tokens that are still vesting for continuous/delayed vesting accounts, in CHEQ.
 
 #### Rationale
 
-There is no Cosmos SDK API that returns balances that are yet to be vested for [continuous or delayed vesting accounts](https://docs.cosmos.network/master/modules/auth/05_vesting.html#vesting-account-types).
+There is no Cosmos SDK API that returns balances that are yet to be vested for [continuous or delayed vesting accounts](https://docs.cosmos.network/v0.45/modules/auth/05_vesting.html#vesting-account-types).
 
 ### 🔒 Vested Account Balance
 
@@ -75,7 +117,7 @@ Tokens that have already vested for continuous/delayed vesting accounts, in CHEQ
 
 #### Rationale
 
-There is no Cosmos SDK API that returns balances that are already vested for [continuous or delayed vesting accounts](https://docs.cosmos.network/master/modules/auth/05_vesting.html#vesting-account-types).
+There is no Cosmos SDK API that returns balances that are already vested for [continuous or delayed vesting accounts](https://docs.cosmos.network/v0.45/modules/auth/05_vesting.html#vesting-account-types).
 
 ### 💸 Liquid Account Balance
 
@@ -89,7 +131,7 @@ Tokens in continuous/delayed vesting accounts that can be converted to liquid ba
 
 #### Rationale
 
-Tokens in [continuous or delayed vesting accounts](https://docs.cosmos.network/master/modules/auth/05_vesting.html#vesting-account-types) that can be converted to liquid balances. This is calculated as the sum of the following figures:
+Tokens in [continuous or delayed vesting accounts](https://docs.cosmos.network/v0.45/modules/auth/05_vesting.html#vesting-account-types) that can be converted to liquid balances. This is calculated as the sum of the following figures:
 
 1. "Delegated free" balance (from the `/cosmos/auth/v1beta1/accounts/<address>` REST API) *or* vested balance, whichever is higher
 2. "Available" balance (if applicable)
@@ -126,7 +168,7 @@ The recommended method of interacting with this repository is using [Cloudflare 
 Dependencies can be installed using Yarn or any other package manager.
 
 ```bash
-yarn install
+npm install
 ```
 
 While our deployment uses Cloudflare Wrangler, the application itself could be modified to run on other platforms with some refactoring.
