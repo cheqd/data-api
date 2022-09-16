@@ -9,6 +9,11 @@ import { handler as delegatorCount } from "./handlers/delegatorCount";
 import { handler as totalDelegators } from "./handlers/totalDelegators";
 import { handler as totalStakedCoins } from "./handlers/totalStakedCoins";
 import { handler as coinGeckoApi } from "./handlers/coinPrice";
+import { webhookTriggers } from "./handlers/webhookTriggers";
+
+addEventListener("scheduled", (event: any) => {
+  event.waitUntil(webhookTriggers(event));
+});
 
 addEventListener("fetch", (event: FetchEvent) => {
   const router = Router<Request, IHTTPMethods>();

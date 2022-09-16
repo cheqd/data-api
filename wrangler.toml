@@ -90,6 +90,10 @@ vars = { ENVIRONMENT = "staging", TOKEN_EXPONENT = "9", REST_API = "https://api.
   id = "afb34dd4b9374cc4a7ae7c3aaf6e5ce2"
   preview_id = "1e1032cbf6854d88b12317da8a792928"
 
+# Cron triggers for staging worker
+[env.staging.triggers]
+crons = ["0/1 * * * *"]
+
 
 ###############################################################
 ###               OPTIONAL: Build Configuration             ###
