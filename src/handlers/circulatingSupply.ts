@@ -12,7 +12,6 @@ async function get_circulating_supply(circulating_supply_watchlist: string[]): P
     let node_api = new NodeApi(REST_API);
 
     let filtered_accounts = filter_marked_as_account_types(circulating_supply_watchlist);
-
     let non_circulating_accounts = await bd_api.get_accounts(filtered_accounts.other);
 
     let non_circulating_accounts_delayed = await Promise.all(filtered_accounts?.delayed?.map(address => node_api.bank_get_account_balances(address)));
