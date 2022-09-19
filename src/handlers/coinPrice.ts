@@ -1,11 +1,10 @@
 import { Price, Payload, ArbitrageOpportunity } from "../types/prices";
 import { CoinGeckoApi } from "../api/coinGeckoApi";
+import { CHEQ_COIN_ID } from "../helpers/constants";
 
 export async function fetchPrices() {
-  console.log("fetching coingeko data");
   let coinGeckoApi = new CoinGeckoApi(COINGECKO_API);
   let coingecko = await coinGeckoApi.get_coingecko_data();
-  console.log("coingecko data", coingecko);
   var prices = new Array<Price>();
   var arbitrage_opportunities = new Array<ArbitrageOpportunity>();
 
@@ -13,7 +12,7 @@ export async function fetchPrices() {
     let coin_pair: Price = {
       market: ticker.market.name,
       coin_pair:
-        ticker.coin_id === "cheqd-network"
+        ticker.coin_id === CHEQ_COIN_ID
           ? ticker.target_coin_id
           : ticker.coin_id,
       price: ticker.converted_last.usd,
@@ -22,11 +21,11 @@ export async function fetchPrices() {
   });
 
   arbitrage_opportunities = coinGeckoApi.arbitrage_opportunities(prices);
-  const is_arbitrage_opportunity = arbitrage_opportunities.length > 0;
+  const has_arbitrage_opportunity = arbitrage_opportunities.length > 0;
   var payload: Payload = {
     markets: prices,
     arbitrage_oportunities: arbitrage_opportunities,
-    arbitrage_oportunity: is_arbitrage_opportunity,
+    arbitrage_oportunity: has_arbitrage_opportunity,
   };
   return payload;
 }

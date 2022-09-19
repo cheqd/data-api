@@ -4,30 +4,10 @@ export class CoinGeckoApi {
   constructor(public readonly base_coingecko_api_url: string) {}
 
   async get_coingecko_data(): Promise<RootObject> {
-    let respJson: RootObject = {
-      name: "",
-      tickers: [],
-    };
-    try {
-      let resp = await fetch(
-        `${this.base_coingecko_api_url}/coins/cheqd-network/tickers`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      //   respJson = (await resp.json()) as RootObject;
-      respJson = (await resp.json()) as RootObject;
-
-      console.log("coingecko data", respJson);
-    } catch (err) {
-      console.log(`error in coingeco `);
-      console.log(err);
-    }
-    return respJson;
+    let response = await fetch(
+      `${this.base_coingecko_api_url}/coins/cheqd-network/tickers`
+    );
+    return (await response.json()) as RootObject;
   }
 
   calculate_difference_percentage(a: number, b: number): number {
@@ -35,7 +15,6 @@ export class CoinGeckoApi {
   }
 
   arbitrage_opportunities(prices: Price[]): ArbitrageOpportunity[] {
-    const arbitrage_percentage = 4; //TODO: change tis using ENVvar bc were going to use different for differnt env
     var arbitrage_opportunities: ArbitrageOpportunity[] = [];
 
     for (let i = 0; i < prices.length; i++) {
@@ -44,7 +23,7 @@ export class CoinGeckoApi {
           prices[i].price,
           prices[j].price
         );
-        if (percentage_delta > arbitrage_percentage) {
+        if (percentage_delta > MARKET_ARBITRAGE_THRESHOLD) {
           arbitrage_opportunities.push({
             market_a: prices[i],
             market_b: prices[j],
