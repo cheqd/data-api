@@ -1,7 +1,6 @@
-import { ArbitrageOpportunity, Payload } from "../types/prices";
-import { fetchPrices, handler } from "./coinPrice";
+import { fetchPrices } from "./coinPrice";
 
-export async function webhookTriggers(event: Event) {
+export async function webhookTriggers() {
   console.log("Triggering webhook...");
   await sendPriceDiscrepancies();
 }
@@ -11,23 +10,21 @@ export async function sendPriceDiscrepancies() {
 
   const prices = await fetchPrices();
 
-  const arbitrage_oportunity = prices.arbitrage_oportunity;
-  // TODO: set this to "arbitrage_oportunity"
-  console.log("Arbitrage opportunities...", prices);
-  if (arbitrage_oportunity) {
+  const has_arbitrage_oportunity = prices.arbitrage_oportunity;
+  if (has_arbitrage_oportunity) {
+    console.log("Arbitrage opportunities...");
     try {
       const init = {
-        body: JSON.stringify(prices),
+        body: JSON.stringify({
+          arbitrage_oportunities: prices.arbitrage_oportunities,
+        }),
         method: "POST",
         headers: {
           "content-type": "application/json;charset=UTF-8",
         },
       };
 
-      await fetch(
-        "https://hooks.zapier.com/hooks/catch/13375168/benkx5j/", //TODO set this back to cheqds webhook url
-        init
-      );
+      await fetch(WEBHOOK_URL, init);
     } catch (err: any) {
       console.log(err);
     }
