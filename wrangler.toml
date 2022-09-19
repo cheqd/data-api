@@ -50,6 +50,9 @@ COINGECKO_API = "https://api.coingecko.com/api/v3"
 # Max percentage difference allowed for a market atrbitrage.
 MARKET_ARBITRAGE_THRESHOLD=6
 
+[triggers]
+crons = ["59 * * * *"]
+
 ###############################################################
 ###             SECTION 3: Local Development                ###
 ###############################################################
@@ -93,7 +96,7 @@ vars = { ENVIRONMENT = "staging", TOKEN_EXPONENT = "9", REST_API = "https://api.
 
 # Cron triggers for staging worker
 [env.staging.triggers]
-crons = ["0/1 * * * *"]
+crons = ["0/30 * * * *"]
 
 
 ###############################################################

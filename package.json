@@ -1,7 +1,7 @@
 {
   "name": "data-api",
   "version": "1.22.19",
-  "licence": "Apache-2.0",
+  "license": "Apache-2.0",
   "source": "src/index.ts",
   "author": "Cheqd Foundation Limited (https://github.com/cheqd)",
   "repository": "https://github.com/cheqd/data-api.git",
