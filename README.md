@@ -8,6 +8,10 @@ Cosmos SDK offers [APIs for built-in modules using gRPC, REST, and Tendermint RP
 
 This collection of custom APIs can be deployed as a [Cloudflare Worker](https://workers.cloudflare.com/) or compatible serverless platforms.
 
+## 🚨 Alerting Market Arbitrages via Zapier
+
+To alert a significant market arbitrages for CHEQ listings on different exchanges, we take the output of our `prices` API endpoint and parse it via [Zapier](https://zapier.com/).We then notify the team via Slack and Email.
+
 ## 🔍 API Endpoints & Features
 
 ### 🧮 Total Supply
@@ -18,7 +22,7 @@ This collection of custom APIs can be deployed as a [Cloudflare Worker](https://
 
 #### Response
 
-*Just* total supply of tokens, in main token denomination (CHEQ instead of `ncheq` in our case)
+_Just_ total supply of tokens, in main token denomination (CHEQ instead of `ncheq` in our case)
 
 #### Rationale
 
@@ -34,20 +38,20 @@ While this figure is available from Cosmos SDK's built-in [`/cosmos/bank/v1beta1
 
 #### Response
 
-Circulating token supply, in main token denomination (CHEQ instead of *ncheq* in our case)
+Circulating token supply, in main token denomination (CHEQ instead of _ncheq_ in our case)
 
 #### Rationale
 
 Cryptocurrency tracking websites such as [CoinMarketCap](https://coinmarketcap.com/currencies/cheqd/) and [CoinGecko](https://www.coingecko.com/en/coins/cheqd-network) require an API endpoint for reporting the circulating supply of tokens in the main/primary token denomination.
 
-This figure is *not* available from any Cosmos SDK API, because the [criteria for determining circulating vs "non-circulating" accounts is defined by CoinMarketCap](https://support.coinmarketcap.com/hc/en-us/articles/360043396252-Supply-Circulating-Total-Max-).
+This figure is _not_ available from any Cosmos SDK API, because the [criteria for determining circulating vs "non-circulating" accounts is defined by CoinMarketCap](https://support.coinmarketcap.com/hc/en-us/articles/360043396252-Supply-Circulating-Total-Max-).
 
 This API calculates the circulating supply by **subtracting** the account balances of a defined list of wallet addresses ("circulating supply watchlist"). Different types of accounts defined in the watchlist are handled as follows:
 
 1. **Base accounts and Continuous Vesting accounts**: These will always have an entry in BigDipper block explorer, since these accounts have transactions that trigger indexing.
-2. **Delayed Vesting accounts**: These accounts present a complex scenario since BigDipper does *not* index all delayed vesting accounts by default.
-   1. **If there have been ANY transactions involving the delayed vesting account**: Delayed vesting accounts can still stake their original vesting allowance, or the account holder may have transferred additional funds into the account. In this scenario, the account *will* be indexed by BigDipper and the account balance can be fetched via the GraphQL API.
-   2. **If there have been NO transactions involving the delayed vesting account**: Delayed vesting accounts with no other transactions beyond the original creation are *not* indexed by BigDipper. Balances for these accounts are fetched using the standard Cosmos SDK `/cosmos/bank/v1beta1/balances/<address>` REST API endpoint.
+2. **Delayed Vesting accounts**: These accounts present a complex scenario since BigDipper does _not_ index all delayed vesting accounts by default.
+   1. **If there have been ANY transactions involving the delayed vesting account**: Delayed vesting accounts can still stake their original vesting allowance, or the account holder may have transferred additional funds into the account. In this scenario, the account _will_ be indexed by BigDipper and the account balance can be fetched via the GraphQL API.
+   2. **If there have been NO transactions involving the delayed vesting account**: Delayed vesting accounts with no other transactions beyond the original creation are _not_ indexed by BigDipper. Balances for these accounts are fetched using the standard Cosmos SDK `/cosmos/bank/v1beta1/balances/<address>` REST API endpoint.
 
 ### 🥩 Total staked supply
 
@@ -133,7 +137,7 @@ Tokens in continuous/delayed vesting accounts that can be converted to liquid ba
 
 Tokens in [continuous or delayed vesting accounts](https://docs.cosmos.network/v0.45/modules/auth/05_vesting.html#vesting-account-types) that can be converted to liquid balances. This is calculated as the sum of the following figures:
 
-1. "Delegated free" balance (from the `/cosmos/auth/v1beta1/accounts/<address>` REST API) *or* vested balance, whichever is higher
+1. "Delegated free" balance (from the `/cosmos/auth/v1beta1/accounts/<address>` REST API) _or_ vested balance, whichever is higher
 2. "Available" balance (if applicable)
 3. "Reward" balance (if applicable)
 
@@ -150,6 +154,28 @@ Total account balance for specified account, in CHEQ.
 #### Rationale
 
 The standard Cosmos SDK REST API for account balances returns JSON with the account balances along with its denomination, usually the lowest denomination. This is hard to parse in applications such as Google Sheets (e.g., to monitor the account balance by fetching a response from a REST API directly in Google Sheets). This API returns a plain number that can be directly plugged into such applications, without having to parse JSON.
+
+### 💲 Prices
+
+#### Endpoint
+
+[`data-api.cheqd.io/prices/`](https://data-api.cheqd.io/prices)
+
+#### Response
+
+Returns current price of CHEQ token among different markets as well as arbitrage opportunities if there are any.
+
+Exchanges:
+
+- Osmosis
+- Gate.io
+- BitMart
+- LBank
+- Uniswap (v3)
+
+#### Rationale
+
+Having a significant market arbitrage among different exchanges creates a [market inefficiencies](https://www.investopedia.com/terms/i/inefficientmarket.asp). Extreme market inefficiencies result [Market Faliure](https://www.investopedia.com/terms/m/marketfailure.asp) and [Deadweight Loss](https://www.investopedia.com/terms/d/deadweightloss.asp). So it is better to implement monitoring of exchanges with CHEQ listings to ensure prices match to least arbitrage opportunities.
 
 ## 🧑‍💻🛠 Developer Guide
 
@@ -177,7 +203,7 @@ While our deployment uses Cloudflare Wrangler, the application itself could be m
 
 Wrangler CLI uses [`wrangler.toml` for configuring](https://developers.cloudflare.com/workers/wrangler/configuration/) the application. If you're using this for your own purposes, you will need to replace values for `account_id`, [Cloudflare KV](https://developers.cloudflare.com/workers/learning/how-kv-works/) bindings, `route`, etc. for the application to work correctly along with your own [Cloudflare API tokens](https://developers.cloudflare.com/api/tokens/create).
 
-For the circulating supply API endpoint, Cloudflare Workers will expect to find a Cloudflare KV namespace called `CIRCULATING_SUPPLY_WATCHLIST` with a list of addresses in the `key`. The application *only* uses the key, so value can be anything.
+For the circulating supply API endpoint, Cloudflare Workers will expect to find a Cloudflare KV namespace called `CIRCULATING_SUPPLY_WATCHLIST` with a list of addresses in the `key`. The application _only_ uses the key, so value can be anything.
 
 Delayed vesting accounts that have never been involved in a transaction (as described above) should be prefixed with a `delayed:` prefix in the JSON file. Cloudflare allows [filtering KV pair `key`s by prefixes](https://developers.cloudflare.com/workers/runtime-apis/kv/#more-detail) when using a list operation.
 
@@ -191,7 +217,7 @@ Delayed vesting accounts that have never been involved in a transaction (as desc
   {
     "key": "delayed:cheqd1...xxx", // This is a delayed account that won't be indexed by BigDipper
     "value": "26-May-2022"
-  },
+  }
 ]
 ```
 
@@ -229,7 +255,7 @@ Wrangler CLI also allows a degree of local development by running the web framew
 wrangler dev --local
 ```
 
-If you want *completely* standalone local development, this can achieved using an emulator framework like [Miniflare](https://miniflare.dev/).
+If you want _completely_ standalone local development, this can achieved using an emulator framework like [Miniflare](https://miniflare.dev/).
 
 ### Deploy
 
