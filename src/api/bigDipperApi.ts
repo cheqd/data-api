@@ -44,6 +44,7 @@ export class BigDipperApi {
     }
 
 
+
     async get_total_supply(): Promise<Coin[]> {
         let query = `query Supply {
             supply(order_by: {height:desc} limit: 1) {
