@@ -10,8 +10,7 @@ export class BigDipperApi {
         let query = `query Account($addresses: [String], $utc: timestamp) {
                           account(where: {address: {_in: $addresses}}) {
                             address
-                          }
-                          accountBalances: action_account_balance(where: {address: {_in: $addresses}}) {
+                            accountBalances: action_account_balance(where: {address: {_in: $addresses}}) {
                             address
                           }
                           delegations: action_delegation(where: {address: {_in: $addresses}}) {
@@ -28,17 +27,18 @@ export class BigDipperApi {
                             validator_address
                             coins
                           }
-                        }
-                    }`
+                          }
+                        }`
 
         let params = {
-            // utc: new Date(),
+            utc: new Date(),
             addresses
         }
 
 
         try {
             let resp = await this.graphql_client.query<{ account: Account[] }>(query, params);
+            console.log({resp})
             return resp.account;
         } catch (e) {
             console.error(JSON.stringify(e))
@@ -49,8 +49,13 @@ export class BigDipperApi {
 
     async get_account(address: string): Promise<Account> {
         let accounts = await this.get_accounts([address]);
-        return accounts[0];
+        if (accounts.length  > 0 ){
+            return accounts[0];
+        }
+
+        return {} as Account
     }
+
 
     async get_total_supply(): Promise<Coin[]> {
         let query = `query Supply {
