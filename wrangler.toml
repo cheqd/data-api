@@ -48,7 +48,7 @@ GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"
 # CoinGecko API endpoint for fetching token prices.
 COINGECKO_API = "https://api.coingecko.com/api/v3"
 # Max percentage difference allowed for a market atrbitrage.
-MARKET_ARBITRAGE_THRESHOLD=6
+MARKET_ARBITRAGE_THRESHOLD=2
 
 [triggers]
 crons = ["59 * * * *"]
@@ -84,7 +84,7 @@ route = { pattern = "data-api-staging.cheqd.io/*", zone_id = "afe3b66243382f2714
 
 # Map of environment variables to set when deploying the Worker
 # Not inherited. @default `{}`
-vars = { ENVIRONMENT = "staging", TOKEN_EXPONENT = "9", REST_API = "https://api.cheqd.net", GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql", COINGECKO_API = "https://api.coingecko.com/api/v3", MARKET_ARBITRAGE_THRESHOLD=4 }
+vars = { ENVIRONMENT = "staging", TOKEN_EXPONENT = "9", REST_API = "https://api.cheqd.net", GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql", COINGECKO_API = "https://api.coingecko.com/api/v3", MARKET_ARBITRAGE_THRESHOLD=1 }
 
 # KV Namespaces accessible from the Worker
 # Details: https://developers.cloudflare.com/workers/learning/how-kv-works
