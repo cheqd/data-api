@@ -1,59 +1,37 @@
 import { GraphQLClient } from "../helpers/graphql";
-import { Account } from "../types/bigDipper";
-import { Coin, Delegation, ValidatorAggregateCountResponse, ValidatorDetailResponse } from "../types/node";
+import { Coin, ValidatorAggregateCountResponse, ValidatorDetailResponse } from "../types/node";
+import { Record } from "../types/bigDipper";
 
 export class BigDipperApi {
     constructor(public readonly graphql_client: GraphQLClient) {
     }
 
-    async get_accounts(addresses: string[]): Promise<Account[]> {
-        let query = `query Account($addresses: [String], $utc: timestamp) {
-                          account(where: {address: {_in: $addresses}}) {
-                            address
-                            accountBalances: action_account_balance(where: {address: {_in: $addresses}}) {
-                            address
-                          }
-                          delegations: action_delegation(where: {address: {_in: $addresses}}) {
-                            address
-                          }
-                          unbondingBalance: action_unbonding_delegation_total(where: {address: {_in: $addresses}}) {
-                            address
-                          }
-                          redelegations: action_redelegation(where: {address: {_in: $addresses}}, limit: $limit, offset: $offset, count_total: $pagination) {
-                            redelegations
-                            pagination
-                          }
-                          delegationRewards: action_delegation_reward(where: {address: {_in: $addresses}}) {
-                            validator_address
-                            coins
-                          }
-                          }
-                        }`
+    async get_accounts(addresses: string[]): Promise<Record[]> {
+        let query = `query Account($addresses: [String!]) {
+  account(where: {address: {_in: $addresses}}) {
+    address
+  }
+  account_balance(where: {address: {_in: $addresses}}) {
+    coins
+  }
+}`
 
         let params = {
-            utc: new Date(),
-            addresses
+            addresses: addresses
         }
 
+        let resp = await this.graphql_client.query<Record[]>(query, params);
 
-        try {
-            let resp = await this.graphql_client.query<{ account: Account[] }>(query, params);
-            console.log({resp})
-            return resp.account;
-        } catch (e) {
-            console.error(JSON.stringify(e))
-        }
-
-        return [];
+        return resp as Record[]
     }
 
-    async get_account(address: string): Promise<Account> {
-        let accounts = await this.get_accounts([address]);
-        if (accounts.length  > 0 ){
+    async get_account(address: string): Promise<Record> {
+        let accounts = await this.get_accounts([ address ]);
+        if (accounts.length > 0) {
             return accounts[0];
         }
 
-        return {} as Account
+        return {} as Record
     }
 
 
@@ -66,7 +44,8 @@ export class BigDipperApi {
         }`;
 
         let resp = await this.graphql_client.query<{ supply: { coins: Coin[] }[] }>(query);
-        return resp.supply[0].coins;
+
+        return resp.data.supply[0].coins;
     }
 
     get_delegator_count_for_validator = async (address: string): Promise<Number> => {
@@ -124,7 +103,7 @@ export class BigDipperApi {
             }
         }`
 
-        const resp = await this.graphql_client.query<{ staking_pool: [{ "bonded_tokens": string }] }>(query);
+        const resp = await this.graphql_client.query<{ staking_pool: [ { "bonded_tokens": string } ] }>(query);
         return resp.staking_pool[0].bonded_tokens;
     }
 }
