@@ -6,6 +6,7 @@ declare global {
   const COINGECKO_API: string;
   const MARKET_ARBITRAGE_THRESHOLD: number;
   const WEBHOOK_URL: string;
+  const COINGECKO_ID: string;
 }
 
 export {};
