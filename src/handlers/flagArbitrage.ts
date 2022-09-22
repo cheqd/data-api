@@ -1,6 +1,5 @@
 import { Price, Payload, ArbitrageOpportunity } from "../types/prices";
 import { CoinGeckoApi } from "../api/coinGeckoApi";
-import { CHEQ_COIN_ID } from "../helpers/constants";
 
 export async function fetchPrices() {
   let coinGeckoApi = new CoinGeckoApi(COINGECKO_API);
@@ -12,7 +11,7 @@ export async function fetchPrices() {
     let coin_pair: Price = {
       market: ticker.market.name,
       coin_pair:
-        ticker.coin_id === CHEQ_COIN_ID
+        ticker.coin_id === COINGECKO_ID
           ? ticker.target_coin_id
           : ticker.coin_id,
       price: ticker.converted_last.usd,
@@ -29,6 +28,7 @@ export async function fetchPrices() {
   };
   return payload;
 }
+
 export async function handler(request: Request): Promise<Response> {
   const payload = await fetchPrices();
   return new Response(JSON.stringify(payload, null, 2), {
