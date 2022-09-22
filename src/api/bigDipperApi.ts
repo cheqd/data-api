@@ -8,13 +8,13 @@ export class BigDipperApi {
 
     async get_accounts(addresses: string[]): Promise<Record[]> {
         let query = `query Account($addresses: [String!]) {
-  account(where: {address: {_in: $addresses}}) {
-    address
-  }
-  account_balance(where: {address: {_in: $addresses}}) {
-    coins
-  }
-}`
+            account(where: {address: {_in: $addresses}}) {
+                address
+            }
+            account_balance(where: {address: {_in: $addresses}}) {
+                coins
+            }
+        }`
 
         let params = {
             addresses: addresses
@@ -22,13 +22,22 @@ export class BigDipperApi {
 
         let resp = await this.graphql_client.query<Record[]>(query, params);
 
+        console.log({ resp })
+
         return resp as Record[]
     }
 
     async get_account(address: string): Promise<Record> {
-        let accounts = await this.get_accounts([ address ]);
-        if (accounts.length > 0) {
-            return accounts[0];
+        const record = await this.get_accounts([ address ]);
+
+        const { account, account_balance, delegations, unbonding, delegationRewards } = record.data;
+        if (account.length > 0) {
+
+            return {
+                account: account[0],
+                account_balance: account_balance[0],
+                delegationRewards: [], delegations: [], unbonding: []
+            } as Record;
         }
 
         return {} as Record
