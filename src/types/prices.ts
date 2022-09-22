@@ -56,6 +56,6 @@ export interface ArbitrageOpportunity {
 
 export interface Payload {
   markets: Price[];
-  arbitrage_oportunities: ArbitrageOpportunity[];
-  arbitrage_oportunity: boolean;
+  arbitrage_opportunities: ArbitrageOpportunity[];
+  arbitrage_opportunity: boolean;
 }

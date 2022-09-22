@@ -24,8 +24,8 @@ export async function fetchPrices() {
   const has_arbitrage_opportunity = arbitrage_opportunities.length > 0;
   var payload: Payload = {
     markets: prices,
-    arbitrage_oportunities: arbitrage_opportunities,
-    arbitrage_oportunity: has_arbitrage_opportunity,
+    arbitrage_opportunities: arbitrage_opportunities,
+    arbitrage_opportunity: has_arbitrage_opportunity,
   };
   return payload;
 }

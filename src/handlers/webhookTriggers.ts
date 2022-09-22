@@ -1,6 +1,6 @@
 import { fetchPrices } from "./coinPrice";
 
-export async function webhookTriggers() {
+export async function webhookTriggers(event: Event) {
   console.log("Triggering webhook...");
   await sendPriceDiscrepancies();
 }
@@ -10,13 +10,13 @@ export async function sendPriceDiscrepancies() {
 
   const prices = await fetchPrices();
 
-  const has_arbitrage_oportunity = prices.arbitrage_oportunity;
-  if (has_arbitrage_oportunity) {
+  const has_arbitrage_opportunity = prices.arbitrage_opportunity;
+  if (has_arbitrage_opportunity) {
     console.log("Arbitrage opportunities...");
     try {
       const init = {
         body: JSON.stringify({
-          arbitrage_oportunities: prices.arbitrage_oportunities,
+          arbitrage_opportunities: prices.arbitrage_opportunities,
         }),
         method: "POST",
         headers: {
