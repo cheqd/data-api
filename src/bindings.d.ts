@@ -7,6 +7,7 @@ declare global {
   const COINGECKO_ID: string;
   const MARKET_ARBITRAGE_THRESHOLD: number;
   const WEBHOOK_URL: string;
+  const TOKEN_DECIMALS = 10 ** TOKEN_EXPONENT;
 }
 
 export {};
