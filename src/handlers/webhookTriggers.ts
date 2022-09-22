@@ -1,4 +1,4 @@
-import { fetchPrices } from "./coinPrice";
+import { fetchPrices } from "./flagArbitrage";
 
 export async function webhookTriggers(event: Event) {
   console.log("Triggering webhook...");
