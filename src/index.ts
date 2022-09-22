@@ -33,7 +33,6 @@ function registerRoutes(router: Router) {
   router.get("/balances/vested/:address", vestedBalanceHandler);
   router.get("/staking/delegators/total", totalDelegators);
   router.get("/staking/delegators/:validator_address", delegatorCount);
-  router.get("/supply/staked", totalStakedCoins);
   router.get("/prices", coinGeckoApi);
 
   // 404 for all other requests
