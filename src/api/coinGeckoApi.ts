@@ -4,9 +4,14 @@ export class CoinGeckoApi {
   constructor(public readonly base_coingecko_api_url: string) {}
 
   async get_coingecko_data(): Promise<RootObject> {
-    let response = await fetch(
-      `${this.base_coingecko_api_url}/coins/cheqd-network/tickers`
-    );
+    let request_url = this.base_coingecko_api_url + "/coins/" + COINGECKO_ID + "/tickers";
+    let request_headers = {
+      headers: {
+        "accept": "application/json,*/*",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"
+      }
+    }
+    let response = await fetch(request_url, request_headers);
     return (await response.json()) as RootObject;
   }
 
