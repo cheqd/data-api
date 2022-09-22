@@ -7,8 +7,8 @@ export class CoinGeckoApi {
     let request_url = this.base_coingecko_api_url + "/coins/" + COINGECKO_ID + "/tickers";
     let request_headers = {
       headers: {
-        "accept": "application/json,*/*",
-        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"
+        "accept": "*/*",
+        "user-agent": "curl/7.79.1"
       }
     }
     let response = await fetch(request_url, request_headers);
