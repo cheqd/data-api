@@ -9,7 +9,7 @@ name = "data-api"
 main = "src/index.ts"
 
 # Date in yyyy-mm-dd to determine which version of Workers runtime to use
-# Details: https://developers.cloudflare.com/workers/platform/compatibility-dates/ 
+# Details: https://developers.cloudflare.com/workers/platform/compatibility-dates/
 compatibility_date = "2022-05-24"
 
 # Usage model for the Worker
@@ -98,13 +98,13 @@ vars = { TOKEN_EXPONENT = "9", REST_API = "https://api.cheqd.net", GRAPHQL_API =
 # Details: https://developers.cloudflare.com/workers/wrangler/custom-builds/
 # @default {}
 # [build]
-#   # Custom build command. On Linux and macOS, the command is executed in 
+#   # Custom build command. On Linux and macOS, the command is executed in
 #   # the `sh` shell and the `cmd` shell for Windows.
 #   # The `&&` and `||` shell operators may be used.
 #   command = ""
 #   # The directory in which the command is executed.
 #   cwd = "./src"
-#   # The directory to watch for changes while using `wrangler dev`, 
+#   # The directory to watch for changes while using `wrangler dev`,
 #   # defaults to the current working directory
 #   watch_dir = ""
 

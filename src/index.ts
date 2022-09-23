@@ -1,4 +1,4 @@
-import { Router, Request, IHTTPMethods } from 'itty-router'
+import { IHTTPMethods, Request, Router } from 'itty-router'
 import { handler as totalSupplyHandler } from "./handlers/totalSupply";
 import { handler as totalBalanceHandler } from "./handlers/totalBalance";
 import { handler as circulatingSupplyHandler } from "./handlers/circulatingSupply";
@@ -27,10 +27,10 @@ function registerRoutes(router: Router) {
 	router.get('/supply/staked', totalStakedCoinsHandler);
 	router.get('/supply/total', totalSupplyHandler);
 
-	// 404 for all other requests
-	router.all('*', () => new Response('Not Found.', { status: 404 }))
+    // 404 for all other requests
+    router.all('*', () => new Response('Not Found.', { status: 404 }))
 }
 
 function handleError(error: Error): Response {
-	return new Response(error.message || 'Server Error', { status: 500 })
+    return new Response(error.message || 'Server Error', { status: 500 })
 }

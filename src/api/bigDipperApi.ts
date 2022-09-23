@@ -31,8 +31,8 @@ export class BigDipperApi {
         const record = await this.get_accounts([ address ]);
 
         const { account, account_balance, delegations, unbonding, delegationRewards } = record.data;
-        if (account.length > 0) {
 
+        if (account.length > 0) {
             return {
                 account: account[0],
                 account_balance: account_balance[0],
