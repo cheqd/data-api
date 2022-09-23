@@ -16,13 +16,21 @@ export class BigDipperApi {
             }
         }`
 
+        let query2 = `query AccountDelegations($addresses: [String!]) {
+            delegations: action_delegation(where: {address: {_in: $addresses}}) {
+                coins
+            }
+        }`
+
         let params = {
             addresses: addresses
         }
 
         let resp = await this.graphql_client.query<Record[]>(query, params);
+        let resp2 = await this.graphql_client.query<Record[]>(query2, params);
 
         console.log({ resp })
+        console.log({ resp2 })
 
         return resp as Record[]
     }
