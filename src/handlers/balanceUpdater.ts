@@ -16,7 +16,7 @@ export async function handler(request: Request): Promise<Response> {
     try {
         const cachedAccount = await CIRCULATING_SUPPLY_WATCHLIST.get(address)
 
-        if (cachedAccount) {
+        if (typeof cachedAccount === "object") {
             console.log(`account "${address}" found in cache: ${JSON.stringify(cachedAccount)}`)
         }
     } catch (e) {
@@ -27,15 +27,14 @@ export async function handler(request: Request): Promise<Response> {
     const rewards = Number(await (await node_api.distribution_get_total_rewards(address)) ?? '0');
     const delegated = Number(account?.base_vesting_account?.delegated_vesting?.find(d => d.denom === "ncheq")?.amount ?? '0');
 
-    const res = {
+    let res = {
         balance: ncheq_to_cheqd(balance),
         rewards: ncheq_to_cheqd(rewards),
         delegated: ncheq_to_cheqd(delegated),
+        total_balance: ncheq_to_cheqd(balance + rewards + delegated)
     };
 
-    let totalBalance = res.balance + res.rewards + res.delegated
-
-    console.log(`account "${address}" total balance: ${totalBalance}`)
+    console.log(`account "${address}" total balance: ${res.total_balance}`)
 
     try {
         await CIRCULATING_SUPPLY_WATCHLIST.put(address, JSON.stringify(res))
