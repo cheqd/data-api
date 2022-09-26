@@ -14,7 +14,7 @@ compatibility_date = "2022-05-24"
 
 # Usage model for the Worker
 # Details: https://developers.cloudflare.com/workers/platform/limits
-usage_model = "bundled"
+usage_model = "unbound"
 
 
 ###############################################################
@@ -32,9 +32,9 @@ route = { pattern = "data-api.cheqd.io/*", zone_id = "afe3b66243382f27140e6feeaa
 # Details: https://developers.cloudflare.com/workers/learning/how-kv-works
 # @default `[]`
 [[kv_namespaces]]
-  binding = "CIRCULATING_SUPPLY_WATCHLIST"
-  id = "ce2e547de27f467c86afa67996b8784a"
-  preview_id = "a9b6ebe3d1b44671acafb0ed5b7f8919"
+binding = "CIRCULATING_SUPPLY_WATCHLIST"
+id = "ce2e547de27f467c86afa67996b8784a"
+preview_id = "a9b6ebe3d1b44671acafb0ed5b7f8919"
 
 # Map of environment variables to set when deploying the Worker
 # Not inherited. @default `{}`
@@ -53,15 +53,15 @@ GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"
 
 # Configuration options for local development via Wrangler
 [dev]
-  # IP address for the local dev server to listen on
-  # @default `localhost`
-  ip = "localhost"
-  # Port for the local dev server to listen on
-  # @default `8787`
-  port = 8787
-  # Protocol that local wrangler dev server listens to requests on
-  # @default `http`
-  local_protocol = "http"
+# IP address for the local dev server to listen on
+# @default `localhost`
+ip = "localhost"
+# Port for the local dev server to listen on
+# @default `8787`
+port = 8787
+# Protocol that local wrangler dev server listens to requests on
+# @default `http`
+local_protocol = "http"
 
 
 ###############################################################
@@ -84,10 +84,11 @@ vars = { TOKEN_EXPONENT = "9", REST_API = "https://api.cheqd.net", GRAPHQL_API =
 # Details: https://developers.cloudflare.com/workers/learning/how-kv-works
 # @default `[]`
 [[env.staging.kv_namespaces]]
-  binding = "CIRCULATING_SUPPLY_WATCHLIST"
-  id = "afb34dd4b9374cc4a7ae7c3aaf6e5ce2"
-  preview_id = "1e1032cbf6854d88b12317da8a792928"
+binding = "CIRCULATING_SUPPLY_WATCHLIST"
+id = "afb34dd4b9374cc4a7ae7c3aaf6e5ce2"
+preview_id = "1e1032cbf6854d88b12317da8a792928"
 
+crons = ["0 * * * *"]
 
 ###############################################################
 ###               OPTIONAL: Build Configuration             ###

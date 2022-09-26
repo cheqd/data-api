@@ -8,6 +8,12 @@ import { handler as vestedBalanceHandler } from "./handlers/vestedBalance";
 import { handler as delegatorCountHandler } from './handlers/delegatorCount';
 import { handler as totalDelegatorsHandler } from './handlers/totalDelegators';
 import { handler as totalStakedCoinsHandler } from "./handlers/totalStakedCoins";
+import { handler as balanceUpdaterHandler } from "./handlers/balanceUpdater";
+import { updateAllBalances } from "./handlers/cron";
+
+addEventListener('scheduled', (event: any) => {
+    event.waitUntil(updateAllBalances(event));
+})
 
 addEventListener('fetch', (event: FetchEvent) => {
 	const router = Router<Request, IHTTPMethods>()
@@ -26,6 +32,9 @@ function registerRoutes(router: Router) {
 	router.get('/supply/circulating', circulatingSupplyHandler);
 	router.get('/supply/staked', totalStakedCoinsHandler);
 	router.get('/supply/total', totalSupplyHandler);
+    router.get('/', totalSupplyHandler);
+    router.get('/_', balanceUpdaterHandler);
+    router.get('/_/:address', balanceUpdaterHandler);
 
     // 404 for all other requests
     router.all('*', () => new Response('Not Found.', { status: 404 }))

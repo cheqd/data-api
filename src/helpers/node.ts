@@ -1,8 +1,11 @@
 import { Coin } from "../types/node";
 import { Record } from "../types/bigDipper";
+import { NodeApi } from "../api/nodeApi";
 
 export function total_balance_ncheq(record: Record): number {
-    let balance = Number(record.account_balance?.coins.find(c => c.denom === "ncheq")?.amount || '0');
+    // let balance = Number(record.account_balance?.coins.find(c => c.denom === "ncheq")?.amount || '0');
+    let node_api = new NodeApi(REST_API);
+    // let balance = node_api.bank_get_account_balances(record.account.address.toString())
 
     console.log(record)
     // let delegations = record?.delegations?.map(d => d.amount)

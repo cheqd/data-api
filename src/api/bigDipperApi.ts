@@ -1,18 +1,15 @@
 import { GraphQLClient } from "../helpers/graphql";
 import { Coin, ValidatorAggregateCountResponse, ValidatorDetailResponse } from "../types/node";
-import { Record } from "../types/bigDipper";
+import { Record, Records } from "../types/bigDipper";
 
 export class BigDipperApi {
     constructor(public readonly graphql_client: GraphQLClient) {
     }
 
-    async get_accounts(addresses: string[]): Promise<Record[]> {
+    async get_accounts(addresses: string[]): Promise<Records[]> {
         let query = `query Account($addresses: [String!]) {
             account(where: {address: {_in: $addresses}}) {
                 address
-            }
-            account_balance(where: {address: {_in: $addresses}}) {
-                coins
             }
         }`
 
@@ -20,11 +17,9 @@ export class BigDipperApi {
             addresses: addresses
         }
 
-        let resp = await this.graphql_client.query<Record[]>(query, params);
+        let resp = await this.graphql_client.query(query, params);
 
-        console.log({ resp })
-
-        return resp as Record[]
+        return resp as Records[]
     }
 
     async get_account(address: string): Promise<Record> {
@@ -35,8 +30,6 @@ export class BigDipperApi {
         if (account.length > 0) {
             return {
                 account: account[0],
-                account_balance: account_balance[0],
-                delegationRewards: [], delegations: [], unbonding: []
             } as Record;
         }
 
@@ -55,6 +48,7 @@ export class BigDipperApi {
 
         let resp = await this.graphql_client.query<{ supply: { coins: Coin[] }[] }>(query);
 
+        console.log(resp)
         return resp.data.supply[0].coins;
     }
 
