@@ -21,10 +21,10 @@ function registerRoutes(router: Router) {
 	router.get('/balances/total/:address', totalBalanceHandler);
 	router.get('/balances/vested/:address', vestedBalanceHandler);
 	router.get('/balances/vesting/:address', vestingBalanceHandler);
-	router.get('/staking/delegators/total', totalDelegators);
-	router.get('/staking/delegators/:validator_address', delegatorCount);
+	router.get('/staking/delegators/total', totalDelegatorsHandler);
+	router.get('/staking/delegators/:validator_address', delegatorCountHandler);
 	router.get('/supply/circulating', circulatingSupplyHandler);
-	router.get('/supply/staked', totalStakedCoins);
+	router.get('/supply/staked', totalStakedCoinsHandler);
 	router.get('/supply/total', totalSupplyHandler);
 
 	// 404 for all other requests
