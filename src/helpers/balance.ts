@@ -1,8 +1,10 @@
 import { NodeApi } from "../api/nodeApi";
 import { ncheq_to_cheqd } from "./currency";
+import { total_balance_ncheq } from "./node";
 
 export async function updateBalance(node_api: NodeApi, address: string): Promise<Response> {
     const account = await node_api.auth_get_account(address)
+    const auth_account = await node_api.auth_get_account(address);
 
     try {
         const cachedAccount = await CIRCULATING_SUPPLY_WATCHLIST.get(`grp_1.${address}`)
@@ -13,13 +15,13 @@ export async function updateBalance(node_api: NodeApi, address: string): Promise
 
         const balance = Number(await (await node_api.bank_get_account_balances(address)).find(b => b.denom === "ncheq")?.amount ?? '0');
         const rewards = Number(await (await node_api.distribution_get_total_rewards(address)) ?? '0');
-        const delegated = Number(account?.base_vesting_account?.delegated_vesting?.find(d => d.denom === "ncheq")?.amount ?? '0');
+        const delegated = Number(auth_account?.base_vesting_account?.delegated_vesting?.find(d => d.denom === "ncheq")?.amount ?? '0');
 
         let res = {
             balance: ncheq_to_cheqd(balance),
             rewards: ncheq_to_cheqd(rewards),
             delegated: ncheq_to_cheqd(delegated),
-            total_balance: ncheq_to_cheqd(balance + rewards + delegated)
+            total_balance: await total_balance_ncheq(address)
         };
 
         console.log(`account "${address}" total balance: ${res.total_balance}`)
