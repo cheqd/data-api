@@ -5,9 +5,9 @@ import { handler as circulatingSupplyHandler } from "./handlers/circulatingSuppl
 import { handler as liquidBalanceHandler } from "./handlers/liquidBalance";
 import { handler as vestingBalanceHandler } from "./handlers/vestingBalance";
 import { handler as vestedBalanceHandler } from "./handlers/vestedBalance";
-import { handler as delegatorCount } from './handlers/delegatorCount';
-import { handler as totalDelegators } from './handlers/totalDelegators';
-import { handler as totalStakedCoins } from "./handlers/totalStakedCoins";
+import { handler as delegatorCountHandler } from './handlers/delegatorCount';
+import { handler as totalDelegatorsHandler } from './handlers/totalDelegators';
+import { handler as totalStakedCoinsHandler } from "./handlers/totalStakedCoins";
 
 addEventListener('fetch', (event: FetchEvent) => {
 	const router = Router<Request, IHTTPMethods>()
