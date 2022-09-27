@@ -1,8 +1,9 @@
 import { GraphQLClient } from "../helpers/graphql";
 import { BigDipperApi } from "../api/bigDipperApi";
 import { Request } from "itty-router";
-import { cheqd_to_ncheq, ncheq_to_cheq_fixed } from "../helpers/currency";
+import { ncheq_to_cheq_fixed } from "../helpers/currency";
 import { filter_marked_as_account_types } from '../helpers/validate';
+import { total_balance_ncheq } from "../helpers/node";
 
 async function get_circulating_supply(circulating_supply_watchlist: string[]): Promise<number> {
     let gql_client = new GraphQLClient(GRAPHQL_API);
@@ -23,12 +24,10 @@ async function get_circulating_supply(circulating_supply_watchlist: string[]): P
         for (const account of cachedBalances.keys) {
             const k = account.name.split('.')
 
-            console.log(`getting from KV: ${k[1]}`)
-
             let cached = await CIRCULATING_SUPPLY_WATCHLIST.get(`grp_1.${k[1]}`);
             if (cached) {
                 const data = JSON.parse(cached)
-                non_circulating_supply_ncheq += cheqd_to_ncheq(data.total_balance);
+                non_circulating_supply_ncheq += total_balance_ncheq(data);
             }
 
         }
