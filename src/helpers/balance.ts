@@ -16,15 +16,14 @@ export async function updateBalance(node_api: NodeApi, address: string): Promise
 
         console.log(`account "${address}": ${JSON.stringify(account)}`)
 
-        try {
+        if (typeof account === "object" && account.accountBalance) {
             await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_1.${address}`, JSON.stringify(account))
             console.log(`account "${address}" balance updated. (res=${JSON.stringify(account)})`)
 
             return new Response(JSON.stringify(account));
-        } catch (e) {
-            console.error(e)
         }
     } catch (e) {
         console.error(e)
+        return new Response(JSON.stringify({ error: e }))
     }
 }

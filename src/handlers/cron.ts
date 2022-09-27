@@ -19,7 +19,9 @@ export async function updateAllBalances(event: Event) {
             }
             const res = await updateBalance(node_api, addr)
 
-            balances.push({ account: addr, balances: await res.json() })
+            if (res !== undefined) {
+                balances.push({ account: addr, balances: await res.json() })
+            }
         }
 
         return new Response(JSON.stringify(balances));
