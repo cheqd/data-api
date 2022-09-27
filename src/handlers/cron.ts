@@ -10,21 +10,30 @@ export async function updateAllBalances(group: number, event: Event) {
         const cached = await CIRCULATING_SUPPLY_WATCHLIST.list({ prefix: `grp_${group}:` });
 
         console.log(`found ${cached.keys.length} cached accounts`)
-        for (const account of cached.keys) {
+        for (const key of cached.keys) {
             let addr: string;
-            if (account.name.startsWith("grp_")) {
-                const parts = account.name.split(':')
+            if (key.name.startsWith("grp_")) {
+                const parts = key.name.split(':')
                 addr = parts[1]
             } else {
-                addr = account.name
+                addr = key.name
             }
 
-            const res = await updateBalance(node_api, addr)
+            const found = await CIRCULATING_SUPPLY_WATCHLIST.get(key)
 
-            if (res !== undefined) {
-                const data = await res.json() as Account;
-                console.log(`updating account (grp_${group}:${addr}) balance (${data})`)
-                balances.push({ account: addr, balances: data })
+            if (found) {
+                const item = JSON.parse(found)
+                // only update errored for now
+                if (item.balances.error) {
+                    const res = await updateBalance(node_api, addr)
+
+                    if (res !== undefined) {
+                        const data = await res.json() as Account;
+                        console.log(`updating account (grp_${group}:${addr}) balance (${data})`)
+                        balances.push({ account: addr, balances: data })
+                    }
+                }
+
             }
         }
 
