@@ -8,7 +8,7 @@ export async function updateBalance(node_api: NodeApi, address: string): Promise
     const account = await bd_api.get_account(address);
 
     try {
-        const cachedAccount = await CIRCULATING_SUPPLY_WATCHLIST.get(`grp_1.${address}`)
+        const cachedAccount = await CIRCULATING_SUPPLY_WATCHLIST.get(`grp_1:${address}`)
 
         if (cachedAccount) {
             console.log(`account "${address}" found in cache: ${JSON.stringify(cachedAccount)}`)
