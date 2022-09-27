@@ -34,7 +34,7 @@ route = { pattern = "data-api.cheqd.io/*", zone_id = "afe3b66243382f27140e6feeaa
 [[kv_namespaces]]
 binding = "CIRCULATING_SUPPLY_WATCHLIST"
 id = "ce2e547de27f467c86afa67996b8784a"
-preview_id = "a9b6ebe3d1b44671acafb0ed5b7f8919"
+preview_id = "afb34dd4b9374cc4a7ae7c3aaf6e5ce2"
 
 # Map of environment variables to set when deploying the Worker
 # Not inherited. @default `{}`
@@ -88,7 +88,7 @@ binding = "CIRCULATING_SUPPLY_WATCHLIST"
 id = "afb34dd4b9374cc4a7ae7c3aaf6e5ce2"
 preview_id = "1e1032cbf6854d88b12317da8a792928"
 
-crons = ["0 * * * *"]
+#crons = ["0 * * * *"]
 
 ###############################################################
 ###               OPTIONAL: Build Configuration             ###

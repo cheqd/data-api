@@ -10,17 +10,18 @@ export async function updateBalance(node_api: NodeApi, address: string): Promise
     try {
         const cachedAccount = await CIRCULATING_SUPPLY_WATCHLIST.get(`grp_1.${address}`)
 
-        if (typeof cachedAccount === "object") {
+        if (cachedAccount) {
             console.log(`account "${address}" found in cache: ${JSON.stringify(cachedAccount)}`)
-        }
 
-        console.log(`account "${address}": ${JSON.stringify(account)}`)
+            if (typeof account === "object" && account.accountBalance) {
+                const grpN = Math.floor(Math.random() * 3) + 1
+                await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_${grpN}:${address}`, JSON.stringify(account))
+                console.log(`account "${address}" balance updated. (res=${JSON.stringify(account)})`)
 
-        if (typeof account === "object" && account.accountBalance) {
-            await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_1.${address}`, JSON.stringify(account))
-            console.log(`account "${address}" balance updated. (res=${JSON.stringify(account)})`)
-
-            return new Response(JSON.stringify(account));
+                return new Response(JSON.stringify(account));
+            } else {
+                return new Response(JSON.stringify({ error: new Error("something went wrong") }));
+            }
         }
     } catch (e) {
         console.error(e)

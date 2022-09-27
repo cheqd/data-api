@@ -20,7 +20,7 @@ export class BigDipperApi {
           redelegationBalance: action_redelegation(address: $address) {
             redelegations
           }
-          rewardBalance: action_delegation_reward(address: $address, height: 100) {
+          rewardBalance: action_delegation_reward(address: $address) {
             coins
           }
           vesting_account(where: $where) {
@@ -56,7 +56,6 @@ export class BigDipperApi {
 
         let resp = await this.graphql_client.query<{ supply: { coins: Coin[] }[] }>(query);
 
-        console.log(resp)
         return resp.data.supply[0].coins;
     }
 

@@ -12,28 +12,30 @@ import { handler as balanceUpdaterHandler } from "./handlers/balanceUpdater";
 import { updateAllBalances } from "./handlers/cron";
 
 addEventListener('scheduled', (event: any) => {
-    event.waitUntil(updateAllBalances(event));
+    event.waitUntil(updateAllBalances(1, event));
+    event.waitUntil(updateAllBalances(2, event));
+    event.waitUntil(updateAllBalances(3, event));
 })
 
 addEventListener('fetch', (event: FetchEvent) => {
-	const router = Router<Request, IHTTPMethods>()
-	registerRoutes(router);
-	event.respondWith(router.handle(event.request).catch(handleError))
+    const router = Router<Request, IHTTPMethods>()
+    registerRoutes(router);
+    event.respondWith(router.handle(event.request).catch(handleError))
 })
 
 function registerRoutes(router: Router) {
-	router.get('/', totalSupplyHandler);
-	router.get('/balances/liquid/:address', liquidBalanceHandler);
-	router.get('/balances/total/:address', totalBalanceHandler);
-	router.get('/balances/vested/:address', vestedBalanceHandler);
-	router.get('/balances/vesting/:address', vestingBalanceHandler);
-	router.get('/staking/delegators/total', totalDelegatorsHandler);
-	router.get('/staking/delegators/:validator_address', delegatorCountHandler);
-	router.get('/supply/circulating', circulatingSupplyHandler);
-	router.get('/supply/staked', totalStakedCoinsHandler);
-	router.get('/supply/total', totalSupplyHandler);
     router.get('/', totalSupplyHandler);
-    router.get('/_', balanceUpdaterHandler);
+    router.get('/balances/liquid/:address', liquidBalanceHandler);
+    router.get('/balances/total/:address', totalBalanceHandler);
+    router.get('/balances/vested/:address', vestedBalanceHandler);
+    router.get('/balances/vesting/:address', vestingBalanceHandler);
+    router.get('/staking/delegators/total', totalDelegatorsHandler);
+    router.get('/staking/delegators/:validator_address', delegatorCountHandler);
+    router.get('/supply/circulating', circulatingSupplyHandler);
+    router.get('/supply/staked', totalStakedCoinsHandler);
+    router.get('/supply/total', totalSupplyHandler);
+    router.get('/', totalSupplyHandler);
+    router.get('/_/grp/:grp', balanceUpdaterHandler);
     router.get('/_/:address', balanceUpdaterHandler);
 
     // 404 for all other requests
