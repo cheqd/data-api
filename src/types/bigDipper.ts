@@ -1,33 +1,35 @@
 import { Coin } from "./node";
 
-export class Records {
-    public accountBalances: { coins: Coin[] }[];
-    public delegations: { amount: Coin }[];
-    public unbonding: { amount: Coin }[];
-    public delegationRewards: { amount: Coin[] }[];
+export class Account {
+    public accountBalance: { coins: Coin[] };
+    public delegationBalance: { coins: Coin[] };
+    public unbondingBalance: { coins: Coin[] };
+    public rewardBalance: { coins: Coin[] };
+    public vesting_account: {
+        id: string,
+        type: string,
+        original_vesting: Coin[],
+        start_time: number,
+        end_time: number
+    }[];
 
-    constructor(accountBalances: { coins: Coin[] }[], delegations: { amount: Coin }[], unbonding: { amount: Coin }[], delegationRewards: { amount: Coin[] }[]) {
-        this.accountBalances = accountBalances;
-        this.delegations = delegations;
-        this.unbonding = unbonding;
-        this.delegationRewards = delegationRewards;
-    }
-}
-
-
-export class Record {
-    public account: { address: String };
-    public account_balance: { coins: Coin[] };
-    public delegations: { amount: Coin }[];
-    public unbonding: { amount: Coin }[];
-    public delegationRewards: { amount: Coin[] }[];
-
-    constructor(account: { address: String }, account_balance: { coins: Coin[] }, delegations: { amount: Coin }[], unbonding: { amount: Coin }[], delegationRewards: { amount: Coin[] }[]) {
-        this.account = account;
-        this.account_balance = account_balance;
-        this.delegations = delegations;
-        this.unbonding = unbonding;
-        this.delegationRewards = delegationRewards;
+    constructor(
+        account_balance: { coins: Coin[] },
+        delegation_balance: { coins: Coin[] },
+        unbonding_balance: { coins: Coin[] },
+        reward_balance: { coins: Coin[] },
+        vesting_account: {
+            id: string,
+            type: string,
+            original_vesting: Coin[],
+            start_time: number,
+            end_time: number
+        }[]) {
+        this.accountBalance = account_balance;
+        this.delegationBalance = delegation_balance;
+        this.unbondingBalance = unbonding_balance;
+        this.rewardBalance = reward_balance;
+        this.vesting_account = vesting_account;
     }
 }
 

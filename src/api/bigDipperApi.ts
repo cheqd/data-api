@@ -1,42 +1,50 @@
 import { GraphQLClient } from "../helpers/graphql";
 import { Coin, ValidatorAggregateCountResponse, ValidatorDetailResponse } from "../types/node";
-import { Record, Records } from "../types/bigDipper";
+import { Account } from "../types/bigDipper";
 
 export class BigDipperApi {
     constructor(public readonly graphql_client: GraphQLClient) {
     }
 
-    async get_accounts(addresses: string[]): Promise<Records[]> {
-        let query = `query Account($addresses: [String!]) {
-            account(where: {address: {_in: $addresses}}) {
-                address
-            }
+    async get_account(address: string): Promise<Account> {
+        let query = `query Account($address: String!, $where: vesting_account_bool_exp) {
+          accountBalance: action_account_balance(address: $address) {
+            coins
+          }
+          delegationBalance: action_delegation_total(address: $address) {
+            coins
+          }
+          unbondingBalance: action_unbonding_delegation_total(address: $address) {
+            coins
+          }
+          redelegationBalance: action_redelegation(address: $address) {
+            redelegations
+          }
+          rewardBalance: action_delegation_reward(address: $address, height: 100) {
+            coins
+          }
+          vesting_account(where: $where) {
+            id
+            type
+            original_vesting
+            start_time
+            end_time
+          }
         }`
 
         let params = {
-            addresses: addresses
+            address: address,
+            where: {
+                address: {
+                    _eq: address
+                }
+            }
         }
 
         let resp = await this.graphql_client.query(query, params);
 
-        return resp as Records[]
+        return resp.data as Account
     }
-
-    async get_account(address: string): Promise<Record> {
-        const record = await this.get_accounts([ address ]);
-
-        const { account, account_balance, delegations, unbonding, delegationRewards } = record.data;
-
-        if (account.length > 0) {
-            return {
-                account: account[0],
-            } as Record;
-        }
-
-        return {} as Record
-    }
-
-
 
     async get_total_supply(): Promise<Coin[]> {
         let query = `query Supply {
