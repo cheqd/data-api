@@ -28,7 +28,6 @@ export async function handler(request: Request): Promise<Response> {
     let bd_api = new BigDipperApi(gql_client);
 
     let account = await bd_api.get_account(address);
-    console.log(JSON.stringify(account))
     let balance = total_balance_ncheq(account);
 
     return new Response(ncheq_to_cheq_fixed(balance))

@@ -1,10 +1,11 @@
 import { NodeApi } from "../api/nodeApi";
-import { ncheq_to_cheqd } from "./currency";
-import { total_balance_ncheq } from "./node";
+import { GraphQLClient } from "./graphql";
+import { BigDipperApi } from "../api/bigDipperApi";
 
 export async function updateBalance(node_api: NodeApi, address: string): Promise<Response> {
-    const account = await node_api.auth_get_account(address)
-    const auth_account = await node_api.auth_get_account(address);
+    const gql_client = new GraphQLClient(GRAPHQL_API);
+    const bd_api = new BigDipperApi(gql_client);
+    const account = await bd_api.get_account(address);
 
     try {
         const cachedAccount = await CIRCULATING_SUPPLY_WATCHLIST.get(`grp_1.${address}`)
@@ -13,24 +14,13 @@ export async function updateBalance(node_api: NodeApi, address: string): Promise
             console.log(`account "${address}" found in cache: ${JSON.stringify(cachedAccount)}`)
         }
 
-        const balance = Number(await (await node_api.bank_get_account_balances(address)).find(b => b.denom === "ncheq")?.amount ?? '0');
-        const rewards = Number(await (await node_api.distribution_get_total_rewards(address)) ?? '0');
-        const delegated = Number(auth_account?.base_vesting_account?.delegated_vesting?.find(d => d.denom === "ncheq")?.amount ?? '0');
-
-        let res = {
-            balance: ncheq_to_cheqd(balance),
-            rewards: ncheq_to_cheqd(rewards),
-            delegated: ncheq_to_cheqd(delegated),
-            total_balance: await total_balance_ncheq(address)
-        };
-
-        console.log(`account "${address}" total balance: ${res.total_balance}`)
+        console.log(`account "${address}": ${JSON.stringify(account)}`)
 
         try {
-            await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_1.${address}`, JSON.stringify(res))
-            console.log(`account "${address}" balance updated. (res=${JSON.stringify(res)})`)
+            await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_1.${address}`, JSON.stringify(account))
+            console.log(`account "${address}" balance updated. (res=${JSON.stringify(account)})`)
 
-            return new Response(JSON.stringify(res));
+            return new Response(JSON.stringify(account));
         } catch (e) {
             console.error(e)
         }

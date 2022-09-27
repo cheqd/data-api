@@ -9,42 +9,42 @@ async function get_circulating_supply(circulating_supply_watchlist: string[]): P
     let bd_api = new BigDipperApi(gql_client);
 
     let filtered_accounts = filter_marked_as_account_types(circulating_supply_watchlist);
-    let non_circulating_accounts = await bd_api.get_accounts(filtered_accounts.other);
+    // let non_circulating_accounts = await bd_api.get_accounts(filtered_accounts.other);
 
     let total_supply = await bd_api.get_total_supply();
     let total_supply_ncheq = Number(total_supply.find(c => c.denom === "ncheq")?.amount || '0');
 
-    if (typeof non_circulating_accounts === 'object') {
-        try {
+    try {
+        const cachedBalances = await CIRCULATING_SUPPLY_WATCHLIST.list({
+            prefix: "grp_1."
+        })
 
-            const cachedBalances = await CIRCULATING_SUPPLY_WATCHLIST.list({
-                prefix: "grp_1."
-            })
-            let non_circulating_supply_ncheq = 0;
-            for (const account of cachedBalances.keys) {
-                const k = account.name.split('.')
-                console.log(`getting from KV: ${k[1]}`)
+        let non_circulating_supply_ncheq = 0;
+        for (const account of cachedBalances.keys) {
+            const k = account.name.split('.')
 
-                let cached = await CIRCULATING_SUPPLY_WATCHLIST.get(`grp_1.${k[1]}`);
-                if (cached) {
-                    const data = JSON.parse(cached)
-                    non_circulating_supply_ncheq += cheqd_to_ncheq(data.total_balance);
-                }
+            console.log(`getting from KV: ${k[1]}`)
 
+            let cached = await CIRCULATING_SUPPLY_WATCHLIST.get(`grp_1.${k[1]}`);
+            if (cached) {
+                const data = JSON.parse(cached)
+                non_circulating_supply_ncheq += cheqd_to_ncheq(data.total_balance);
             }
-            console.log(`Non-circulating supply: ${non_circulating_supply_ncheq}`);
-            // Get total supply
-            let total_supply_ncheq = Number(total_supply.find(c => c.denom === "ncheq")?.amount || '0');
-            console.log(`Total supply: ${total_supply_ncheq}`);
 
-            // Calculate circulating supply
-            return total_supply_ncheq - non_circulating_supply_ncheq;
-        } catch (e) {
-            console.error(e)
         }
 
-        return total_supply_ncheq
+        console.log(`Non-circulating supply: ${non_circulating_supply_ncheq}`);
+        // Get total supply
+        let total_supply_ncheq = Number(total_supply.find(c => c.denom === "ncheq")?.amount || '0');
+        console.log(`Total supply: ${total_supply_ncheq}`);
+
+        // Calculate circulating supply
+        return total_supply_ncheq - non_circulating_supply_ncheq;
+    } catch (e) {
+        console.error(e)
     }
+
+    return total_supply_ncheq
 }
 
 export async function handler(request: Request): Promise<Response> {
