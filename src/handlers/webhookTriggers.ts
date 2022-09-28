@@ -1,4 +1,4 @@
-import { fetchPrices } from "./flagArbitrage";
+import { fetchPrices } from "./coinPrice";
 
 export async function webhookTriggers(event: Event) {
   console.log("Triggering webhook...");
@@ -10,13 +10,12 @@ export async function sendPriceDiscrepancies() {
 
   const prices = await fetchPrices();
 
-  const has_arbitrage_opportunity = prices.arbitrage_opportunity;
-  if (has_arbitrage_opportunity) {
+  if (prices.hasArbitrageOpportunities) {
     console.log("Arbitrage opportunities...");
     try {
       const init = {
         body: JSON.stringify({
-          arbitrage_opportunities: prices.arbitrage_opportunities,
+          arbitrage_opportunities: prices.arbitrageOpportunities,
         }),
         method: "POST",
         headers: {
