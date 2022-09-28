@@ -37,11 +37,10 @@ async function get_circulating_supply(circulating_supply_watchlist: string[]): P
 
         // Calculate circulating supply
         return total_supply_ncheq - non_circulating_supply_ncheq;
-    } catch (e) {
-        console.error(e)
+    } catch (e: any) {
+        console.error(new Map(e))
+        return total_supply_ncheq
     }
-
-    return total_supply_ncheq
 }
 
 export async function handler(request: Request): Promise<Response> {
