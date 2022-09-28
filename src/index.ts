@@ -26,6 +26,7 @@ addEventListener('fetch', (event: FetchEvent) => {
 })
 
 function registerRoutes(router: Router) {
+    router.get('/_/grp/:grp', balanceUpdaterHandler);
     router.get('/', totalSupplyHandler);
     router.get('/balances/liquid/:address', liquidBalanceHandler);
     router.get('/balances/total/:address', totalBalanceHandler);
@@ -36,8 +37,6 @@ function registerRoutes(router: Router) {
     router.get('/supply/circulating', circulatingSupplyHandler);
     router.get('/supply/staked', totalStakedCoinsHandler);
     router.get('/supply/total', totalSupplyHandler);
-    router.get('/', totalSupplyHandler);
-    router.get('/_/grp/:grp', balanceUpdaterHandler);
 
 
     // 404 for all other requests

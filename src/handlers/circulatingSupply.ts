@@ -15,6 +15,7 @@ async function get_circulating_supply(circulating_supply_watchlist: string[]): P
         const cached = await CIRCULATING_SUPPLY_WATCHLIST.list({
             prefix: 'grp_'
         })
+        
 
         console.log(`found ${cached.keys.length} cached items`)
 
@@ -46,8 +47,8 @@ async function get_circulating_supply(circulating_supply_watchlist: string[]): P
 export async function handler(request: Request): Promise<Response> {
     let addresses_to_exclude: string[] = (await CIRCULATING_SUPPLY_WATCHLIST.list()).keys.filter(k => !k.name.startsWith("grp_"));
 
-    console.log(`get_circulating_supply($addresses_to_exclude (len=${addresses_to_exclude.length})`)
     let circulating_supply = await get_circulating_supply(addresses_to_exclude);
+    console.log(`circulating_supply=${circulating_supply}`)
 
     return new Response(ncheq_to_cheq_fixed(circulating_supply));
 }
