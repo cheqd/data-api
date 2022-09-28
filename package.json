@@ -14,7 +14,6 @@
     "publish": "npx wrangler publish"
   },
   "dependencies": {
-    "coingecko-api": "^1.0.10",
     "itty-router": "^2.6.3"
   },
   "devDependencies": {

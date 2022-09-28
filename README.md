@@ -12,7 +12,7 @@ This collection of custom APIs can be deployed as a [Cloudflare Worker](https://
 
 ## 🚨 Alerting Market Arbitrages via Zapier
 
-To alert a significant market arbitrages for CHEQ listings on different exchanges, we take the output of our `prices` API endpoint and parse it via [Zapier](https://zapier.com/).We then notify the team via Slack and Email.
+To alert a significant market arbitrages for CHEQ listings on different exchanges, we take the output of our [Monitor Markets API](https://github.com/cheqd/market-monitoring) and parse it via [Zapier](https://zapier.com/).Then notify the team via Slack and Email.
 
 ## 🔍 API Endpoints & Features
 
@@ -157,11 +157,11 @@ Total account balance for specified account, in CHEQ.
 
 The standard Cosmos SDK REST API for account balances returns JSON with the account balances along with its denomination, usually the lowest denomination. This is hard to parse in applications such as Google Sheets (e.g., to monitor the account balance by fetching a response from a REST API directly in Google Sheets). This API returns a plain number that can be directly plugged into such applications, without having to parse JSON.
 
-### 💲 Prices
+### 💲 Arbitrage
 
 #### Endpoint
 
-[`data-api.cheqd.io/prices/`](https://data-api.cheqd.io/prices)
+[`data-api.cheqd.io/prices/`](https://data-api.cheqd.io/arbitrage)
 
 #### Response
 
