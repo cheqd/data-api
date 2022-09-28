@@ -13,7 +13,7 @@ import { updateAllBalances } from "./handlers/cron";
 
 addEventListener('scheduled', (event: any) => {
     console.log(`triggering scheduled account balance update`)
-    
+
     event.waitUntil(updateAllBalances(1, event));
     // event.waitUntil(updateAllBalances(2, event));
     // event.waitUntil(updateAllBalances(3, event));
@@ -38,7 +38,6 @@ function registerRoutes(router: Router) {
     router.get('/supply/total', totalSupplyHandler);
     router.get('/', totalSupplyHandler);
     router.get('/_/grp/:grp', balanceUpdaterHandler);
-    router.get('/_/:address', balanceUpdaterHandler);
 
     // 404 for all other requests
     router.all('*', () => new Response('Not Found.', { status: 404 }))

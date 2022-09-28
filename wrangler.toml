@@ -88,7 +88,7 @@ binding = "CIRCULATING_SUPPLY_WATCHLIST"
 id = "afb34dd4b9374cc4a7ae7c3aaf6e5ce2"
 preview_id = "1e1032cbf6854d88b12317da8a792928"
 
-crons = ["0 * * * *"]
+crons = ["0/60 * * * *"]
 
 ###############################################################
 ###               OPTIONAL: Build Configuration             ###
