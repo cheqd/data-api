@@ -39,6 +39,7 @@ function registerRoutes(router: Router) {
     router.get('/', totalSupplyHandler);
     router.get('/_/grp/:grp', balanceUpdaterHandler);
 
+
     // 404 for all other requests
     router.all('*', () => new Response('Not Found.', { status: 404 }))
 }
