@@ -26,9 +26,11 @@ export async function updateAllBalances(group: number, event: Event) {
 
                 if (res !== undefined) {
                     const data = await res.json() as Account;
-                    console.log(`updating account (grp_${group}:${addr}) balance (${JSON.stringify(data)})`)
 
-                    balances.push({ account: addr, balances: data })
+                    if (!data.error) {
+                        console.log(`updating account (grp_${group}:${addr}) balance (${JSON.stringify(data)})`)
+                        balances.push({ account: addr, balances: data })
+                    }
                 }
             }
         }

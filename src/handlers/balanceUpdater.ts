@@ -9,6 +9,8 @@ export async function handler(request: Request): Promise<Response> {
     if (res !== undefined) {
         return res
     }
+
+    return new Response(JSON.stringify({
+        error: new Error("this endpoint should be called for all accounts")
+    }))
 }
-
-

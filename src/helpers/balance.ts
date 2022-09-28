@@ -7,22 +7,26 @@ export async function updateBalance(node_api: NodeApi, addr: string, grpN: numbe
     const bd_api = new BigDipperApi(gql_client);
     const account = await bd_api.get_account(addr);
 
+    if (!account) {
+        return new Response(JSON.stringify({ error: "Account not found" }))
+    }
+
     try {
         const cachedAccount = await CIRCULATING_SUPPLY_WATCHLIST.get(`grp_${grpN}:${addr}`)
 
-        if (cachedAccount) {
-            console.log(`account "${addr}" found in cache: ${JSON.stringify(cachedAccount)}`)
+        if (cachedAccount !== undefined) {
+            console.log(`account "${addr}" found in cache: ${cachedAccount}`)
 
-            if (typeof account === "object" && account.accountBalance) {
-                // const grpN = Math.floor(Math.random() * 3) + 1
-                await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_${grpN}:${addr}`, JSON.stringify(account))
+            await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_${grpN}:${addr}`, JSON.stringify(account))
+            console.log(`account "${addr}" balance updated. (res=${JSON.stringify(account)})`)
 
-                console.log(`account "${addr}" balance updated. (res=${JSON.stringify(account)})`)
-
-                return new Response(JSON.stringify(account));
-            }
+            return new Response(JSON.stringify(account));
         }
+
+        return new Response(JSON.stringify({ error: "Account not found" }));
     } catch (e: any) {
-        return new Response(JSON.stringify({ error: new Map(e) }))
+        console.error(e)
+        console.log(new Map(e))
+        return new Response(JSON.stringify({ error: e }))
     }
 }

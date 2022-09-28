@@ -15,7 +15,6 @@ async function get_circulating_supply(circulating_supply_watchlist: string[]): P
         const cached = await CIRCULATING_SUPPLY_WATCHLIST.list({
             prefix: 'grp_'
         })
-        
 
         console.log(`found ${cached.keys.length} cached items`)
 
@@ -24,10 +23,13 @@ async function get_circulating_supply(circulating_supply_watchlist: string[]): P
             console.log(`looking for account: "${JSON.stringify(account.name)}" in cache`)
             let cachedFound = await CIRCULATING_SUPPLY_WATCHLIST.get(account.name);
 
-            if (cachedFound) {
+            if (cachedFound !== undefined) {
                 const data = JSON.parse(cachedFound)
-                console.log(`found cache entry: ${cachedFound}`)
-                non_circulating_supply_ncheq += total_balance_ncheq(data);
+
+                if (typeof data === "object") {
+                    console.log(`found cache entry: ${cachedFound}`)
+                    non_circulating_supply_ncheq += total_balance_ncheq(data);
+                }
             }
         }
 
