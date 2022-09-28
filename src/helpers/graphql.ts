@@ -14,16 +14,16 @@ export class GraphQLClient {
                 body: JSON.stringify(req)
             })
 
-            let json = await resp.json()
+            let json: { errors: any } = await resp.json()
 
             if (json.errors) {
-                console.error(json.errors)
+                console.error(new Map(json.errors))
                 return {} as T;
             }
 
             return json as T;
-        } catch (e) {
-            console.error(JSON.stringify(e))
+        } catch (e: any) {
+            console.error(new Map(e))
             return {} as T;
         }
     }

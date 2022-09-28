@@ -25,7 +25,7 @@ async function get_circulating_supply(circulating_supply_watchlist: string[]): P
 
             if (cachedFound) {
                 const data = JSON.parse(cachedFound)
-                console.log(`found cache entry: ${data}`)
+                console.log(`found cache entry: ${cachedFound}`)
                 non_circulating_supply_ncheq += total_balance_ncheq(data);
             }
         }

@@ -11,7 +11,7 @@ export async function updateAllBalances(group: number, event: Event) {
 
         console.log(`found ${cached.keys.length} cached accounts`)
         for (const key of cached.keys) {
-            const found = await CIRCULATING_SUPPLY_WATCHLIST.get(key)
+            const found = await CIRCULATING_SUPPLY_WATCHLIST.get(key.name)
 
             if (found) {
                 let addr: string;

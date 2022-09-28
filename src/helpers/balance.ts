@@ -2,21 +2,22 @@ import { NodeApi } from "../api/nodeApi";
 import { GraphQLClient } from "./graphql";
 import { BigDipperApi } from "../api/bigDipperApi";
 
-export async function updateBalance(node_api: NodeApi, address: string): Promise<Response> {
+export async function updateBalance(node_api: NodeApi, addr: string): Promise<Response> {
     const gql_client = new GraphQLClient(GRAPHQL_API);
     const bd_api = new BigDipperApi(gql_client);
-    const account = await bd_api.get_account(address);
+    const account = await bd_api.get_account(addr);
 
     try {
-        const cachedAccount = await CIRCULATING_SUPPLY_WATCHLIST.get(`grp_1:${address}`)
+        const cachedAccount = await CIRCULATING_SUPPLY_WATCHLIST.get(`grp_1:${addr}`)
 
         if (cachedAccount) {
-            console.log(`account "${address}" found in cache: ${JSON.stringify(cachedAccount)}`)
+            console.log(`account "${addr}" found in cache: ${JSON.stringify(cachedAccount)}`)
 
             if (typeof account === "object" && account.accountBalance) {
                 const grpN = Math.floor(Math.random() * 3) + 1
-                await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_${grpN}:${address}`, JSON.stringify(account))
-                console.log(`account "${address}" balance updated. (res=${JSON.stringify(account)})`)
+                await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_${grpN}:${addr}`, JSON.stringify(account))
+
+                console.log(`account "${addr}" balance updated. (res=${JSON.stringify(account)})`)
 
                 return new Response(JSON.stringify(account));
             } else {

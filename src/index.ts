@@ -15,8 +15,8 @@ addEventListener('scheduled', (event: any) => {
     console.log(`triggering scheduled account balance update`)
 
     event.waitUntil(updateAllBalances(1, event));
-    // event.waitUntil(updateAllBalances(2, event));
-    // event.waitUntil(updateAllBalances(3, event));
+    event.waitUntil(updateAllBalances(2, event));
+    event.waitUntil(updateAllBalances(3, event));
 })
 
 addEventListener('fetch', (event: FetchEvent) => {
