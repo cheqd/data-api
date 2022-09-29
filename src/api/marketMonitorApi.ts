@@ -1,4 +1,4 @@
-import { MarketMonitorData } from "../types/marektMonitor";
+import { MarketMonitorData } from "../types/marketMonitor";
 export class MarketMonitorApi {
   constructor(public readonly base_market_monitor_api_url: string) {}
 
