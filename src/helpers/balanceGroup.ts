@@ -1,10 +1,10 @@
 import { NodeApi } from "../api/nodeApi";
-import { updateBalance } from "./balance";
+import { updateCachedBalance } from "./balance";
 import { Account } from "../types/bigDipper";
 
 export async function updateGroupBalances(group: number, event: Event) {
     let node_api = new NodeApi(REST_API);
-    let balances: { account: String, balances: Account } [] = [];
+    let balances: { account: Account } [] = [];
 
     try {
         const cached = await CIRCULATING_SUPPLY_WATCHLIST.list();
@@ -21,14 +21,12 @@ export async function updateGroupBalances(group: number, event: Event) {
                     const parts = key.name.split(':')
                     addr = parts[1]
                 }
-                
-                const res = await updateBalance(node_api, addr, group)
 
-                if (res !== undefined) {
-                    const data = await res.json() as Account;
+                const account = await updateCachedBalance(node_api, addr, group)
 
-                    console.log(`updating account (grp_${group}:${addr}) balance (${JSON.stringify(data)})`)
-                    balances.push({ account: addr, balances: data })
+                if (account) {
+                    console.log(`updating account (grp_${group}:${addr}) balance (${JSON.stringify(account)})`)
+                    balances.push({ account: account })
                 }
             }
         }

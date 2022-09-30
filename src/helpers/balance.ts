@@ -2,14 +2,15 @@ import { NodeApi } from "../api/nodeApi";
 import { GraphQLClient } from "./graphql";
 import { BigDipperApi } from "../api/bigDipperApi";
 import { total_balance_ncheq } from "./node";
+import { Account } from "../types/bigDipper";
 
-export async function updateBalance(node_api: NodeApi, addr: string, grpN: number): Promise<Response> {
+export async function updateCachedBalance(node_api: NodeApi, addr: string, grpN: number): Promise<Account | null> {
     const gql_client = new GraphQLClient(GRAPHQL_API);
     const bd_api = new BigDipperApi(gql_client);
     const account = await bd_api.get_account(addr);
 
     if (!account) {
-        return new Response(JSON.stringify({ error: "Account not found" }))
+        throw new Error(`Account not found for address "${addr}"`)
     }
 
     try {
@@ -24,13 +25,12 @@ export async function updateBalance(node_api: NodeApi, addr: string, grpN: numbe
 
             console.log(`account "${addr}" balance updated. (res=${JSON.stringify(account)})`)
 
-            return new Response(JSON.stringify(account));
+            return account;
         }
 
-        return new Response(JSON.stringify({ error: "Account not found" }));
+        return null;
     } catch (e: any) {
-        console.error(e)
-        console.log(new Map(e))
-        return new Response(JSON.stringify({ error: e }))
+        console.error(new Map(e))
+        throw e;
     }
 }
