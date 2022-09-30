@@ -6,7 +6,7 @@ export class BigDipperApi {
     constructor(public readonly graphql_client: GraphQLClient) {
     }
 
-    async get_account(address: string): Promise<Account> {
+    async get_account(address: string): Promise<Account | null> {
         let query = `query Account($address: String!, $where: vesting_account_bool_exp) {
           accountBalance: action_account_balance(address: $address) {
             coins
@@ -41,9 +41,16 @@ export class BigDipperApi {
             }
         }
 
-        let resp = await this.graphql_client.query(query, params);
+        try {
+            let resp = await this.graphql_client.query<{
+                data: any, errors: any
+            }>(query, params);
 
-        return resp.data as Account
+            return resp.data as Account
+        } catch (e: any) {
+            console.error(new Map(e))
+            return null;
+        }
     }
 
     async get_total_supply(): Promise<Coin[]> {

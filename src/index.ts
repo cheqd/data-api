@@ -27,7 +27,6 @@ addEventListener('fetch', (event: FetchEvent) => {
 })
 
 function registerRoutes(router: Router) {
-    router.get('/_/grp', balanceUpdaterHandler);
     router.get('/_/grp/:grp', balanceUpdaterHandler);
     router.get('/', totalSupplyHandler);
     router.get('/balances/liquid/:address', liquidBalanceHandler);

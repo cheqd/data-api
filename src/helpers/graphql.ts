@@ -8,23 +8,17 @@ export class GraphQLClient {
             variables,
         }
 
-        try {
-            let resp = await fetch(this.base_url, {
-                method: "POST",
-                body: JSON.stringify(req)
-            })
+        let resp = await fetch(this.base_url, {
+            method: "POST",
+            body: JSON.stringify(req)
+        })
 
-            let json: { errors: any } = await resp.json()
+        let json: { errors: any } = await resp.json()
 
-            if (json.errors) {
-                console.error(new Map(json.errors))
-                return {} as T;
-            }
-
-            return json as T;
-        } catch (e: any) {
-            console.error(new Map(e))
-            return {} as T;
+        if (json.errors) {
+            throw new Error(`query failed: ${json.errors}`)
         }
+
+        return json as T;
     }
 }
