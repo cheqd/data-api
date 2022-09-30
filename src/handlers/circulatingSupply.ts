@@ -19,7 +19,7 @@ async function get_circulating_supply(): Promise<number> {
             console.log(`looking for account: ${JSON.stringify(r.name)} in cache`)
             let cachedFound = await CIRCULATING_SUPPLY_WATCHLIST.get(r.name);
 
-            if (cachedFound !== null) {
+            if (cachedFound) {
                 const data: { totalBalance: number | null } = JSON.parse(cachedFound)
 
                 if (data.totalBalance !== null) {

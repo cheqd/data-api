@@ -29,7 +29,7 @@ export async function updateCachedBalance(node_api: NodeApi, addr: string, grpN:
             return account;
         }
 
-        return null;
+        return account;
     } catch (e: any) {
         console.error(new Map(e))
         throw e;

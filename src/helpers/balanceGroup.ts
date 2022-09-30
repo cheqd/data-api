@@ -23,7 +23,7 @@ export async function updateGroupBalances(group: number, event: Event) {
 
                 const account = await updateCachedBalance(node_api, addr, group)
 
-                if (account) {
+                if (account !== null) {
                     console.log(`updating account (grp_${group}:${addr}) balance (${JSON.stringify(account)})`)
                     balances.push({ account: account })
                 }
@@ -31,8 +31,8 @@ export async function updateGroupBalances(group: number, event: Event) {
         }
 
         return new Response(JSON.stringify(balances));
-    } catch (e) {
-        console.error(e)
+    } catch (e: any) {
+        console.error(new Map(e))
         throw e;
     }
 }
