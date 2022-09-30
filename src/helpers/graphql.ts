@@ -16,7 +16,7 @@ export class GraphQLClient {
         let json: { errors: any } = await resp.json()
 
         if (json.errors) {
-            throw new Error(`query failed: ${json.errors}`)
+            throw new Error(`query failed: ${JSON.stringify(json.errors)}`)
         }
 
         return json as T;

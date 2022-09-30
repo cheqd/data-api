@@ -48,7 +48,7 @@ export class BigDipperApi {
 
             return resp.data as Account
         } catch (e: any) {
-            console.error(new Map(e))
+            console.error(e)
             return null;
         }
     }

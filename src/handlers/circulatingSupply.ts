@@ -2,6 +2,8 @@ import { GraphQLClient } from "../helpers/graphql";
 import { BigDipperApi } from "../api/bigDipperApi";
 import { Request } from "itty-router";
 import { ncheq_to_cheq_fixed } from "../helpers/currency";
+import { total_balance_ncheq } from "../helpers/node";
+import { Account } from "../types/bigDipper";
 
 async function get_circulating_supply(): Promise<number> {
     let gql_client = new GraphQLClient(GRAPHQL_API);
@@ -14,16 +16,22 @@ async function get_circulating_supply(): Promise<number> {
         const cached = await CIRCULATING_SUPPLY_WATCHLIST.list()
         console.log(`found ${cached.keys.length} cached items`)
 
-        let non_circulating_supply_ncheq = 0;
+        let non_circulating_supply_ncheq = Number(0);
         for (const r of cached.keys) {
-            console.log(`looking for account: ${JSON.stringify(r.name)} in cache`)
-            let cachedFound = await CIRCULATING_SUPPLY_WATCHLIST.get(r.name);
+            console.log(`looking for account: ${r.name} in cache`)
+            let data: any = await CIRCULATING_SUPPLY_WATCHLIST.get(r.name, { type: "json" });
 
-            if (cachedFound) {
-                const data: { totalBalance: number | null } = JSON.parse(cachedFound)
+            if (data !== null) {
+                if (data.totalBalance === undefined) {
+                    const balance = total_balance_ncheq(JSON.parse(data) as Account)
+                    data = JSON.stringify({ totalBalance: balance })
+                    console.log(`updating bad cache entry: ${JSON.stringify(data)} totalBalance=${data.totalBalance} data=${JSON.stringify(data)}`)
+                    await CIRCULATING_SUPPLY_WATCHLIST.put(r.name, data)
+                }
+
+                console.log(`found cache entry: ${JSON.stringify(data)} totalBalance=${data.totalBalance}`)
 
                 if (data.totalBalance !== null) {
-                    console.log(`found cache entry: ${cachedFound}`)
                     non_circulating_supply_ncheq += data.totalBalance;
                 }
             }

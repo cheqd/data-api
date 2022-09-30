@@ -14,24 +14,24 @@ export async function updateCachedBalance(node_api: NodeApi, addr: string, grpN:
     }
 
     try {
-        const cachedAccount = await CIRCULATING_SUPPLY_WATCHLIST.get(`grp_${grpN}:${addr}`)
+        const cachedAccount = await CIRCULATING_SUPPLY_WATCHLIST.get(`grp_${grpN}:${addr}`, { type: "json" })
 
-        if (cachedAccount !== undefined) {
-            console.log(`account "${addr}" found in cache: ${cachedAccount}`)
+        // if (cachedAccount !== undefined) {
+        console.log(`account "${addr}" found in cache: ${JSON.stringify(cachedAccount)}`)
 
-            const totalBalance = total_balance_ncheq(account);
-            const data = JSON.stringify({ totalBalance });
+        const totalBalance = total_balance_ncheq(account);
+        const data = JSON.stringify({ totalBalance: totalBalance });
 
-            await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_${grpN}:${addr}`, data)
+        await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_${grpN}:${addr}`, data)
 
-            console.log(`account "${addr}" balance updated. (${data})`)
+        console.log(`account "${addr}" balance updated. (${data})`)
 
-            return account;
-        }
+        return account;
+        // }
 
         return account;
     } catch (e: any) {
-        console.error(new Map(e))
-        throw e;
+        console.error(e)
+        return null;
     }
 }

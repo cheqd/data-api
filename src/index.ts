@@ -8,7 +8,7 @@ import { handler as vestedBalanceHandler } from "./handlers/vestedBalance";
 import { handler as delegatorCountHandler } from './handlers/delegatorCount';
 import { handler as totalDelegatorsHandler } from './handlers/totalDelegators';
 import { handler as totalStakedCoinsHandler } from "./handlers/totalStakedCoins";
-import { handler as balanceUpdaterHandler } from "./handlers/balanceUpdater";
+import { handler as balanceUpdaterHandler } from "./handlers/balanceGroup";
 import { updateGroupBalances } from "./helpers/balanceGroup";
 
 addEventListener('scheduled', (event: any) => {
