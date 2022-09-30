@@ -46,7 +46,7 @@ REST_API = "https://api.cheqd.net"
 # GraphQL API endpoint for target network. Must be sourced from a BigDipper instance.
 GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"
 # Moniter market API base url
-MONITOR_MARKET_API_FUNCTIONS_BASE_URL = "https://faas-blr1-8177d592.doserverless.co/api/v1/namespaces/fn-6d0a7473-a6eb-4404-8601-a3bd56525b02/actions"
+MONITOR_MARKET_API_FUNCTIONS_BASE_URL = "https://market-monitoring.cheqd.net"
 
 # The necessary secrets are:
 # - MONITOR_MARKET_API_FUNCTIONS_ACCESS_TOKEN
@@ -88,7 +88,7 @@ route = { pattern = "data-api-staging.cheqd.io/*", zone_id = "afe3b66243382f2714
 
 # Map of environment variables to set when deploying the Worker
 # Not inherited. @default `{}`
-vars = { ENVIRONMENT = "staging", TOKEN_EXPONENT = "9", REST_API = "https://api.cheqd.net", GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql", MONITOR_MARKET_API_FUNCTIONS_BASE_URL = "https://faas-blr1-8177d592.doserverless.co/api/v1/namespaces/fn-6d0a7473-a6eb-4404-8601-a3bd56525b02/actions"}
+vars = { ENVIRONMENT = "staging", TOKEN_EXPONENT = "9", REST_API = "https://api.cheqd.net", GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql", MONITOR_MARKET_API_FUNCTIONS_BASE_URL = "https://market-monitoring-staging.cheqd.net"}
 
 
 # The necessary secrets are:

@@ -3,20 +3,11 @@ export class MarketMonitorApi {
   constructor(public readonly base_market_monitor_api_url: string) {}
 
   async get_market_monitor_data(): Promise<MarketMonitorData> {
-    const headers = new Headers();
-    headers.append("Content-Type", "application/json");
-    headers.append(
-      "Authorization",
-      `Basic ${MONITOR_MARKET_API_FUNCTIONS_ACCESS_TOKEN}`
-    );
-
     const requestOptions = {
-      method: "POST",
-      headers: headers,
-      redirect: "follow",
+      method: "GET",
     };
     const response = await fetch(
-      `${this.base_market_monitor_api_url}/coingecko-tickers/arbitrage?blocking=true&result=true`,
+      `${this.base_market_monitor_api_url}/arbitrage`,
       requestOptions
     );
     return (await response.json()) as MarketMonitorData;
