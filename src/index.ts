@@ -14,10 +14,7 @@ import { updateGroupBalances } from "./handlers/cron";
 addEventListener('scheduled', (event: any) => {
     console.log(`triggering scheduled account balance update`)
 
-    event.waitUntil(updateGroupBalances(1, event));
-    event.waitUntil(updateGroupBalances(2, event));
-    event.waitUntil(updateGroupBalances(3, event));
-    event.waitUntil(updateGroupBalances(4, event));
+    event.waitUntil(updateGroupBalances(getRandomGroup(), event));
 })
 
 addEventListener('fetch', (event: FetchEvent) => {
@@ -46,4 +43,26 @@ function registerRoutes(router: Router) {
 
 function handleError(error: Error): Response {
     return new Response(error.message || 'Server Error', { status: 500 })
+}
+
+function getRandomGroup(): number {
+    const hour = new Date().getHours()
+
+    if (hour > 0 && hour < 6) {
+        return 1;
+    }
+
+    if (hour >= 6 && hour < 12) {
+        return 2;
+    }
+
+    if (hour >= 12 && hour < 18) {
+        return 2;
+    }
+
+    if (hour >= 18 && hour < 24) {
+        return 2;
+    }
+
+    throw new Error("invalid hour for group");
 }
