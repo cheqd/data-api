@@ -19,11 +19,12 @@ export async function updateCachedBalance(node_api: NodeApi, addr: string, grpN:
         if (cachedAccount !== undefined) {
             console.log(`account "${addr}" found in cache: ${cachedAccount}`)
 
-            await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_${grpN}:${addr}`, JSON.stringify({
-                totalBalance: total_balance_ncheq(account),
-            }))
+            const totalBalance = total_balance_ncheq(account);
+            const data = JSON.stringify({ totalBalance });
 
-            console.log(`account "${addr}" balance updated. (res=${JSON.stringify(account)})`)
+            await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_${grpN}:${addr}`, data)
+
+            console.log(`account "${addr}" balance updated. (${data})`)
 
             return account;
         }

@@ -2,9 +2,8 @@ import { GraphQLClient } from "../helpers/graphql";
 import { BigDipperApi } from "../api/bigDipperApi";
 import { Request } from "itty-router";
 import { ncheq_to_cheq_fixed } from "../helpers/currency";
-import { total_balance_ncheq } from "../helpers/node";
 
-async function get_circulating_supply(circulating_supply_watchlist: string[]): Promise<number> {
+async function get_circulating_supply(): Promise<number> {
     let gql_client = new GraphQLClient(GRAPHQL_API);
     let bd_api = new BigDipperApi(gql_client);
 
@@ -12,23 +11,20 @@ async function get_circulating_supply(circulating_supply_watchlist: string[]): P
     let total_supply_ncheq = Number(total_supply.find(c => c.denom === "ncheq")?.amount || '0');
 
     try {
-        const cached = await CIRCULATING_SUPPLY_WATCHLIST.list({
-            prefix: 'grp_'
-        })
-
+        const cached = await CIRCULATING_SUPPLY_WATCHLIST.list()
         console.log(`found ${cached.keys.length} cached items`)
 
         let non_circulating_supply_ncheq = 0;
-        for (const account of cached.keys) {
-            console.log(`looking for account: "${JSON.stringify(account.name)}" in cache`)
-            let cachedFound = await CIRCULATING_SUPPLY_WATCHLIST.get(account.name);
+        for (const r of cached.keys) {
+            console.log(`looking for account: ${JSON.stringify(r.name)} in cache`)
+            let cachedFound = await CIRCULATING_SUPPLY_WATCHLIST.get(r.name);
 
-            if (cachedFound !== undefined) {
-                const data = JSON.parse(cachedFound)
+            if (cachedFound !== null) {
+                const data: { totalBalance: number | null } = JSON.parse(cachedFound)
 
-                if (typeof data === "object") {
+                if (data.totalBalance !== null) {
                     console.log(`found cache entry: ${cachedFound}`)
-                    non_circulating_supply_ncheq += total_balance_ncheq(data);
+                    non_circulating_supply_ncheq += data.totalBalance;
                 }
             }
         }
@@ -47,10 +43,7 @@ async function get_circulating_supply(circulating_supply_watchlist: string[]): P
 }
 
 export async function handler(request: Request): Promise<Response> {
-    let addresses_to_exclude: string[] = (await CIRCULATING_SUPPLY_WATCHLIST.list()).keys.filter(k => !k.name.startsWith("grp_"));
-
-    let circulating_supply = await get_circulating_supply(addresses_to_exclude);
-    console.log(`circulating_supply=${circulating_supply}`)
+    let circulating_supply = await get_circulating_supply();
 
     return new Response(ncheq_to_cheq_fixed(circulating_supply));
 }

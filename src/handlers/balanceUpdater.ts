@@ -6,7 +6,12 @@ export async function handler(request: Request): Promise<Response> {
 
     if (grp !== null) {
         console.log(`updating all account balances (group: ${grp})`)
-        return updateGroupBalances(Number(grp), {} as Event)
+        try {
+            return updateGroupBalances(Number(grp), {} as Event)
+        } catch (e: any) {
+            console.log(new Map(e))
+            return new Response(JSON.stringify(new Map(e)))
+        }
     }
 
     return new Response("group is missing")

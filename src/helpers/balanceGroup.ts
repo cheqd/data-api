@@ -17,9 +17,8 @@ export async function updateGroupBalances(group: number, event: Event) {
                 const parts = key.name.split(':')
                 let addr = parts[1]
 
-                if (addr.startsWith("delayed:")) {
-                    const parts = key.name.split(':')
-                    addr = parts[1]
+                if (key.name.startsWith("delayed:")) {
+                    addr = parts[2]
                 }
 
                 const account = await updateCachedBalance(node_api, addr, group)
