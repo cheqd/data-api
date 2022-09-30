@@ -9,7 +9,7 @@ import { handler as delegatorCountHandler } from './handlers/delegatorCount';
 import { handler as totalDelegatorsHandler } from './handlers/totalDelegators';
 import { handler as totalStakedCoinsHandler } from "./handlers/totalStakedCoins";
 import { handler as balanceUpdaterHandler } from "./handlers/balanceUpdater";
-import { updateGroupBalances } from "./handlers/cron";
+import { updateGroupBalances } from "./helpers/balanceGroup";
 
 addEventListener('scheduled', (event: any) => {
     console.log(`triggering scheduled account balance update`)

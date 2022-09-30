@@ -1,5 +1,5 @@
 import { Request } from "itty-router";
-import { updateGroupBalances } from "./cron";
+import { updateGroupBalances } from "../helpers/balanceGroup";
 
 export async function handler(request: Request): Promise<Response> {
     const grp = request.params?.['grp'];
