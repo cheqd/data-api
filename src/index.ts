@@ -9,14 +9,15 @@ import { handler as delegatorCountHandler } from './handlers/delegatorCount';
 import { handler as totalDelegatorsHandler } from './handlers/totalDelegators';
 import { handler as totalStakedCoinsHandler } from "./handlers/totalStakedCoins";
 import { handler as balanceUpdaterHandler } from "./handlers/balanceUpdater";
-import { updateAllBalances } from "./handlers/cron";
+import { updateGroupBalances } from "./handlers/cron";
 
 addEventListener('scheduled', (event: any) => {
     console.log(`triggering scheduled account balance update`)
 
-    event.waitUntil(updateAllBalances(1, event));
-    event.waitUntil(updateAllBalances(2, event));
-    event.waitUntil(updateAllBalances(3, event));
+    event.waitUntil(updateGroupBalances(1, event));
+    event.waitUntil(updateGroupBalances(2, event));
+    event.waitUntil(updateGroupBalances(3, event));
+    event.waitUntil(updateGroupBalances(4, event));
 })
 
 addEventListener('fetch', (event: FetchEvent) => {
@@ -26,6 +27,7 @@ addEventListener('fetch', (event: FetchEvent) => {
 })
 
 function registerRoutes(router: Router) {
+    router.get('/_/grp', balanceUpdaterHandler);
     router.get('/_/grp/:grp', balanceUpdaterHandler);
     router.get('/', totalSupplyHandler);
     router.get('/balances/liquid/:address', liquidBalanceHandler);

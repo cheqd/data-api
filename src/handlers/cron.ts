@@ -2,7 +2,7 @@ import { NodeApi } from "../api/nodeApi";
 import { updateBalance } from "../helpers/balance";
 import { Account } from "../types/bigDipper";
 
-export async function updateAllBalances(group: number, event: Event) {
+export async function updateGroupBalances(group: number, event: Event) {
     let node_api = new NodeApi(REST_API);
     let balances: { account: String, balances: Account } [] = [];
 
@@ -38,5 +38,6 @@ export async function updateAllBalances(group: number, event: Event) {
         return new Response(JSON.stringify(balances));
     } catch (e) {
         console.error(e)
+        throw e;
     }
 }
