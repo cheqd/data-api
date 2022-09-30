@@ -1,6 +1,7 @@
 import { NodeApi } from "../api/nodeApi";
 import { GraphQLClient } from "./graphql";
 import { BigDipperApi } from "../api/bigDipperApi";
+import { total_balance_ncheq } from "./node";
 
 export async function updateBalance(node_api: NodeApi, addr: string, grpN: number): Promise<Response> {
     const gql_client = new GraphQLClient(GRAPHQL_API);
@@ -17,7 +18,10 @@ export async function updateBalance(node_api: NodeApi, addr: string, grpN: numbe
         if (cachedAccount !== undefined) {
             console.log(`account "${addr}" found in cache: ${cachedAccount}`)
 
-            await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_${grpN}:${addr}`, JSON.stringify(account))
+            await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_${grpN}:${addr}`, JSON.stringify({
+                totalBalance: total_balance_ncheq(account),
+            }))
+
             console.log(`account "${addr}" balance updated. (res=${JSON.stringify(account)})`)
 
             return new Response(JSON.stringify(account));
