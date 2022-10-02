@@ -61,7 +61,7 @@ export class BigDipperApi {
             }
         }`;
 
-        let resp = await this.graphql_client.query<{ supply: { coins: Coin[] }[] }>(query);
+        let resp = await this.graphql_client.query<{ data: { supply: { coins: Coin[] }[] } }>(query);
 
         return resp.data.supply[0].coins;
     }

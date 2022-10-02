@@ -7,7 +7,7 @@ export async function updateGroupBalances(group: number, event: Event) {
     let balances: { account: Account } [] = [];
 
     const cached = await CIRCULATING_SUPPLY_WATCHLIST.list({ prefix: `grp_${group}:` });
-    // const cached = await import ("../../addresses.json");
+
     console.log(`found ${cached.keys.length} cached accounts`)
 
     for (const key of cached.keys) {
