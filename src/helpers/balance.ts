@@ -31,7 +31,7 @@ export async function updateCachedBalance(node_api: NodeApi, addr: string, grpN:
 
         return account;
     } catch (e: any) {
-        console.error(e)
+        console.error(new Map(e))
         return null;
     }
 }

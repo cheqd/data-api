@@ -10,24 +10,17 @@ export async function updateGroupBalances(group: number, event: Event) {
     // const cached = await import ("../../addresses.json");
     console.log(`found ${cached.keys.length} cached accounts`)
 
-
     for (const key of cached.keys) {
-        CIRCULATING_SUPPLY_WATCHLIST.delete(key.name)
-    }
+        const parts = key.name.split(':')
+        let addr = parts[1]
+        let grpN = Number(parts[0].split("_")[1])
 
-    for (const key of cached.keys) {
-        console.log(`searching ${key.name}`)
-        const found = await CIRCULATING_SUPPLY_WATCHLIST.get(key.name)
+        if (key.name.includes("delayed:")) {
+            addr = parts[2]
+        }
 
+        const found = await CIRCULATING_SUPPLY_WATCHLIST.get(`grp_${grpN}:${addr}`)
         if (found) {
-            const parts = key.name.split(':')
-            let addr = parts[1]
-            let grpN = Number(parts[0].split("_")[1])
-
-            if (key.name.includes("delayed:")) {
-                addr = parts[2]
-            }
-
             console.log(`found ${key.name} (addr=${addr}) grp=${grpN}`)
 
             const account = await updateCachedBalance(node_api, addr, grpN)
