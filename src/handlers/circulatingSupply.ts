@@ -24,7 +24,7 @@ async function get_circulating_supply(): Promise<number> {
             if (data !== null) {
                 if (data.totalBalance === undefined) {
                     const balance = total_balance_ncheq(JSON.parse(data) as Account)
-                    data = JSON.stringify({ totalBalance: balance })
+                    data = JSON.stringify({ totalBalance: balance, updatedAt: Date.now() })
                     console.log(`updating bad cache entry: ${JSON.stringify(data)} totalBalance=${data.totalBalance} data=${JSON.stringify(data)}`)
                     await CIRCULATING_SUPPLY_WATCHLIST.put(r.name, data)
                 }
