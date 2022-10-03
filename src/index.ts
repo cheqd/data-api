@@ -34,8 +34,6 @@ function registerRoutes(router: Router) {
     router.get('/supply/circulating', circulatingSupplyHandler);
     router.get('/supply/staked', totalStakedCoinsHandler);
     router.get('/supply/total', totalSupplyHandler);
-    router.get('/_/grp/:grp', balanceUpdaterHandler);
-
 
     // 404 for all other requests
     router.all('*', () => new Response('Not Found.', { status: 404 }))
