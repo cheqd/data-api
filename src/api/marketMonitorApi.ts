@@ -1,13 +1,13 @@
-import { MarketMonitorData } from "../types/marketMonitor";
+import { MarketMonitorData } from '../types/marketMonitor';
 export class MarketMonitorApi {
   constructor(public readonly base_market_monitor_api_url: string) {}
 
   async get_market_monitor_data(): Promise<MarketMonitorData> {
     const requestOptions = {
-      method: "GET",
+      method: 'GET',
     };
     const response = await fetch(
-      `${this.base_market_monitor_api_url}/arbitrage`,
+      `${this.base_market_monitor_api_url}`,
       requestOptions
     );
     return (await response.json()) as MarketMonitorData;
