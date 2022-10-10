@@ -1,19 +1,19 @@
 export interface Price {
   price: number;
-  coin_pair: string;
+  coinPair: string;
   market: string;
 }
 
 export interface ArbitrageOpportunity {
-  market_pair_id: string;
-  market_name_a: string;
-  coin_price_a: number;
-  coin_pair_a: string;
-  market_name_b: string;
-  coin_price_b: number;
-  coin_pair_b: string;
+  marketPairId: string;
+  marketNameA: string;
+  coinPriceA: number;
+  coinPairA: string;
+  marketNameB: string;
+  coinPriceB: number;
+  coinPairB: string;
   arbitragePossible: boolean;
-  percentage_delta: number;
+  percentageDelta: number;
 }
 
 export interface MarketMonitorData {
