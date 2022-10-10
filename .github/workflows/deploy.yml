@@ -62,3 +62,7 @@ jobs:
           wranglerVersion: '2.0.29'
           preCommands: npm ci
           command: publish
+          secrets: |
+            WEBHOOK_URL
+        env:
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
