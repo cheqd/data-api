@@ -2,7 +2,7 @@ import { MarketMonitorApi } from "../api/marketMonitorApi";
 
 export async function fetchPrices() {
   let market_monitor_api = new MarketMonitorApi(
-    `${MONITOR_MARKET_API_FUNCTIONS_BASE_URL}`
+    `${MARKET_MONITORING_API}`
   );
   return await market_monitor_api.get_market_monitor_data();
 }
