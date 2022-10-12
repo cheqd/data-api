@@ -52,7 +52,6 @@ MARKET_MONITORING_API = "https://market-monitoring.cheqd.net"
 # - WEBHOOK_URL
 # Run `echo <VALUE> | wrangler secret put <NAME>` for each of these
 
-
 [triggers]
 crons = ["0 0/2 * * *"]
 
@@ -106,9 +105,6 @@ preview_id = "1e1032cbf6854d88b12317da8a792928"
 [env.staging.triggers]
 crons = ["0 9 * * *"]
 
-
-[triggers]
-crons = ["0 * * * *"]
 ###############################################################
 ###               OPTIONAL: Build Configuration             ###
 ###############################################################
