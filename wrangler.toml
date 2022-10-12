@@ -45,7 +45,16 @@ TOKEN_EXPONENT = "9"
 REST_API = "https://api.cheqd.net"
 # GraphQL API endpoint for target network. Must be sourced from a BigDipper instance.
 GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"
+# Moniter market API base url
+MARKET_MONITORING_API = "https://market-monitoring.cheqd.net"
 
+# The necessary secrets are:
+# - WEBHOOK_URL
+# Run `echo <VALUE> | wrangler secret put <NAME>` for each of these
+
+
+[triggers]
+crons = ["0 * * * *"]
 
 ###############################################################
 ###             SECTION 3: Local Development                ###
@@ -78,7 +87,12 @@ route = { pattern = "data-api-staging.cheqd.io/*", zone_id = "afe3b66243382f2714
 
 # Map of environment variables to set when deploying the Worker
 # Not inherited. @default `{}`
-vars = { TOKEN_EXPONENT = "9", REST_API = "https://api.cheqd.net", GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql" }
+vars = { ENVIRONMENT = "staging", TOKEN_EXPONENT = "9", REST_API = "https://api.cheqd.net", GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql", MARKET_MONITORING_API = "https://market-monitoring-staging.cheqd.net"}
+
+
+# The necessary secrets are:
+# - WEBHOOK_URL
+# Run `echo <VALUE> | wrangler secret put <NAME>` for each of these
 
 # KV Namespaces accessible from the Worker
 # Details: https://developers.cloudflare.com/workers/learning/how-kv-works
@@ -88,6 +102,9 @@ binding = "CIRCULATING_SUPPLY_WATCHLIST"
 id = "afb34dd4b9374cc4a7ae7c3aaf6e5ce2"
 preview_id = "1e1032cbf6854d88b12317da8a792928"
 
+# Cron triggers for staging worker
+[env.staging.triggers]
+crons = ["0 9 * * *"]
 
 
 [triggers]
