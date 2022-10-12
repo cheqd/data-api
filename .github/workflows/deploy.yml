@@ -31,6 +31,10 @@ jobs:
           wranglerVersion: '2.0.29'
           preCommands: npm ci
           command: publish --env staging
+          secrets: |
+            WEBHOOK_URL
+        env:
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
 
   production-deploy:
     name: "Cloudflare - Production"
@@ -62,3 +66,7 @@ jobs:
           wranglerVersion: '2.0.29'
           preCommands: npm ci
           command: publish
+          secrets: |
+            WEBHOOK_URL
+        env:
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
