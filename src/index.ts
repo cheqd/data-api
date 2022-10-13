@@ -1,30 +1,33 @@
-import { IHTTPMethods, Request, Router } from 'itty-router'
-import { handler as totalSupplyHandler } from "./handlers/totalSupply";
-import { handler as totalBalanceHandler } from "./handlers/totalBalance";
-import { handler as circulatingSupplyHandler } from "./handlers/circulatingSupply";
-import { handler as liquidBalanceHandler } from "./handlers/liquidBalance";
-import { handler as vestingBalanceHandler } from "./handlers/vestingBalance";
-import { handler as vestedBalanceHandler } from "./handlers/vestedBalance";
+import { Router, Request, IHTTPMethods } from 'itty-router';
+import { handler as totalSupplyHandler } from './handlers/totalSupply';
+import { handler as totalBalanceHandler } from './handlers/totalBalance';
+import { handler as circulatingSupplyHandler } from './handlers/circulatingSupply';
+import { handler as liquidBalanceHandler } from './handlers/liquidBalance';
+import { handler as vestingBalanceHandler } from './handlers/vestingBalance';
+import { handler as vestedBalanceHandler } from './handlers/vestedBalance';
 import { handler as delegatorCountHandler } from './handlers/delegatorCount';
 import { handler as totalDelegatorsHandler } from './handlers/totalDelegators';
-import { handler as totalStakedCoinsHandler } from "./handlers/totalStakedCoins";
+import { handler as totalStakedCoinsHandler } from './handlers/totalStakedCoins';
+import { handler as allArbitrageOpportunitiesHandler } from './handlers/allArbitrageOpportunities';
+import { handler as arbitrageOpportunitiesHandler } from './handlers/arbitrageOpportunities';
+import { webhookTriggers } from './handlers/webhookTriggers';
 import { handler as balanceUpdaterHandler } from "./handlers/balanceGroup";
-import { updateGroupBalances } from "./helpers/balanceGroup";
 
 addEventListener('scheduled', (event: any) => {
-    console.log(`triggering scheduled account balance update`)
-
-    event.waitUntil(updateGroupBalances(getRandomGroup(), event));
-})
+  event.waitUntil(webhookTriggers(event));
+  // event.waitUntil(balanceUpdaterHandler(getRandomGroup(event)));
+});
 
 addEventListener('fetch', (event: FetchEvent) => {
-    const router = Router<Request, IHTTPMethods>()
-    registerRoutes(router);
-    event.respondWith(router.handle(event.request).catch(handleError))
+	const router = Router<Request, IHTTPMethods>()
+	registerRoutes(router);
+	event.respondWith(router.handle(event.request).catch(handleError))
 })
 
 function registerRoutes(router: Router) {
     router.get('/', totalSupplyHandler);
+    router.get('/arbitrage', arbitrageOpportunitiesHandler);
+    router.get('/arbitrage/all', allArbitrageOpportunitiesHandler);
     router.get('/balances/liquid/:address', liquidBalanceHandler);
     router.get('/balances/total/:address', totalBalanceHandler);
     router.get('/balances/vested/:address', vestedBalanceHandler);
@@ -61,6 +64,5 @@ function getRandomGroup(): number {
     if (hour >= 18 && hour < 24) {
         return 2;
     }
-
     throw new Error("invalid hour for group");
 }
