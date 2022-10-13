@@ -68,3 +68,11 @@ export interface ActiveValidatorsResponse {
     }
   ];
 }
+
+export interface TotalStakedCoinsResponse {
+  staking_pool: [
+    {
+      bonded_tokens: string;
+    }
+  ];
+}

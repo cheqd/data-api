@@ -2,8 +2,8 @@ import { GraphQLClient } from '../helpers/graphql';
 import {
   ActiveValidatorsResponse,
   Coin,
+  TotalStakedCoinsResponse,
   ValidatorDelegationsCountResponse,
-  ValidatorDetailResponse,
 } from '../types/node';
 import { Account } from '../types/bigDipper';
 import { NodeApi } from './nodeApi';
@@ -140,8 +140,8 @@ export class BigDipperApi {
         }`;
 
     const resp = await this.graphql_client.query<{
-      staking_pool: [{ bonded_tokens: string }];
+      data: TotalStakedCoinsResponse;
     }>(query);
-    return resp.staking_pool[0].bonded_tokens;
+    return resp.data.staking_pool[0].bonded_tokens;
   };
 }
