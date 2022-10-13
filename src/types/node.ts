@@ -51,10 +51,20 @@ export interface ValidatorDelegationsCountResponse {
 }
 
 export interface ValidatorDetailResponse {
-  validator: [
+  delegation_responses: [
     {
-      validatorStatuses: [{ jailed: boolean }];
-      delegations: [{ delegatorAddress: string }];
+      delegation: {
+        delegator_address: string;
+        validator_address: string;
+      };
+    }
+  ];
+}
+
+export interface ActiveValidatorsResponse {
+  validator_info: [
+    {
+      operator_address: string;
     }
   ];
 }
