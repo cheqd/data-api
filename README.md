@@ -83,7 +83,7 @@ The only way to derive this figure from the Cosmos SDK APIs is by iterating over
 
 #### Endpoint
 
-[`data-api.cheqd.io/staking/balances/<validator-address>`](https://data-api.cheqd.io/staking/balances/cheqdvaloper1lg0vwuu888hu4arnt9egtqrm2662kcrtf2unrs)
+[`data-api.cheqd.io/staking/delegators/<validator-address>`](https://data-api.cheqd.io/staking/delegators/cheqdvaloper1lg0vwuu888hu4arnt9egtqrm2662kcrtf2unrs)
 
 #### Response
 
