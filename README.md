@@ -97,7 +97,7 @@ There is no simple Cosmos SDK API to fetch the number of delegators for a given 
 
 #### Endpoint
 
-[`data-api.cheqd.io/balances/vesting/<address>`](https://data-api.cheqd.io/balances/vesting/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg)
+[`data-api.cheqd.io/balances/vesting/<address>`](https://data-api.cheqd.io/balances/vesting/cheqd17wrwqxsfwy4rqlltjhj6jxtz68tvxm0ykge5dr)
 
 #### Response
 
@@ -111,7 +111,7 @@ There is no Cosmos SDK API that returns balances that are yet to be vested for [
 
 #### Endpoint
 
-[`data-api.cheqd.io/balances/vested/<address>`](https://data-api.cheqd.io/balances/vesting/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg)
+[`data-api.cheqd.io/balances/vested/<address>`](https://data-api.cheqd.io/balances/vesting/cheqd17wrwqxsfwy4rqlltjhj6jxtz68tvxm0ykge5dr)
 
 #### Response
 
@@ -125,7 +125,7 @@ There is no Cosmos SDK API that returns balances that are already vested for [co
 
 #### Endpoint
 
-[`data-api.cheqd.io/balances/liquid/<address>`](https://data-api.cheqd.io/balances/vesting/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg)
+[`data-api.cheqd.io/balances/liquid/<address>`](https://data-api.cheqd.io/balances/vesting/cheqd17wrwqxsfwy4rqlltjhj6jxtz68tvxm0ykge5dr)
 
 #### Response
 
@@ -143,7 +143,7 @@ Tokens in [continuous or delayed vesting accounts](https://docs.cosmos.network/v
 
 #### Endpoint
 
-[`data-api.cheqd.io/balances/total/<address>`](https://data-api.cheqd.io/balances/total/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg)
+[`data-api.cheqd.io/balances/total/<address>`](https://data-api.cheqd.io/balances/total/cheqd17wrwqxsfwy4rqlltjhj6jxtz68tvxm0ykge5dr)
 
 #### Response
 
