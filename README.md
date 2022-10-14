@@ -83,7 +83,7 @@ The only way to derive this figure from the Cosmos SDK APIs is by iterating over
 
 #### Endpoint
 
-[`data-api.cheqd.io/staking/balances/<validator-address>`](https://data-api.cheqd.io/staking/balances/cheqdvaloper1lg0vwuu888hu4arnt9egtqrm2662kcrtf2unrs)
+[`data-api.cheqd.io/staking/delegators/<validator-address>`](https://data-api.cheqd.io/staking/delegators/cheqdvaloper1lg0vwuu888hu4arnt9egtqrm2662kcrtf2unrs)
 
 #### Response
 
@@ -97,7 +97,7 @@ There is no simple Cosmos SDK API to fetch the number of delegators for a given 
 
 #### Endpoint
 
-[`data-api.cheqd.io/balances/vesting/<address>`](https://data-api.cheqd.io/balances/vesting/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg)
+[`data-api.cheqd.io/balances/vesting/<address>`](https://data-api.cheqd.io/balances/vesting/cheqd17wrwqxsfwy4rqlltjhj6jxtz68tvxm0ykge5dr)
 
 #### Response
 
@@ -111,7 +111,7 @@ There is no Cosmos SDK API that returns balances that are yet to be vested for [
 
 #### Endpoint
 
-[`data-api.cheqd.io/balances/vested/<address>`](https://data-api.cheqd.io/balances/vesting/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg)
+[`data-api.cheqd.io/balances/vested/<address>`](https://data-api.cheqd.io/balances/vesting/cheqd17wrwqxsfwy4rqlltjhj6jxtz68tvxm0ykge5dr)
 
 #### Response
 
@@ -125,7 +125,7 @@ There is no Cosmos SDK API that returns balances that are already vested for [co
 
 #### Endpoint
 
-[`data-api.cheqd.io/balances/liquid/<address>`](https://data-api.cheqd.io/balances/vesting/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg)
+[`data-api.cheqd.io/balances/liquid/<address>`](https://data-api.cheqd.io/balances/vesting/cheqd17wrwqxsfwy4rqlltjhj6jxtz68tvxm0ykge5dr)
 
 #### Response
 
@@ -143,7 +143,7 @@ Tokens in [continuous or delayed vesting accounts](https://docs.cosmos.network/v
 
 #### Endpoint
 
-[`data-api.cheqd.io/balances/total/<address>`](https://data-api.cheqd.io/balances/total/cheqd1qs0nhyk868c246defezhz5eymlt0dmajna2csg)
+[`data-api.cheqd.io/balances/total/<address>`](https://data-api.cheqd.io/balances/total/cheqd17wrwqxsfwy4rqlltjhj6jxtz68tvxm0ykge5dr)
 
 #### Response
 
@@ -157,7 +157,8 @@ The standard Cosmos SDK REST API for account balances returns JSON with the acco
 
 #### Endpoint
 
-[`data-api.cheqd.io/arbitrage/`](https://data-api.cheqd.io/arbitrage)
+- Results filtered by threshold value: [`data-api.cheqd.io/arbitrage`](https://data-api.cheqd.io/arbitrage)
+- Unfiltered results: [`data-api.cheqd.io/arbitrage/all`](https://data-api.cheqd.io/arbitrage/all)
 
 #### Response
 

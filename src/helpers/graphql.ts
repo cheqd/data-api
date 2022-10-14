@@ -5,7 +5,7 @@ export class GraphQLClient {
     async query<T>(query: string, variables: Object = {}): Promise<T> {
         let req = {
             query,
-            variables
+            variables,
         }
 
         let resp = await fetch(this.base_url, {
@@ -13,12 +13,12 @@ export class GraphQLClient {
             body: JSON.stringify(req)
         })
 
-        let resp_json = await resp.json() as { data: T, errors: any }
+        let json: { errors: any } = await resp.json()
 
-        if (resp_json.errors != null) {
-            throw new Error(resp_json.errors);
+        if (json.errors) {
+            throw new Error(`query failed: ${JSON.stringify(json.errors)}`)
         }
 
-        return resp_json.data;
+        return json as T;
     }
 }
