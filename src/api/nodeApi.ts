@@ -46,7 +46,7 @@ export class NodeApi {
     address: string
   ): Promise<ValidatorDetailResponse> {
     let resp = await fetch(
-      `${this.base_rest_api_url}/cosmos/staking/v1beta1/validators/${address}/delegations?pagination.limit=100000000000000`
+      `${this.base_rest_api_url}/cosmos/staking/v1beta1/validators/${address}/delegations?pagination.limit=10000`
     );
 
     return await resp.json();
