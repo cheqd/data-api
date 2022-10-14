@@ -157,7 +157,8 @@ The standard Cosmos SDK REST API for account balances returns JSON with the acco
 
 #### Endpoint
 
-[`data-api.cheqd.io/arbitrage/`](https://data-api.cheqd.io/arbitrage)
+- Results filtered by threshold value: [`data-api.cheqd.io/arbitrage`](https://data-api.cheqd.io/arbitrage)
+- Unfiltered results: [`data-api.cheqd.io/arbitrage/all`](https://data-api.cheqd.io/arbitrage/all)
 
 #### Response
 
