@@ -24,8 +24,15 @@ export async function handler(request: Request): Promise<Response> {
   let delegated = Number(
     auth_account?.base_vesting_account?.delegated_vesting?.find(
       (d) => d.denom === 'ncheq'
-    )?.amount ?? '0'
-  );
+    )?.amount ?? '0';
 
-  return new Response(ncheq_to_cheq_fixed(balance + rewards + delegated));
+  let unbonding = Number(
+      auth_account?.base_vesting_account?.delegated_free?.find(
+        (d) => d.denom === 'ncheq'
+      )?.amount ?? '0'
+    
+  );
+  
+
+  return new Response(ncheq_to_cheq_fixed(balance + rewards + delegated + unbonding));
 }
