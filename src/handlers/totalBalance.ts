@@ -1,8 +1,5 @@
 import { Request } from 'itty-router';
-import {
-  is_delayed_vesting_account_type,
-  validate_cheqd_address,
-} from '../helpers/validate';
+import { validate_cheqd_address } from '../helpers/validate';
 import { ncheq_to_cheq_fixed } from '../helpers/currency';
 import { NodeApi } from '../api/nodeApi';
 

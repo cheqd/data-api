@@ -96,14 +96,14 @@ vars = { ENVIRONMENT = "staging", TOKEN_EXPONENT = "9", REST_API = "https://api.
 # KV Namespaces accessible from the Worker
 # Details: https://developers.cloudflare.com/workers/learning/how-kv-works
 # @default `[]`
-[[env.staging.kv_namespaces]]
-binding = "CIRCULATING_SUPPLY_WATCHLIST"
-id = "afb34dd4b9374cc4a7ae7c3aaf6e5ce2"
-preview_id = "1e1032cbf6854d88b12317da8a792928"
+
+kv_namespaces = [
+  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "afb34dd4b9374cc4a7ae7c3aaf6e5ce2"} , { binding = "CURRENT_CSW_GROUP_TO_BE_UPDATED", id = "da8c7da9529943c79167ca1254abc3cc" }
+]
 
 # Cron triggers for staging worker
 [env.staging.triggers]
-crons = ["0 9 * * *"]
+crons = ["* * * * *"]
 
 ###############################################################
 ###               OPTIONAL: Build Configuration             ###
