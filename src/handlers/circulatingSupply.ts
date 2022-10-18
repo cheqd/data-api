@@ -64,7 +64,7 @@ async function get_circulating_supply(): Promise<number> {
     console.log(`Shareholders total balance: ${shareholders_total_balance}`);
     console.log('Total staked coins', total_staked_coins);
     console.log('Total supply', total_supply);
-    return total_supply - (total_staked_coins + shareholders_total_balance);
+    return total_supply - shareholders_total_balance;
   } catch (e: any) {
     console.error(new Map(e));
   }
