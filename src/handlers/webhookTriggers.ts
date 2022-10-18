@@ -4,7 +4,7 @@ import { filterArbitrageOpportunities } from './arbitrageOpportunities';
 export async function webhookTriggers(event: Event) {
   console.log('Triggering webhook...');
   await sendPriceDiscrepancies();
-  await updateGroupBalances(Number(3));
+  await updateGroupBalances();
 }
 
 export async function sendPriceDiscrepancies() {

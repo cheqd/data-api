@@ -1,32 +1,39 @@
 import { updateCachedBalance } from './balance';
 import { NodeApi } from '../api/nodeApi';
-import { Account } from '../types/bigDipper';
+
+export function extract_group_number_and_address(key: string) {
+  const parts = key.split(':');
+  let addr = parts[1];
+  let grpN = Number(parts[0].split('_')[1]);
+
+  if (key.includes('delayed:')) {
+    addr = parts[2];
+  }
+  return {
+    address: addr,
+    groupNumber: grpN,
+  };
+}
 
 export async function updateGroupBalances() {
-  console.log('updatingg....');
   let node_api = new NodeApi(REST_API);
-  let grouptToBeUpdated = await CURRENT_CSW_GROUP_TO_BE_UPDATED.get('group');
-
+  let balance_group_to_be_updated = await CURRENT_CSW_GROUP_TO_BE_UPDATED.get(
+    'group'
+  );
   const cached = await CIRCULATING_SUPPLY_WATCHLIST.list({
-    prefix: `grp_${Number(grouptToBeUpdated)}:`,
+    prefix: `grp_${balance_group_to_be_updated}:`,
   });
 
   console.log(
-    `found ${cached.keys.length} cached accounts for group ${grouptToBeUpdated}`
+    `found ${cached.keys.length} cached accounts for group ${balance_group_to_be_updated}`
   );
 
   for (const key of cached.keys) {
-    const parts = key.name.split(':');
-    let addr = parts[1];
-    let grpN = Number(parts[0].split('_')[1]);
-
-    if (key.name.includes('delayed:')) {
-      addr = parts[2];
-      console.log('some include delayed...');
-    }
+    const parts = extract_group_number_and_address(key.name);
+    let addr = parts.address;
+    let grpN = parts.groupNumber;
 
     const found = await CIRCULATING_SUPPLY_WATCHLIST.get(`grp_${grpN}:${addr}`);
-    console.log('address to be updated', found);
     if (found) {
       console.log(`found ${key.name} (addr=${addr}) grp=${grpN}`);
 
@@ -42,11 +49,11 @@ export async function updateGroupBalances() {
     }
   }
   //   TODO: move group totatl to env var
-  // updated CSW_group
-  if (Number(grouptToBeUpdated) < 4) {
+  // updated CSW_group (note: we have 4 groups as of now)
+  if (Number(balance_group_to_be_updated) < 4) {
     await CURRENT_CSW_GROUP_TO_BE_UPDATED.put(
       'group',
-      `${Number(grouptToBeUpdated) + 1}`
+      `${Number(balance_group_to_be_updated) + 1}`
     );
   } else {
     await CURRENT_CSW_GROUP_TO_BE_UPDATED.put('group', `${1}`);
