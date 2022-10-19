@@ -5,7 +5,7 @@ import {
   TotalStakedCoinsResponse,
   ValidatorDelegationsCountResponse,
 } from '../types/node';
-import { Account, LatestBlockHeightResponse } from '../types/bigDipper';
+import { Account } from '../types/bigDipper';
 import { NodeApi } from './nodeApi';
 
 export class BigDipperApi {

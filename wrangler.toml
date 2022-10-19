@@ -98,12 +98,12 @@ vars = { ENVIRONMENT = "staging", TOKEN_EXPONENT = "9", REST_API = "https://api.
 # @default `[]`
 
 kv_namespaces = [
-  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "afb34dd4b9374cc4a7ae7c3aaf6e5ce2"} , { binding = "CURRENT_CSW_GROUP_TO_BE_UPDATED", id = "da8c7da9529943c79167ca1254abc3cc" }
+  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "afb34dd4b9374cc4a7ae7c3aaf6e5ce2"}}
 ]
 
 # Cron triggers for staging worker
 [env.staging.triggers]
-crons = ["* * * * *"]
+crons = ["0 9 * * *"]
 
 ###############################################################
 ###               OPTIONAL: Build Configuration             ###
