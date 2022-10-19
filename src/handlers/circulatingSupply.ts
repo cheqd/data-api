@@ -14,7 +14,6 @@ async function get_total_supply(): Promise<number> {
 }
 
 async function get_circulating_supply(): Promise<number> {
-  let node_api = new NodeApi(REST_API);
   const total_supply = await get_total_supply();
 
   try {
@@ -39,7 +38,7 @@ async function get_circulating_supply(): Promise<number> {
           data.timeUpdated === undefined
         ) {
           const parts = extract_group_number_and_address(key.name);
-          updateCachedBalance(node_api, parts.address, parts.groupNumber);
+          updateCachedBalance(parts.address, parts.groupNumber);
         }
 
         console.log(

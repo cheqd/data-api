@@ -15,17 +15,15 @@ export function extract_group_number_and_address(key: string) {
   };
 }
 
-export async function updateGroupBalances() {
+export async function updateGroupBalances(groupNumber: number) {
   let node_api = new NodeApi(REST_API);
-  let balance_group_to_be_updated = await CURRENT_CSW_GROUP_TO_BE_UPDATED.get(
-    'group'
-  );
+
   const cached = await CIRCULATING_SUPPLY_WATCHLIST.list({
-    prefix: `grp_${balance_group_to_be_updated}:`,
+    prefix: `grp_${groupNumber}:`,
   });
 
   console.log(
-    `found ${cached.keys.length} cached accounts for group ${balance_group_to_be_updated}`
+    `found ${cached.keys.length} cached accounts for group ${groupNumber}`
   );
 
   for (const key of cached.keys) {
@@ -37,7 +35,7 @@ export async function updateGroupBalances() {
     if (found) {
       console.log(`found ${key.name} (addr=${addr}) grp=${grpN}`);
 
-      const account = await updateCachedBalance(node_api, addr, grpN);
+      const account = await updateCachedBalance(addr, grpN);
 
       if (account !== null) {
         console.log(
@@ -47,15 +45,5 @@ export async function updateGroupBalances() {
         );
       }
     }
-  }
-  //   TODO: move group totatl to env var
-  // updated CSW_group (note: we have 4 groups as of now)
-  if (Number(balance_group_to_be_updated) < 4) {
-    await CURRENT_CSW_GROUP_TO_BE_UPDATED.put(
-      'group',
-      `${Number(balance_group_to_be_updated) + 1}`
-    );
-  } else {
-    await CURRENT_CSW_GROUP_TO_BE_UPDATED.put('group', `${1}`);
   }
 }

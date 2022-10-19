@@ -72,11 +72,7 @@ export async function get_account_balance_infos(
   }
 }
 
-export async function updateCachedBalance(
-  node_api: NodeApi,
-  addr: string,
-  grpN: number
-) {
+export async function updateCachedBalance(addr: string, grpN: number) {
   try {
     const account_balance_infos = await get_account_balance_infos(addr);
 
