@@ -5,45 +5,34 @@ import {
   TotalStakedCoinsResponse,
   ValidatorDelegationsCountResponse,
 } from '../types/node';
-import { Account } from '../types/bigDipper';
+import { Account, LatestBlockHeightResponse } from '../types/bigDipper';
 import { NodeApi } from './nodeApi';
 
 export class BigDipperApi {
   constructor(public readonly graphql_client: GraphQLClient) {}
 
-  async get_account(address: string): Promise<Account | null> {
-    let query = `query Account($address: String!, $where: vesting_account_bool_exp) {
-          accountBalance: action_account_balance(address: $address) {
-            coins
-          }
-          delegationBalance: action_delegation_total(address: $address) {
-            coins
-          }
-          unbondingBalance: action_unbonding_delegation_total(address: $address) {
-            coins
-          }
-          redelegationBalance: action_redelegation(address: $address) {
-            redelegations
-          }
-          rewardBalance: action_delegation_reward(address: $address) {
-            coins
-          }
-          vesting_account(where: $where) {
-            id
-            type
-            original_vesting
-            start_time
-            end_time
-          }
-        }`;
+  async get_account(address: string, height: number): Promise<Account | null> {
+    let query = `query Account($address: String!, $height: Int!) {
+      accountBalance: action_account_balance(address: $address, height: $height) {
+        coins
+      }
+      delegationBalance: action_delegation_total(address: $address, height: $height) {
+        coins
+      }
+      unbondingBalance: action_unbonding_delegation_total(address: $address, height: $height) {
+        coins
+      }
+      redelegationBalance: action_redelegation(address: $address, height: $height) {
+        redelegations
+      }
+      rewardBalance: action_delegation_reward(address: $address, height: $height) {
+        coins
+      }
+    }`;
 
     let params = {
       address: address,
-      where: {
-        address: {
-          _eq: address,
-        },
-      },
+      height: height,
     };
 
     try {
@@ -54,7 +43,7 @@ export class BigDipperApi {
 
       return resp.data as Account;
     } catch (e: any) {
-      console.error(new Map(e));
+      console.log(e);
       return null;
     }
   }

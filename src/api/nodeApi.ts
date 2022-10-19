@@ -51,4 +51,12 @@ export class NodeApi {
 
     return await resp.json();
   }
+
+  async get_latest_block_height(): Promise<number> {
+    const resp = await fetch(`${this.base_rest_api_url}/blocks/latest`);
+    let respJson = (await resp.json()) as {
+      block: { header: { height: number } };
+    };
+    return Number(respJson.block.header.height);
+  }
 }
