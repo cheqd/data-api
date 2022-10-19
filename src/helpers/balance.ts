@@ -1,11 +1,12 @@
 import { NodeApi } from '../api/nodeApi';
+import { AccountBalanceInfos } from '../types/node';
 import { ncheq_to_cheq_fixed } from './currency';
 import { validate_cheqd_address } from './validate';
 
-export async function calculate_total_balance_for_an_account(
+export async function get_account_balance_infos(
   node_api: NodeApi,
   address: string
-): Promise<Number> {
+): Promise<AccountBalanceInfos> {
   if (!address || !validate_cheqd_address(address)) {
     throw new Error('No address specified or wrong address format.');
   }
@@ -30,7 +31,16 @@ export async function calculate_total_balance_for_an_account(
       (d) => d.denom === 'ncheq'
     )?.amount ?? '0'
   );
-  return Number(ncheq_to_cheq_fixed(balance + rewards + delegated + unbonding));
+  return {
+    totalBalance: Number(
+      ncheq_to_cheq_fixed(balance + rewards + delegated + unbonding)
+    ),
+    availiableBalance: balance,
+    rewards: Number(ncheq_to_cheq_fixed(rewards)),
+    delegated: Number(ncheq_to_cheq_fixed(delegated)),
+    unbounding: Number(ncheq_to_cheq_fixed(unbonding)),
+    timeUpdated: new Date().toUTCString(),
+  };
 }
 export async function updateCachedBalance(
   node_api: NodeApi,
@@ -38,12 +48,12 @@ export async function updateCachedBalance(
   grpN: number
 ) {
   try {
-    const total_balance_without_delegations =
-      await calculate_total_balance_for_an_account(node_api, addr);
+    const account_balance_infos = await get_account_balance_infos(
+      node_api,
+      addr
+    );
 
-    const data = JSON.stringify({
-      totalBalance: total_balance_without_delegations,
-    });
+    const data = JSON.stringify(account_balance_infos);
 
     await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_${grpN}:${addr}`, data);
 

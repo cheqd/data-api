@@ -76,3 +76,12 @@ export interface TotalStakedCoinsResponse {
     }
   ];
 }
+
+export interface AccountBalanceInfos {
+  totalBalance: number;
+  availiableBalance: number;
+  rewards: number;
+  delegated: number;
+  unbounding: number;
+  timeUpdated: string;
+}
