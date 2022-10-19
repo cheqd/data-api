@@ -12,8 +12,6 @@ export function extract_group_number_and_address(key: string) {
 }
 
 export async function updateGroupBalances(groupNumber: number) {
-  let node_api = new NodeApi(REST_API);
-
   const cached = await CIRCULATING_SUPPLY_WATCHLIST.list({
     prefix: `grp_${groupNumber}:`,
   });
