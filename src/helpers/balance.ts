@@ -48,8 +48,9 @@ export async function get_account_balance_infos(
     const gql_client = new GraphQLClient(GRAPHQL_API);
     const bd_api = new BigDipperApi(gql_client);
     const node_api = new NodeApi(REST_API);
-    const latest_block_height = await node_api.get_latest_block_height();
+    const latest_block_height = (await node_api.get_latest_block_height()) - 10;
     console.log('height', latest_block_height);
+
     const account_balance_infos: Account | null = await bd_api.get_account(
       address,
       latest_block_height!!

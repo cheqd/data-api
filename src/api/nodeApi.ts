@@ -57,6 +57,6 @@ export class NodeApi {
     let respJson = (await resp.json()) as {
       block: { header: { height: number } };
     };
-    return Number(respJson.block.header.height) - -1; //TODO: maybe find better way of doin
+    return Number(respJson.block.header.height);
   }
 }
