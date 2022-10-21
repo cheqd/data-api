@@ -2,6 +2,7 @@ import {
   Account,
   Coin,
   DelegationsResponse,
+  UnbondingResponse,
   ValidatorDetailResponse,
 } from '../types/node';
 
@@ -68,6 +69,21 @@ export class NodeApi {
     );
 
     return (await resp.json()) as DelegationsResponse;
+  }
+
+  async staking_get_all_unboding_delegations_for_delegator(
+    address: string,
+    next_key?: string
+  ) {
+    const resp = await fetch(
+      `${
+        this.base_rest_api_url
+      }/cosmos/staking/v1beta1/delegators/${address}/unbonding_delegations${
+        next_key ? `?pagination.key=${next_key}` : ''
+      }`
+    );
+
+    return (await resp.json()) as UnbondingResponse;
   }
 
   async get_latest_block_height(): Promise<number> {
