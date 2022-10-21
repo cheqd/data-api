@@ -66,7 +66,7 @@ export async function get_account_balance_infos(
       availableBalance: balance,
       rewards: Number(ncheq_to_cheq_fixed(rewards)),
       delegated: Number(ncheq_to_cheq_fixed(delegated)),
-      unbounding: Number(ncheq_to_cheq_fixed(unbonding)),
+      unbonding: Number(ncheq_to_cheq_fixed(unbonding)),
       timeUpdated: new Date().toUTCString(),
     };
   } catch (e) {

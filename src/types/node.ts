@@ -82,6 +82,6 @@ export interface AccountBalanceInfos {
   availableBalance: number;
   rewards: number;
   delegated: number;
-  unbounding: number;
+  unbonding: number;
   timeUpdated: string;
 }
