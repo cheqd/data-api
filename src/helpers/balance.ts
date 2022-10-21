@@ -119,7 +119,9 @@ export async function get_account_balance_infos_from_node_api(
 
 export async function updateCachedBalance(addr: string, grpN: number) {
   try {
-    const account_balance_infos = await get_account_balance_infos(addr);
+    const account_balance_infos = await get_account_balance_infos_from_node_api(
+      addr
+    );
 
     const data = JSON.stringify(account_balance_infos);
 
