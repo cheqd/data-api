@@ -79,10 +79,10 @@ export interface TotalStakedCoinsResponse {
 
 export interface AccountBalanceInfos {
   totalBalance: number;
-  availiableBalance: number;
+  availableBalance: number;
   rewards: number;
   delegated: number;
-  unbounding: number;
+  unbonding: number;
   timeUpdated: string;
 }
 

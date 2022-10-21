@@ -31,10 +31,10 @@ async function get_circulating_supply(): Promise<number> {
       if (data !== null) {
         if (
           data.totalBalance === undefined ||
-          data.availiableBalance === undefined ||
+          data.availableBalance === undefined ||
           data.rewards === undefined ||
           data.delegated === undefined ||
-          data.unbounding === undefined ||
+          data.unbonding === undefined ||
           data.timeUpdated === undefined
         ) {
           const parts = extract_group_number_and_address(key.name);
