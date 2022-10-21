@@ -1,5 +1,6 @@
+import { NodeApi } from '../api/nodeApi';
 import { Account } from '../types/bigDipper';
-import { Coin } from '../types/node';
+import { Coin, DelegationsResponse } from '../types/node';
 
 export function total_balance_ncheq(account: Account): number {
   let balance = Number(
@@ -35,4 +36,32 @@ export function total_balance_ncheq(account: Account): number {
 
 export function delayed_balance_ncheq(balance: Coin[]): number {
   return Number(balance.find((c) => c.denom === 'ncheq')?.amount || '0');
+}
+
+export async function calculate_total_delegations_balance_for_delegator(
+  delegationsResp: DelegationsResponse
+): Promise<number> {
+  let total_delegation_balance = 0;
+  const next_Key = delegationsResp.pagination.next_key;
+
+  for (let i = 0; i < delegationsResp.delegation_responses.length; i++) {
+    total_delegation_balance += Number(
+      delegationsResp.delegation_responses[i].balance.amount
+    );
+  }
+
+  if (next_Key !== null) {
+    const node_api = new NodeApi(REST_API);
+    const delegator_address =
+      delegationsResp.delegation_responses[0].delegation.delegator_address;
+
+    const resp = await node_api.staking_get_all_delegations_for_delegator(
+      delegator_address,
+      next_Key
+    );
+
+    total_delegation_balance +=
+      await calculate_total_delegations_balance_for_delegator(resp);
+  }
+  return total_delegation_balance;
 }
