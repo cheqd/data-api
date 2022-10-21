@@ -63,11 +63,11 @@ export async function get_account_balance_infos(
       totalBalance: Number(
         ncheq_to_cheq_fixed(balance + rewards + delegated + unbonding)
       ),
-      availableBalance: balance,
+      availableBalance: Number(ncheq_to_cheq_fixed(balance)),
       rewards: Number(ncheq_to_cheq_fixed(rewards)),
       delegated: Number(ncheq_to_cheq_fixed(delegated)),
       unbonding: Number(ncheq_to_cheq_fixed(unbonding)),
-      timeUpdated: new Date().toUTCString(),
+      timeUpdated: new Date().toUTCString()
     };
   } catch (e) {
     console.error(e);
