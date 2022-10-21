@@ -74,7 +74,11 @@ export async function calculate_total_unboding_delegations_balance_for_delegator
   const next_key = unbondingResp.pagination.next_key;
 
   for (let i = 0; i < unbondingResp.unbonding_responses.length; i++) {
-    for (let j = 0; j < unbondingResp.unbonding_responses.entries.length; j++) {
+    for (
+      let j = 0;
+      j < unbondingResp.unbonding_responses[i].entries.length;
+      j++
+    ) {
       total_unbonding_balance_in_ncheq += Number(
         unbondingResp.unbonding_responses[i].entries[j].balance
       );
