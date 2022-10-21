@@ -43,7 +43,7 @@ export class BigDipperApi {
 
       return resp.data as Account;
     } catch (e: any) {
-      console.log(e);
+      console.log('error get_account: %s', e);
       return null;
     }
   }

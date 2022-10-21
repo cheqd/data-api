@@ -1,8 +1,6 @@
 import { Request } from 'itty-router';
 import { ncheq_to_cheq_fixed } from '../helpers/currency';
-import { updateCachedBalance } from '../helpers/balance';
 import { NodeApi } from '../api/nodeApi';
-import { extract_group_number_and_address } from '../helpers/balanceGroup';
 import { AccountBalanceInfos } from '../types/node';
 
 async function get_total_supply(): Promise<number> {
@@ -28,28 +26,14 @@ async function get_circulating_supply(): Promise<number> {
           type: 'json',
         });
 
-      if (data !== null) {
-        if (
-          data.totalBalance === undefined ||
-          data.availableBalance === undefined ||
-          data.rewards === undefined ||
-          data.delegated === undefined ||
-          data.unbonding === undefined ||
-          data.timeUpdated === undefined
-        ) {
-          const parts = extract_group_number_and_address(key.name);
-          updateCachedBalance(parts.address, parts.groupNumber);
-        }
-
+      if (data !== null && data.totalBalance !== null) {
         console.log(
           `found cache entry: ${JSON.stringify(data)} totalBalance=${
             data.totalBalance
           }`
         );
 
-        if (data.totalBalance !== null) {
-          shareholders_total_balance += Number(data.totalBalance);
-        }
+        shareholders_total_balance += Number(data.totalBalance);
       }
     }
 

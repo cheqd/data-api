@@ -74,7 +74,7 @@ export async function get_account_balance_infos(
       timeUpdated: new Date().toUTCString(),
     };
   } catch (e) {
-    console.error(e);
+    console.error(`error get_account_balance_infos: ${e}`);
     return null;
   }
 }
@@ -129,6 +129,6 @@ export async function updateCachedBalance(addr: string, grpN: number) {
 
     console.log(`account "${addr}" balance updated. (${data})`);
   } catch (e: any) {
-    console.error('error', e);
+    console.log(`error updateCachedBalance: ${e}`);
   }
 }
