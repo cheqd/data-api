@@ -63,7 +63,7 @@ export async function get_account_balance_infos(
       totalBalance: Number(
         ncheq_to_cheq_fixed(balance + rewards + delegated + unbonding)
       ),
-      availiableBalance: balance,
+      availableBalance: balance,
       rewards: Number(ncheq_to_cheq_fixed(rewards)),
       delegated: Number(ncheq_to_cheq_fixed(delegated)),
       unbounding: Number(ncheq_to_cheq_fixed(unbonding)),
