@@ -126,3 +126,8 @@ export interface UnbondingResponse {
     total: string;
   };
 }
+
+export interface CachedTotalDelegatorsCount {
+  totalDeleagatorsCount: number;
+  updatedAt: string;
+}
