@@ -1,8 +1,10 @@
+import { updateGroupBalances } from '../helpers/balanceGroup';
 import { filterArbitrageOpportunities } from './arbitrageOpportunities';
 
 export async function webhookTriggers(event: Event) {
   console.log('Triggering webhook...');
   await sendPriceDiscrepancies();
+  await updateGroupBalances(getRandomGroup());
 }
 
 export async function sendPriceDiscrepancies() {
@@ -28,4 +30,10 @@ export async function sendPriceDiscrepancies() {
       console.log(err);
     }
   }
+}
+
+function getRandomGroup(): number {
+  let min = 1;
+  let max = Math.floor(CIRCULATING_SUPPLY_GROUPS);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }

@@ -1,4 +1,10 @@
-import { Account, Coin, ValidatorDetailResponse } from '../types/node';
+import {
+  Account,
+  Coin,
+  DelegationsResponse,
+  UnbondingResponse,
+  ValidatorDetailResponse,
+} from '../types/node';
 
 export class NodeApi {
   constructor(public readonly base_rest_api_url: string) {}
@@ -50,5 +56,41 @@ export class NodeApi {
     );
 
     return await resp.json();
+  }
+
+  async staking_get_all_delegations_for_delegator(
+    address: string,
+    next_key?: string
+  ) {
+    const resp = await fetch(
+      `${this.base_rest_api_url}/cosmos/staking/v1beta1/delegations/${address}${
+        next_key ? `?pagination.key=${next_key}` : ''
+      }`
+    );
+
+    return (await resp.json()) as DelegationsResponse;
+  }
+
+  async staking_get_all_unboding_delegations_for_delegator(
+    address: string,
+    next_key?: string
+  ) {
+    const resp = await fetch(
+      `${
+        this.base_rest_api_url
+      }/cosmos/staking/v1beta1/delegators/${address}/unbonding_delegations${
+        next_key ? `?pagination.key=${next_key}` : ''
+      }`
+    );
+
+    return (await resp.json()) as UnbondingResponse;
+  }
+
+  async get_latest_block_height(): Promise<number> {
+    const resp = await fetch(`${this.base_rest_api_url}/blocks/latest`);
+    let respJson = (await resp.json()) as {
+      block: { header: { height: number } };
+    };
+    return Number(respJson.block.header.height);
   }
 }

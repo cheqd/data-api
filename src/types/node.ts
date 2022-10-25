@@ -76,3 +76,53 @@ export interface TotalStakedCoinsResponse {
     }
   ];
 }
+
+export interface AccountBalanceInfos {
+  totalBalance: number;
+  availableBalance: number;
+  rewards: number;
+  delegated: number;
+  unbonding: number;
+  timeUpdated: string;
+}
+
+export interface DelegationsResponse {
+  delegation_responses: [
+    {
+      delegation: {
+        delegator_address: string;
+        validator_address: string;
+        shares: string;
+      };
+      balance: {
+        denom: string;
+        amount: string;
+      };
+    }
+  ];
+  pagination: {
+    next_key: string;
+    total: string;
+  };
+}
+
+export interface UnbondingResponse {
+  unbonding_responses: [
+    {
+      delegator_address: string;
+      validator_address: string;
+      entries: [
+        {
+          creation_height: string;
+          completion_time: string;
+          initial_balance: string;
+          balance: string;
+        }
+      ];
+    }
+  ];
+  pagination: {
+    next_key: string;
+    total: string;
+  };
+}

@@ -1,36 +1,42 @@
-import { updateCachedBalance } from "./balance";
-import { NodeApi } from "../api/nodeApi";
-import { Account } from "../types/bigDipper";
+import { updateCachedBalance } from './balance';
 
-export async function updateGroupBalances(group: number, event: Event) {
-    let node_api = new NodeApi(REST_API);
-    let balances: { account: Account } [] = [];
+export function extract_group_number_and_address(key: string) {
+  const parts = key.split(':');
+  let addr = parts[1];
+  let grpN = Number(parts[0].split('_')[1]);
+  return {
+    address: addr,
+    groupNumber: grpN,
+  };
+}
 
-    const cached = await CIRCULATING_SUPPLY_WATCHLIST.list({ prefix: `grp_${group}:` });
+export async function updateGroupBalances(groupNumber: number) {
+  const cached = await CIRCULATING_SUPPLY_WATCHLIST.list({
+    prefix: `grp_${groupNumber}:`,
+  });
 
-    console.log(`found ${cached.keys.length} cached accounts`)
+  console.log(
+    `found ${cached.keys.length} cached accounts for group ${groupNumber}`
+  );
 
-    for (const key of cached.keys) {
-        const parts = key.name.split(':')
-        let addr = parts[1]
-        let grpN = Number(parts[0].split("_")[1])
+  for (const key of cached.keys) {
+    const parts = extract_group_number_and_address(key.name);
+    let addr = parts.address;
+    let grpN = parts.groupNumber;
 
-        if (key.name.includes("delayed:")) {
-            addr = parts[2]
-        }
+    const found = await CIRCULATING_SUPPLY_WATCHLIST.get(`grp_${grpN}:${addr}`);
+    if (found) {
+      console.log(`found ${key.name} (addr=${addr}) grp=${grpN}`);
 
-        const found = await CIRCULATING_SUPPLY_WATCHLIST.get(`grp_${grpN}:${addr}`)
-        if (found) {
-            console.log(`found ${key.name} (addr=${addr}) grp=${grpN}`)
+      const account = await updateCachedBalance(addr, grpN);
 
-            const account = await updateCachedBalance(node_api, addr, grpN)
-
-            if (account !== null) {
-                console.log(`updating account (grp_${grpN}:${addr}) balance (${JSON.stringify(account)})`)
-                balances.push({ account: account })
-            }
-        }
+      if (account !== null) {
+        console.log(
+          `updating account (grp_${grpN}:${addr}) balance (${JSON.stringify(
+            account
+          )})`
+        );
+      }
     }
-
-    return balances
+  }
 }

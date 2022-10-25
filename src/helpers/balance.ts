@@ -1,37 +1,104 @@
-import { NodeApi } from "../api/nodeApi";
-import { GraphQLClient } from "./graphql";
-import { BigDipperApi } from "../api/bigDipperApi";
-import { total_balance_ncheq } from "./node";
-import { Account } from "../types/bigDipper";
+import { BigDipperApi } from '../api/bigDipperApi';
+import { NodeApi } from '../api/nodeApi';
+import { Account } from '../types/bigDipper';
+import { AccountBalanceInfos } from '../types/node';
+import { ncheq_to_cheq_fixed } from './currency';
+import { GraphQLClient } from './graphql';
+import {
+  calculate_total_delegations_balance_for_delegator_in_ncheq,
+  calculate_total_unboding_delegations_balance_for_delegator_in_ncheq,
+} from './node';
 
-export async function updateCachedBalance(node_api: NodeApi, addr: string, grpN: number): Promise<Account | null> {
-    const gql_client = new GraphQLClient(GRAPHQL_API);
-    const bd_api = new BigDipperApi(gql_client);
-    const account = await bd_api.get_account(addr);
+function extract_account_infos(account: Account) {
+  let balance = Number(
+    account?.accountBalance?.coins.find((c) => c.denom === 'ncheq')?.amount ||
+      '0'
+  );
 
-    if (!account) {
-        throw new Error(`Account not found for address "${addr}"`)
+  let delegated = 0;
+  if (
+    account?.delegationBalance?.coins &&
+    account?.delegationBalance?.coins.length > 0
+  ) {
+    delegated = Number(account?.delegationBalance?.coins[0]?.amount || '0');
+  }
+
+  let unbonding = 0;
+  if (
+    account?.unbondingBalance?.coins &&
+    account?.unbondingBalance?.coins.length > 0
+  ) {
+    unbonding = Number(account?.unbondingBalance?.coins[0]?.amount || '0');
+  }
+
+  let rewards = 0;
+  if (account?.rewardBalance?.length > 0) {
+    for (let i = 0; i < account?.rewardBalance.length; i++) {
+      rewards += Number(account?.rewardBalance[i]?.coins[0]?.amount || '0');
     }
+  }
 
-    try {
-        const cachedAccount = await CIRCULATING_SUPPLY_WATCHLIST.get(`grp_${grpN}:${addr}`, { type: "json" })
+  return {
+    balance,
+    rewards,
+    delegated,
+    unbonding,
+  };
+}
 
-        // if (cachedAccount !== undefined) {
-        console.log(`account "${addr}" found in cache: ${JSON.stringify(cachedAccount)}`)
+export async function get_account_balance_infos_from_node_api(
+  address: string
+): Promise<AccountBalanceInfos | null> {
+  const node_api = new NodeApi(REST_API);
+  const available_balance = await node_api.bank_get_account_balances(address);
 
-        const totalBalance = total_balance_ncheq(account);
-        const data = JSON.stringify({ totalBalance: totalBalance });
+  let available_balance_in_ncheq = 0;
+  if (available_balance.length > 0) {
+    available_balance_in_ncheq = Number(available_balance[0]?.amount);
+  }
 
-        await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_${grpN}:${addr}`, data)
+  const reward_balance_in_ncheq = await node_api.distribution_get_total_rewards(
+    address
+  );
+  const total_delegation_balance_in_ncheq =
+    await calculate_total_delegations_balance_for_delegator_in_ncheq(
+      await node_api.staking_get_all_delegations_for_delegator(address)
+    );
 
-        console.log(`account "${addr}" balance updated. (${data})`)
+  const total_unbonding_balance_in_ncheq =
+    await calculate_total_unboding_delegations_balance_for_delegator_in_ncheq(
+      await node_api.staking_get_all_unboding_delegations_for_delegator(address)
+    );
 
-        return account;
-        // }
+  return {
+    totalBalance: Number(
+      ncheq_to_cheq_fixed(
+        available_balance_in_ncheq +
+          reward_balance_in_ncheq +
+          total_delegation_balance_in_ncheq +
+          total_unbonding_balance_in_ncheq
+      )
+    ),
+    availableBalance: Number(ncheq_to_cheq_fixed(available_balance_in_ncheq)),
+    rewards: Number(ncheq_to_cheq_fixed(reward_balance_in_ncheq)),
+    delegated: Number(ncheq_to_cheq_fixed(total_delegation_balance_in_ncheq)),
+    unbonding: Number(ncheq_to_cheq_fixed(total_unbonding_balance_in_ncheq)),
+    timeUpdated: new Date().toUTCString(),
+  };
+}
 
-        return account;
-    } catch (e: any) {
-        console.error(new Map(e))
-        return null;
-    }
+export async function updateCachedBalance(addr: string, grpN: number) {
+  try {
+    const account_balance_infos = await get_account_balance_infos_from_node_api(
+      addr
+    );
+
+    const data = JSON.stringify(account_balance_infos);
+
+    await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_${grpN}:${addr}`, data);
+
+    console.log(`account "${addr}" balance updated. (${data})`);
+  } catch (e: any) {
+    console.log(`error updateCachedBalance: ${e}`);
+  }
 }
