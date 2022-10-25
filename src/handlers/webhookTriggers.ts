@@ -1,10 +1,12 @@
 import { updateGroupBalances } from '../helpers/balanceGroup';
+import { updateTotalDelegatorsCount } from '../helpers/totalDelegators';
 import { filterArbitrageOpportunities } from './arbitrageOpportunities';
 
 export async function webhookTriggers(event: Event) {
   console.log('Triggering webhook...');
   await sendPriceDiscrepancies();
   await updateGroupBalances(getRandomGroup());
+  await updateTotalDelegatorsCount();
 }
 
 export async function sendPriceDiscrepancies() {
