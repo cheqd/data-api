@@ -84,12 +84,15 @@ export async function get_account_balance_infos_from_node_api(
 ): Promise<AccountBalanceInfos | null> {
   const node_api = new NodeApi(REST_API);
   const available_balance = await node_api.bank_get_account_balances(address);
-  const available_balance_in_ncheq = Number(available_balance[0].amount);
+
+  let available_balance_in_ncheq = 0;
+  if (available_balance.length > 0) {
+    available_balance_in_ncheq = Number(available_balance[0]?.amount);
+  }
 
   const reward_balance_in_ncheq = await node_api.distribution_get_total_rewards(
     address
   );
-
   const total_delegation_balance_in_ncheq =
     await calculate_total_delegations_balance_for_delegator_in_ncheq(
       await node_api.staking_get_all_delegations_for_delegator(address)
