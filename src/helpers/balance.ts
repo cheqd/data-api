@@ -45,39 +45,6 @@ function extract_account_infos(account: Account) {
     unbonding,
   };
 }
-export async function get_account_balance_infos(
-  address: string
-): Promise<AccountBalanceInfos | null> {
-  try {
-    const gql_client = new GraphQLClient(GRAPHQL_API);
-    const bd_api = new BigDipperApi(gql_client);
-    const node_api = new NodeApi(REST_API);
-    const latest_block_height = (await node_api.get_latest_block_height()) - 10;
-    console.log('height', latest_block_height);
-
-    const account_balance_infos: Account | null = await bd_api.get_account(
-      address,
-      latest_block_height!!
-    );
-    console.log('account infos', account_balance_infos);
-    const { balance, rewards, delegated, unbonding } = extract_account_infos(
-      account_balance_infos!!
-    );
-    return {
-      totalBalance: Number(
-        ncheq_to_cheq_fixed(balance + rewards + delegated + unbonding)
-      ),
-      availableBalance: Number(ncheq_to_cheq_fixed(balance)),
-      rewards: Number(ncheq_to_cheq_fixed(rewards)),
-      delegated: Number(ncheq_to_cheq_fixed(delegated)),
-      unbonding: Number(ncheq_to_cheq_fixed(unbonding)),
-      timeUpdated: new Date().toUTCString(),
-    };
-  } catch (e) {
-    console.error(`error get_account_balance_infos: ${e}`);
-    return null;
-  }
-}
 
 export async function get_account_balance_infos_from_node_api(
   address: string

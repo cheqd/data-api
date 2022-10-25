@@ -11,43 +11,6 @@ import { NodeApi } from './nodeApi';
 export class BigDipperApi {
   constructor(public readonly graphql_client: GraphQLClient) {}
 
-  async get_account(address: string, height: number): Promise<Account | null> {
-    let query = `query Account($address: String!, $height: Int!) {
-      accountBalance: action_account_balance(address: $address, height: $height) {
-        coins
-      }
-      delegationBalance: action_delegation_total(address: $address, height: $height) {
-        coins
-      }
-      unbondingBalance: action_unbonding_delegation_total(address: $address, height: $height) {
-        coins
-      }
-      redelegationBalance: action_redelegation(address: $address, height: $height) {
-        redelegations
-      }
-      rewardBalance: action_delegation_reward(address: $address, height: $height) {
-        coins
-      }
-    }`;
-
-    let params = {
-      address: address,
-      height: height,
-    };
-
-    try {
-      let resp = await this.graphql_client.query<{
-        data: any;
-        errors: any;
-      }>(query, params);
-
-      return resp.data as Account;
-    } catch (e: any) {
-      console.log('error get_account: %s', e);
-      return null;
-    }
-  }
-
   async get_total_supply(): Promise<Coin[]> {
     let query = `query Supply {
             supply(order_by: {height:desc} limit: 1) {
