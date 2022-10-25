@@ -47,6 +47,8 @@ REST_API = "https://api.cheqd.net"
 GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"
 # Moniter market API base url
 MARKET_MONITORING_API = "https://market-monitoring.cheqd.net"
+# Number of groups circulating supply watchlist is split into
+WATCHLIST_GROUPS = "4"
 
 # The necessary secrets are:
 # - WEBHOOK_URL
