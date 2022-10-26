@@ -34,6 +34,7 @@ route = { pattern = "data-api.cheqd.io/*", zone_id = "afe3b66243382f27140e6feeaa
 [[kv_namespaces]]
 binding = "CIRCULATING_SUPPLY_WATCHLIST"
 id = "a9bc7aaa54ee4394ae6b9abe43e05ad6"
+preview_id = "e0229bd428de4499b8a28729c2892a4e"
 
 # Map of environment variables to set when deploying the Worker
 # Not inherited. @default `{}`
@@ -99,7 +100,7 @@ vars = { ENVIRONMENT = "staging", TOKEN_EXPONENT = "9", REST_API = "https://api.
 # @default `[]`
 
 kv_namespaces = [
-  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "86891d184f7f40ee9b403a94a76fcdab" }, { binding = "TOTAL_DELEGATORS_COUNT_ACROSS_EVERY_VALIDATOR", id = "adb85e74fe54495481cb41e32e137a21" }
+  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "86891d184f7f40ee9b403a94a76fcdab", preview_id = "7330320a78374dab87176419c89e7dcd" }, { binding = "TOTAL_DELEGATORS_COUNT_ACROSS_EVERY_VALIDATOR", id = "adb85e74fe54495481cb41e32e137a21" }
 ]
 
 # Cron triggers for staging worker
