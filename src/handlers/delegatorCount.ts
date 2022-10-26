@@ -1,17 +1,17 @@
-import { Request } from "itty-router";
-import { BigDipperApi } from "../api/bigDipperApi";
-import { GraphQLClient } from "../helpers/graphql";
+import { Request } from 'itty-router';
+import { NodeApi } from '../api/nodeApi';
 
 export async function handler(request: Request): Promise<Response> {
-	const address = request.params?.['validator_address'];
+  const address = request.params?.['validator_address'];
 
-	if (!address) {
-		throw new Error("No address specified or wrong address format.");
-	}
+  if (!address) {
+    throw new Error('No address specified or wrong address format.');
+  }
 
-	let gql_client = new GraphQLClient(GRAPHQL_API);
-	let bd_api = new BigDipperApi(gql_client);
+  const resp = await new NodeApi(REST_API).staking_get_delegators_per_validator(
+    address
+  );
+  const delegators_count = resp.delegation_responses.length;
 
-	let delegators = await bd_api.get_delegator_count_for_validator(address);
-	return new Response(delegators.toString());
+  return new Response(delegators_count.toString());
 }

@@ -55,7 +55,7 @@ export class NodeApi {
       `${this.base_rest_api_url}/cosmos/staking/v1beta1/validators/${address}/delegations?pagination.limit=10000`
     );
 
-    return await resp.json();
+    return (await resp.json()) as ValidatorDetailResponse;
   }
 
   async staking_get_all_delegations_for_delegator(
