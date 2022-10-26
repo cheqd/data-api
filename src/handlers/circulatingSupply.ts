@@ -16,31 +16,23 @@ async function get_circulating_supply(): Promise<number> {
 
   try {
     const cached = await CIRCULATING_SUPPLY_WATCHLIST.list();
-    console.log(`found ${cached.keys.length} cached items`);
+    console.log(`Total cached entries: ${cached.keys.length}`);
 
     let shareholders_total_balance = Number(0);
     for (const key of cached.keys) {
-      console.log(`looking for account: ${key.name} in cache`);
       let data: AccountBalanceInfos | null =
         await CIRCULATING_SUPPLY_WATCHLIST.get(key.name, {
           type: 'json',
         });
 
       if (data !== null && data.totalBalance !== null) {
-        console.log(
-          `found cache entry: ${JSON.stringify(data)} totalBalance=${
-            data.totalBalance
-          }`
-        );
-
         shareholders_total_balance += Number(data.totalBalance);
       }
     }
 
-    console.log(
-      `Sum of Shareholders total balance: ${shareholders_total_balance}`
-    );
     console.log('Total supply', total_supply);
+    console.log(`Watchlist total balance: ${shareholders_total_balance}`);
+
     return total_supply - shareholders_total_balance;
   } catch (e: any) {
     throw new Error(e.toString);

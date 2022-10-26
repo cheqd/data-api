@@ -35,22 +35,7 @@ export async function sendPriceDiscrepancies() {
 }
 
 function getRandomGroup(): number {
-  const hour = new Date().getHours();
-
-  if (hour > 0 && hour < 6) {
-    return 1;
-  }
-
-  if (hour >= 6 && hour < 12) {
-    return 2;
-  }
-
-  if (hour >= 12 && hour < 18) {
-    return 3;
-  }
-
-  if (hour >= 18 && hour < 24) {
-    return 4;
-  }
-  throw new Error('invalid hour for group');
+  let min = 1;
+  let max = Math.floor(CIRCULATING_SUPPLY_GROUPS);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }

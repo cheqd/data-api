@@ -1,5 +1,4 @@
 import { updateCachedBalance } from './balance';
-import { NodeApi } from '../api/nodeApi';
 
 export function extract_group_number_and_address(key: string) {
   const parts = key.split(':');
