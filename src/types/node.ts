@@ -56,9 +56,18 @@ export interface ValidatorDetailResponse {
       delegation: {
         delegator_address: string;
         validator_address: string;
+        shares: string;
+      };
+      balance: {
+        denom: string;
+        amount: string;
       };
     }
   ];
+  pagination: {
+    next_key: string;
+    total: string;
+  };
 }
 
 export interface ActiveValidatorsResponse {
@@ -106,6 +115,25 @@ export interface DelegationsResponse {
   };
 }
 
+export interface ValidatorDetailResponse {
+  delegation_responses: [
+    {
+      delegation: {
+        delegator_address: string;
+        validator_address: string;
+        shares: string;
+      };
+      balance: {
+        denom: string;
+        amount: string;
+      };
+    }
+  ];
+  pagination: {
+    next_key: string;
+    total: string;
+  };
+}
 export interface UnbondingResponse {
   unbonding_responses: [
     {

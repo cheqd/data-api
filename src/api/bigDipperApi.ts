@@ -5,9 +5,6 @@ import {
   TotalStakedCoinsResponse,
   ValidatorDelegationsCountResponse,
 } from '../types/node';
-import { Account } from '../types/bigDipper';
-import { NodeApi } from './nodeApi';
-
 export class BigDipperApi {
   constructor(public readonly graphql_client: GraphQLClient) {}
 
@@ -47,41 +44,16 @@ export class BigDipperApi {
     return resp.data.delegations.pagination.total;
   };
 
-  get_total_delegator_count = async (): Promise<Number> => {
+  get_active_validators = async (): Promise<ActiveValidatorsResponse> => {
     const queryActiveValidators = `query ActiveValidators {
         validator_info(distinct_on: operator_address, where: {validator: {validator_statuses: {jailed: {_eq: false}}}}) {
           operator_address
         }
       }`;
-
-    const data = [];
-    const uniques = new Set();
-
     const activeValidator = await this.graphql_client.query<{
       data: ActiveValidatorsResponse;
     }>(queryActiveValidators);
-
-    for (let i = 0; i < activeValidator.data.validator_info.length; i++) {
-      const operator_address =
-        activeValidator.data.validator_info[i].operator_address;
-      const resp = await new NodeApi(
-        REST_API
-      ).staking_get_delegators_per_validator(operator_address);
-      data.push({
-        validator: operator_address,
-        delegators: resp.delegation_responses,
-      });
-    }
-
-    for (let i = 0; i < data.length; i++) {
-      const delegators = data[i].delegators;
-      for (let j = 0; j < delegators.length; j++) {
-        uniques.add(
-          `${delegators[j].delegation.delegator_address}${delegators[j].delegation.validator_address}`
-        );
-      }
-    }
-    return uniques.size;
+    return activeValidator.data;
   };
 
   get_total_staked_coins = async (): Promise<string> => {
