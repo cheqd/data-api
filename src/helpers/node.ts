@@ -104,3 +104,33 @@ export async function calculate_total_unboding_delegations_balance_for_delegator
 
   return total_unbonding_balance_in_ncheq;
 }
+
+export async function get_all_delegators_for_a_validator(
+  validator_address: string
+): Promise<string[]> {
+  const node_api = new NodeApi(REST_API);
+  let delegationsResp = await node_api.staking_get_delegators_per_validator(
+    validator_address
+  );
+  let delegators = [];
+  let next_key = delegationsResp.pagination.next_key;
+
+  while (next_key !== null || delegationsResp.delegation_responses.length > 0) {
+    for (let i = 0; i < delegationsResp.delegation_responses.length; i++) {
+      const delegator =
+        delegationsResp.delegation_responses[i].delegation.delegator_address;
+      delegators.push(delegator);
+    }
+    if (next_key !== null) {
+      next_key = delegationsResp.pagination.next_key;
+      delegationsResp = await node_api.staking_get_delegators_per_validator(
+        validator_address,
+        next_key
+      );
+    } else {
+      break;
+    }
+  }
+
+  return delegators;
+}

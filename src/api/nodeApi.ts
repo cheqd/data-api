@@ -49,10 +49,15 @@ export class NodeApi {
   }
 
   async staking_get_delegators_per_validator(
-    address: string
+    address: string,
+    next_key?: string
   ): Promise<ValidatorDetailResponse> {
     let resp = await fetch(
-      `${this.base_rest_api_url}/cosmos/staking/v1beta1/validators/${address}/delegations?pagination.limit=10000`
+      `${
+        this.base_rest_api_url
+      }/cosmos/staking/v1beta1/validators/${address}/delegations${
+        next_key ? `?pagination.key=${next_key}` : ''
+      }`
     );
 
     return (await resp.json()) as ValidatorDetailResponse;
