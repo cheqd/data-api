@@ -1,12 +1,14 @@
 import { updateGroupBalances } from '../helpers/balanceGroup';
-import { updateTotalDelegatorsCount } from '../helpers/totalDelegators';
+import { update_delegator_to_validators_KV } from '../helpers/totalDelegators';
 import { filterArbitrageOpportunities } from './arbitrageOpportunities';
 
 export async function webhookTriggers(event: Event) {
   console.log('Triggering webhook...');
   await sendPriceDiscrepancies();
-  await updateGroupBalances(getRandomGroup());
-  await updateTotalDelegatorsCount();
+  await updateGroupBalances(getRandomGroup(CIRCULATING_SUPPLY_GROUPS));
+  await update_delegator_to_validators_KV(
+    getRandomGroup(ACTIVE_VALIDATOR_GROUPS)
+  );
 }
 
 export async function sendPriceDiscrepancies() {
@@ -34,8 +36,8 @@ export async function sendPriceDiscrepancies() {
   }
 }
 
-function getRandomGroup(): number {
+function getRandomGroup(group: number): number {
   let min = 1;
-  let max = Math.floor(CIRCULATING_SUPPLY_GROUPS);
+  let max = Math.floor(group);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }

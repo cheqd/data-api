@@ -92,7 +92,9 @@ async function delete_stale_validator_from_kv(key: string) {
   await ACTIVE_VALIDATORS.delete(key);
 }
 
-async function update_delegator_to_validators_KV(validators_group: number) {
+export async function update_delegator_to_validators_KV(
+  validators_group: number
+) {
   const validators = await ACTIVE_VALIDATORS.list({
     prefix: `grp_${validators_group}:`,
   });
