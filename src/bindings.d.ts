@@ -6,6 +6,7 @@ declare global {
   const ACTIVE_VALIDATORS: KVNamespace;
   const TOTAL_DELEGATORS: KVNamespace;
   const CIRCULATING_SUPPLY_GROUPS: number;
+  const ACTIVE_VALIDATOR_GROUPS: number;
   const MARKET_MONITORING_API: string;
   const WEBHOOK_URL: string;
 }
