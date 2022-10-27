@@ -1,5 +1,6 @@
 import { ActiveValidatorsResponse } from '../types/node';
 import { extract_group_number_and_address } from './balanceGroup';
+import { get_all_delegators_for_a_validator } from './node';
 
 export async function add_new_active_validators_to_kv(
   data: ActiveValidatorsResponse
@@ -89,4 +90,46 @@ async function add_new_active_validator_in_kv(address: string) {
 }
 async function delete_stale_validator_from_kv(key: string) {
   await ACTIVE_VALIDATORS.delete(key);
+}
+
+async function update_delegator_to_validators_KV(validators_group: number) {
+  const validators = await ACTIVE_VALIDATORS.list({
+    prefix: `grp_${validators_group}:`,
+  });
+
+  for (let validator of validators.keys) {
+    const validator_address = extract_group_number_and_address(
+      validator.name
+    ).address;
+
+    const delegators_list = await get_all_delegators_for_a_validator(
+      validator_address
+    );
+    for (let delegator of delegators_list) {
+      const get_validator_for_delegator_from_kv = (await TOTAL_DELEGATORS.get(
+        delegator,
+        { type: 'json' }
+      )) as string[];
+
+      if (get_validator_for_delegator_from_kv) {
+        // delegator has undelegated from all validators
+        if (get_validator_for_delegator_from_kv.length === 0) {
+          await TOTAL_DELEGATORS.delete(delegator);
+          return;
+        }
+        // delegator is still delegating, and delegated to new validator
+        const updated_array = [
+          ...get_validator_for_delegator_from_kv,
+          validator.name,
+        ];
+
+        await TOTAL_DELEGATORS.put(delegator, JSON.stringify(updated_array));
+      } else {
+        // delegator is delegating to its first validator
+        const data = [];
+        data.push(validator.name);
+        await TOTAL_DELEGATORS.put(delegator, JSON.stringify(data));
+      }
+    }
+  }
 }
