@@ -122,11 +122,11 @@ export async function get_all_delegators_for_a_validator(
       delegators.push(delegator);
     }
     if (next_key !== null) {
-      next_key = delegationsResp.pagination.next_key;
       delegationsResp = await node_api.staking_get_delegators_per_validator(
         validator_address,
         next_key
       );
+      next_key = delegationsResp.pagination.next_key;
     } else {
       break;
     }
