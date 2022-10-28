@@ -55,8 +55,8 @@ export class NodeApi {
     let resp = await fetch(
       `${
         this.base_rest_api_url
-      }/cosmos/staking/v1beta1/validators/${address}/delegations${
-        next_key ? `?pagination.key=${next_key}` : ''
+      }/cosmos/staking/v1beta1/validators/${address}/delegations?pagination.limit=10${
+        next_key ? `&pagination.key=${next_key}` : ''
       }`
     );
 

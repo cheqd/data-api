@@ -113,7 +113,12 @@ export async function get_all_delegators_for_a_validator(
     validator_address
   );
   let delegators = [];
-  let next_key = delegationsResp.pagination.next_key;
+  let next_key =
+    delegationsResp.pagination.next_key !== null
+      ? clean_up_specail_characters_from_pagination_key(
+          delegationsResp.pagination.next_key
+        )
+      : null;
 
   while (next_key !== null || delegationsResp.delegation_responses.length > 0) {
     for (let i = 0; i < delegationsResp.delegation_responses.length; i++) {
@@ -126,11 +131,32 @@ export async function get_all_delegators_for_a_validator(
         validator_address,
         next_key
       );
-      next_key = delegationsResp.pagination.next_key;
+      next_key =
+        delegationsResp.pagination.next_key !== null
+          ? clean_up_specail_characters_from_pagination_key(
+              delegationsResp.pagination.next_key
+            )
+          : null;
     } else {
       break;
     }
+    console.log(delegationsResp);
   }
 
   return delegators;
+}
+
+export function clean_up_specail_characters_from_pagination_key(
+  unclean_key: string
+): string {
+  const specail_char_1 = '/';
+  const specail_char_2 = '+';
+  const specail_char_1_placeholder = '%2F';
+  const specail_char_2_placeholder = '%2B';
+
+  return unclean_key
+    .split(specail_char_1)
+    .join(specail_char_1_placeholder)
+    .split(specail_char_2)
+    .join(specail_char_2_placeholder);
 }
