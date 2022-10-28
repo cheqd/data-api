@@ -33,7 +33,7 @@ route = { pattern = "data-api.cheqd.io/*", zone_id = "afe3b66243382f27140e6feeaa
 # @default `[]`
 
 kv_namespaces = [
-  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "a9bc7aaa54ee4394ae6b9abe43e05ad6", preview_id = "e0229bd428de4499b8a28729c2892a4e" }, { binding = "ACTIVE_VALIDATORS", id = "02a25d1f74f44e22ab3ee7c290c4b8e0" }, { binding = "TOTAL_DELEGATORS", id = "cdb09a8a4c374c5a85b4f532da27fbde" }
+  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "a9bc7aaa54ee4394ae6b9abe43e05ad6", preview_id = "e0229bd428de4499b8a28729c2892a4e" }, { binding = "ACTIVE_VALIDATORS", id = "02a25d1f74f44e22ab3ee7c290c4b8e0",  preview_id = "ba46538120c645bd9b2056edd95ba250" }, { binding = "TOTAL_DELEGATORS", id = "cdb09a8a4c374c5a85b4f532da27fbde",  preview_id = "b1fed5728cb04b2d9008aa38065d19eb" }
 ]
 
 # Map of environment variables to set when deploying the Worker
@@ -101,7 +101,7 @@ vars = { ENVIRONMENT = "staging", TOKEN_EXPONENT = "9", REST_API = "https://api.
 # @default `[]`
 
 kv_namespaces = [
-  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "86891d184f7f40ee9b403a94a76fcdab", preview_id = "7330320a78374dab87176419c89e7dcd" }, { binding = "ACTIVE_VALIDATORS", id = "7270ce2a9275432386e59102ee8638b1" }, { binding = "TOTAL_DELEGATORS", id = "596aa5f4f43a4737957a030a2d73a8ac" }
+  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "86891d184f7f40ee9b403a94a76fcdab", preview_id = "7330320a78374dab87176419c89e7dcd" }, { binding = "ACTIVE_VALIDATORS", id = "7270ce2a9275432386e59102ee8638b1", preview_id = "5fbc36f8c3c3463586046034bb52117d" }, { binding = "TOTAL_DELEGATORS", id = "596aa5f4f43a4737957a030a2d73a8ac", preview_id = "94ed81cdb6a444d9923a9fc7497930cc" }
 ]
 
 # Cron triggers for staging worker
