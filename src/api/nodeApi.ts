@@ -96,7 +96,7 @@ export class NodeApi {
     const pagination_count_total = should_count_total
       ? 'pagination.count_total=true'
       : 'pagination.count_total=false';
-    const REST_API_PAGINATION_LIMIT = `&pagination.limit=${REST_API_PAGINATION_LIMIT}`;
+    const pagination_limit = `&pagination.limit=${REST_API_PAGINATION_LIMIT}`;
     const pagination_offset = `&pagination.offset=${offset}`;
     // NOTE: be cautious of new lines or spaces. Might make the request URL malformed
     const resp = await fetch(
