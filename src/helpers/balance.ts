@@ -6,7 +6,7 @@ import { ncheq_to_cheq_fixed } from './currency';
 import { GraphQLClient } from './graphql';
 import {
   calculate_total_delegations_balance_for_delegator_in_ncheq,
-  calculate_total_unboding_delegations_balance_for_delegator_in_ncheq,
+  calculate_total_unbonding_delegations_balance_for_delegator_in_ncheq,
 } from './node';
 
 function extract_account_infos(account: Account) {
@@ -71,8 +71,8 @@ export async function get_account_balance_infos_from_node_api(
     );
 
   const total_unbonding_balance_in_ncheq =
-    await calculate_total_unboding_delegations_balance_for_delegator_in_ncheq(
-      await node_api.staking_get_all_unboding_delegations_for_delegator(
+    await calculate_total_unbonding_delegations_balance_for_delegator_in_ncheq(
+      await node_api.staking_get_all_unbonding_delegations_for_delegator(
         address,
         0,
         true

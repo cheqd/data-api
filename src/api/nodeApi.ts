@@ -86,7 +86,7 @@ export class NodeApi {
     return (await resp.json()) as DelegationsResponse;
   }
 
-  async staking_get_all_unboding_delegations_for_delegator(
+  async staking_get_all_unbonding_delegations_for_delegator(
     address: string,
     offset: number,
     should_count_total: boolean
