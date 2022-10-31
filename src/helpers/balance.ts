@@ -64,20 +64,20 @@ export async function get_account_balance_infos_from_node_api(
     await calculate_total_delegations_balance_for_delegator_in_ncheq(
       await node_api.staking_get_all_delegations_for_delegator(
         address,
-        0,
+        0, // first call
         true
       ),
-      REST_API_PAGINATION_LIMIT
+      REST_API_PAGINATION_LIMIT // second call
     );
 
   const total_unbonding_balance_in_ncheq =
     await calculate_total_unbonding_delegations_balance_for_delegator_in_ncheq(
       await node_api.staking_get_all_unbonding_delegations_for_delegator(
         address,
-        0,
+        0, // first call
         true
       ),
-      REST_API_PAGINATION_LIMIT
+      REST_API_PAGINATION_LIMIT // second call
     );
 
   return {

@@ -19,11 +19,9 @@ export async function add_new_active_validators_to_kv() {
   for (let latest_active_validator of latest_active_validators_from_api) {
     // if latest_active_validator is in kv, keep it.
     // if latest_active_validator is not in kv, add it.
-    const is_active_validator_in_kv =
-      active_validators_from_kv_hashmap.key ===
+    const is_active_validator_in_kv = active_validators_from_kv_hashmap.has(
       latest_active_validator.operator_address
-        ? true
-        : false;
+    );
 
     if (!is_active_validator_in_kv) {
       add_new_active_validator_in_kv(latest_active_validator.operator_address);
@@ -51,7 +49,7 @@ export async function remove_any_jailed_validators_from_kv() {
     const key_to_look_up = extract_group_number_and_address(
       validator_from_kv.name
     ).address;
-    if (active_validators_from_api_hash_map.key !== key_to_look_up) {
+    if (!active_validators_from_api_hash_map.has(key_to_look_up)) {
       delete_stale_validator_from_kv(validator_from_kv.name);
     }
   }
@@ -59,15 +57,15 @@ export async function remove_any_jailed_validators_from_kv() {
 
 function create_hashmap_of_validators_addresses_from_kv(
   validators_from_KV: KVNamespaceListKey<unknown>[]
-): { key: string } {
+): Map<string, string> {
   // keys incase contain prefixes, since they are from KV
 
-  const hashmap: { key: string } = { key: '' };
+  const hashmap = new Map();
   for (let key of validators_from_KV) {
     const key_to_look_up = extract_group_number_and_address(key.name).address;
-    if (hashmap.key !== key_to_look_up) {
+    if (!hashmap.has(key_to_look_up)) {
       // since kv contains prefix like grp_1.. we need to extract address only
-      hashmap.key = key_to_look_up;
+      hashmap.set(key_to_look_up, key_to_look_up);
     }
   }
   return hashmap;
@@ -77,13 +75,16 @@ function create_hashmap_of_validators_addresses_from_api(
   validators_from_api: {
     operator_address: string;
   }[]
-): { key: string } {
+): Map<string, string> {
   // keys incase contain prefixes, since they are from KV
-  const hashmap: { key: string } = { key: '' };
+  const hashmap = new Map<string, string>();
   for (let validator_address of validators_from_api) {
-    if (hashmap.key !== validator_address.operator_address) {
+    if (!hashmap.has(validator_address.operator_address)) {
       // since kv contains prefix like grp_1.. we need to extract address only
-      hashmap.key = validator_address.operator_address;
+      hashmap.set(
+        validator_address.operator_address,
+        validator_address.operator_address
+      );
     }
   }
   return hashmap;
