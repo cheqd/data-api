@@ -1,11 +1,17 @@
 import { updateGroupBalances } from '../helpers/balanceGroup';
-import { update_delegator_to_validators_KV } from '../helpers/totalDelegators';
+import {
+  add_new_active_validators_to_kv,
+  remove_any_jailed_validators_from_kv,
+  update_delegator_to_validators_KV,
+} from '../helpers/totalDelegators';
 import { filterArbitrageOpportunities } from './arbitrageOpportunities';
 
 export async function webhookTriggers(event: Event) {
   console.log('Triggering webhook...');
   await sendPriceDiscrepancies();
   await updateGroupBalances(getRandomGroup(CIRCULATING_SUPPLY_GROUPS));
+  await add_new_active_validators_to_kv();
+  await remove_any_jailed_validators_from_kv();
   await update_delegator_to_validators_KV(
     getRandomGroup(ACTIVE_VALIDATOR_GROUPS)
   );
