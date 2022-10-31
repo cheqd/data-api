@@ -68,13 +68,13 @@ export function estimatedVesting(account: Account, t?: Date) {
   if (is_delayed_vesting_account_type(account?.['@type'])) {
     const endsAt = account.base_vesting_account.end_time;
 
-    const orginalVesting = Number(
+    const originalVesting = Number(
       account.base_vesting_account.original_vesting[0]?.amount
     );
 
     const doneRatio = t > new Date(endsAt) ? 1 : 0;
-    const vested = Math.ceil(Number(orginalVesting) * doneRatio);
-    const vesting = Math.ceil(Number(orginalVesting) * (1.0 - doneRatio));
+    const vested = Math.ceil(Number(originalVesting) * doneRatio);
+    const vesting = Math.ceil(Number(originalVesting) * (1.0 - doneRatio));
 
     return {
       vested,
