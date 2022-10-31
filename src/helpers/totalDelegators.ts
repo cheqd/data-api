@@ -1,4 +1,3 @@
-import { ActiveValidatorsResponse } from '../types/node';
 import { extract_group_number_and_address } from './balanceGroup';
 import { BigDipperApi } from '../api/bigDipperApi';
 import { GraphQLClient } from './graphql';
@@ -7,8 +6,7 @@ import { get_all_delegators_for_a_validator } from './node';
 export async function add_new_active_validators_to_kv() {
   let gql_client = new GraphQLClient(GRAPHQL_API);
   let bd_api = new BigDipperApi(gql_client);
-  const data =  await bd_api.get_active_validators()
-  
+  const data = await bd_api.get_active_validators();
 
   const latest_active_validators_from_api = data.validator_info;
   const active_validators_from_kv = await ACTIVE_VALIDATORS.list();
@@ -39,7 +37,7 @@ export async function remove_any_jailed_validators_from_kv() {
   // a validator from kv doesnt exist in api remove the kv
   let gql_client = new GraphQLClient(GRAPHQL_API);
   let bd_api = new BigDipperApi(gql_client);
-  const active_validators =  await bd_api.get_active_validators()
+  const active_validators = await bd_api.get_active_validators();
 
   const active_validators_from_kv = await ACTIVE_VALIDATORS.list();
   const active_validators_from_api_hash_map =
@@ -141,4 +139,4 @@ export async function update_delegator_to_validators_KV(
       }
     }
   }
-
+}
