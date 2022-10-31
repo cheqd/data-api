@@ -5,6 +5,7 @@ import {
   TotalStakedCoinsResponse,
   ValidatorDelegationsCountResponse,
 } from '../types/node';
+
 export class BigDipperApi {
   constructor(public readonly graphql_client: GraphQLClient) {}
 
@@ -23,26 +24,6 @@ export class BigDipperApi {
     return resp.data.supply[0].coins;
   }
 
-  get_delegator_count_for_validator = async (
-    address: string
-  ): Promise<Number> => {
-    let query = `query ValidatorDelegations($address: String!, $pagination: Boolean! = true) {
-        delegations: action_validator_delegations(address: $address, count_total: $pagination) {         
-          pagination
-        }
-      }
-      `;
-
-    const params = {
-      address: address,
-    };
-
-    const resp = await this.graphql_client.query<{
-      data: ValidatorDelegationsCountResponse;
-    }>(query, params);
-
-    return resp.data.delegations.pagination.total;
-  };
 
   get_active_validators = async (): Promise<ActiveValidatorsResponse> => {
     const queryActiveValidators = `query ActiveValidators {
