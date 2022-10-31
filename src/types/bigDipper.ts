@@ -33,3 +33,16 @@ export class Account {
     this.vesting_account = vesting_account;
   }
 }
+
+export interface TotalSupplyResponse {
+  supply: [
+    {
+      coins: [
+        {
+          denom: string;
+          amount: string;
+        }
+      ];
+    }
+  ];
+}

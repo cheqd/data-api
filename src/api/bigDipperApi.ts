@@ -1,26 +1,28 @@
 import { GraphQLClient } from '../helpers/graphql';
+import { TotalSupplyResponse } from '../types/bigDipper';
 import {
   ActiveValidatorsResponse,
-  Coin,
   TotalStakedCoinsResponse,
   ValidatorDelegationsCountResponse,
 } from '../types/node';
 export class BigDipperApi {
   constructor(public readonly graphql_client: GraphQLClient) {}
 
-  async get_total_supply(): Promise<Coin[]> {
-    let query = `query Supply {
-            supply(order_by: {height:desc} limit: 1) {
-                coins
-                height
-            }
-        }`;
+  async get_total_supply(): Promise<number> {
+    let query = `query TotalSupply {
+      supply {
+        coins
+      }
+    }`;
 
     let resp = await this.graphql_client.query<{
-      data: { supply: { coins: Coin[] }[] };
+      data: TotalSupplyResponse;
     }>(query);
 
-    return resp.data.supply[0].coins;
+    return Number(
+      resp.data.supply[0].coins.find((coin) => coin.denom === 'ncheq')
+        ?.amount || '0'
+    );
   }
 
   get_delegator_count_for_validator = async (
