@@ -40,10 +40,11 @@ export function delayed_balance_ncheq(balance: Coin[]): number {
 }
 
 export async function calculate_total_delegations_balance_for_delegator_in_ncheq(
-  delegationsResp: DelegationsResponse
+  delegationsResp: DelegationsResponse,
+  current_offset: number
 ): Promise<number> {
   let total_delegation_balance_in_ncheq = 0;
-  const next_key = delegationsResp.pagination.next_key;
+  const total_count = Number(delegationsResp.pagination.total);
 
   for (let i = 0; i < delegationsResp.delegation_responses.length; i++) {
     total_delegation_balance_in_ncheq += Number(
@@ -51,18 +52,22 @@ export async function calculate_total_delegations_balance_for_delegator_in_ncheq
     );
   }
 
-  if (next_key !== null) {
+  if (current_offset < total_count) {
     const node_api = new NodeApi(REST_API);
     const delegator_address =
       delegationsResp.delegation_responses[0].delegation.delegator_address;
 
     const resp = await node_api.staking_get_all_delegations_for_delegator(
       delegator_address,
-      next_key
+      current_offset, // our current offset will be updated by recursive call below
+      true // we count total again , since it's implemented recursively
     );
 
     total_delegation_balance_in_ncheq +=
-      await calculate_total_delegations_balance_for_delegator_in_ncheq(resp);
+      await calculate_total_delegations_balance_for_delegator_in_ncheq(
+        resp,
+        current_offset + PAGINATION_LIMIT
+      );
   }
 
   return total_delegation_balance_in_ncheq;

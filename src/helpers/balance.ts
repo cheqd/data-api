@@ -62,7 +62,12 @@ export async function get_account_balance_infos_from_node_api(
   );
   const total_delegation_balance_in_ncheq =
     await calculate_total_delegations_balance_for_delegator_in_ncheq(
-      await node_api.staking_get_all_delegations_for_delegator(address)
+      await node_api.staking_get_all_delegations_for_delegator(
+        address,
+        0,
+        true
+      ),
+      0
     );
 
   const total_unbonding_balance_in_ncheq =
