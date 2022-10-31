@@ -57,11 +57,11 @@ export class NodeApi {
     const pagination_count_total = should_count_total
       ? 'pagination.count_total=true'
       : 'pagination.count_total=false';
-    const pagination_limit = `&pagination.limit=${REST_API_PAGINATION_LIMIT}`;
-    const pagination_offset = `&pagination.offset=${offset}`;
+    const pagination_limit = `pagination.limit=${REST_API_PAGINATION_LIMIT}`;
+    const pagination_offset = `pagination.offset=${offset}`;
     // NOTE: be cautious of newlines or spaces. Might make the request URL malformed
     let resp = await fetch(
-      `${this.base_rest_api_url}/cosmos/staking/v1beta1/validators/${address}/delegations?${pagination_count_total}${pagination_limit}${pagination_offset}`
+      `${this.base_rest_api_url}/cosmos/staking/v1beta1/validators/${address}/delegations?${pagination_count_total}&${pagination_limit}&${pagination_offset}`
     );
 
     return (await resp.json()) as ValidatorDetailResponse;
@@ -76,11 +76,11 @@ export class NodeApi {
     const pagination_count_total = should_count_total
       ? 'pagination.count_total=true'
       : 'pagination.count_total=false';
-    const pagination_limit = `&pagination.limit=${REST_API_PAGINATION_LIMIT}`;
-    const pagination_offset = `&pagination.offset=${offset}`;
+    const pagination_limit = `pagination.limit=${REST_API_PAGINATION_LIMIT}`;
+    const pagination_offset = `pagination.offset=${offset}`;
     // NOTE: be cautious of newlines or spaces. Might make the request URL malformed
     const resp = await fetch(
-      `${this.base_rest_api_url}/cosmos/staking/v1beta1/delegations/${address}?${pagination_count_total}${pagination_limit}${pagination_offset}`
+      `${this.base_rest_api_url}/cosmos/staking/v1beta1/delegations/${address}?${pagination_count_total}&${pagination_limit}&${pagination_offset}`
     );
 
     return (await resp.json()) as DelegationsResponse;
@@ -95,11 +95,11 @@ export class NodeApi {
     const pagination_count_total = should_count_total
       ? 'pagination.count_total=true'
       : 'pagination.count_total=false';
-    const pagination_limit = `&pagination.limit=${REST_API_PAGINATION_LIMIT}`;
-    const pagination_offset = `&pagination.offset=${offset}`;
+    const pagination_limit = `pagination.limit=${REST_API_PAGINATION_LIMIT}`;
+    const pagination_offset = `pagination.offset=${offset}`;
     // NOTE: be cautious of new lines or spaces. Might make the request URL malformed
     const resp = await fetch(
-      `${this.base_rest_api_url}/cosmos/staking/v1beta1/delegators/${address}/unbonding_delegations?${pagination_count_total}${pagination_limit}${pagination_offset}`
+      `${this.base_rest_api_url}/cosmos/staking/v1beta1/delegators/${address}/unbonding_delegations?${pagination_count_total}&${pagination_limit}&${pagination_offset}`
     );
 
     return (await resp.json()) as UnbondingResponse;
