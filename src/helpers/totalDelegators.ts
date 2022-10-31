@@ -50,7 +50,7 @@ export async function remove_any_jailed_validators_from_kv(
   }
 }
 
-export function create_hashmap_of_validators_addresses_from_kv(
+function create_hashmap_of_validators_addresses_from_kv(
   validators_from_KV: string[]
 ): { key: string } {
   // keys incase contain prexifes, since they are from KV
@@ -66,7 +66,7 @@ export function create_hashmap_of_validators_addresses_from_kv(
   return hashmap;
 }
 
-export function create_hashmap_of_validators_addresses_from_api(
+function create_hashmap_of_validators_addresses_from_api(
   validators_from_api: {
     operator_address: string;
   }[]
