@@ -1,4 +1,3 @@
-import { REST_API_PAGINATION_LIMIT } from '../helpers/constants';
 import {
   Account,
   Coin,
