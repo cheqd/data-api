@@ -1,2 +1,2 @@
 export const TOKEN_DECIMALS = 10 ** TOKEN_EXPONENT;
-export const PAGINATION_LIMIT = 50;
+export const REST_API_PAGINATION_LIMIT = 50;

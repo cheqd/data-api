@@ -1,7 +1,7 @@
 import { NodeApi } from '../api/nodeApi';
 import { Account } from '../types/bigDipper';
 import { Coin, DelegationsResponse, UnbondingResponse } from '../types/node';
-import { PAGINATION_LIMIT } from './constants';
+import { REST_API_PAGINATION_LIMIT } from './constants';
 
 export function total_balance_ncheq(account: Account): number {
   let balance = Number(
@@ -66,7 +66,7 @@ export async function calculate_total_delegations_balance_for_delegator_in_ncheq
     total_delegation_balance_in_ncheq +=
       await calculate_total_delegations_balance_for_delegator_in_ncheq(
         resp,
-        current_offset + PAGINATION_LIMIT
+        current_offset + REST_API_PAGINATION_LIMIT
       );
   }
 
@@ -106,7 +106,7 @@ export async function calculate_total_unboding_delegations_balance_for_delegator
     total_unbonding_balance_in_ncheq +=
       await calculate_total_unboding_delegations_balance_for_delegator_in_ncheq(
         resp,
-        current_offset + PAGINATION_LIMIT
+        current_offset + REST_API_PAGINATION_LIMIT
       );
   }
 
@@ -136,7 +136,7 @@ export async function get_all_delegators_for_a_validator(
         delegationsResp.delegation_responses[i].delegation.delegator_address;
       delegators.push(delegator);
     }
-    offset += PAGINATION_LIMIT;
+    offset += REST_API_PAGINATION_LIMIT;
     delegationsResp = await node_api.staking_get_delegators_per_validator(
       validator_address,
       offset,

@@ -43,6 +43,8 @@ kv_namespaces = [
 TOKEN_EXPONENT = "9"
 # Standard Cosmosd SDK REST API endpoint for a node on target network
 REST_API = "https://api.cheqd.net"
+# REST API pagination limit
+REST_API_PAGINATION_LIMIT = "50"
 # GraphQL API endpoint for target network. Must be sourced from a BigDipper instance.
 GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"
 # Number of groups circulating supply watchlist is split into
