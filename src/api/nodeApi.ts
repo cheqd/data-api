@@ -63,7 +63,7 @@ export class NodeApi {
     let resp = await fetch(
       `${this.base_rest_api_url}/cosmos/staking/v1beta1/validators/${address}/delegations?${pagination_count_total}&${pagination_limit}&${pagination_offset}`
     );
-
+    console.log(resp.url);
     return (await resp.json()) as ValidatorDetailResponse;
   }
 
