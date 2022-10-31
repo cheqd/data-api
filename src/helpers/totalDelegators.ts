@@ -4,6 +4,7 @@ import { GraphQLClient } from './graphql';
 import { get_all_delegators_for_a_validator } from './node';
 
 export async function add_new_active_validators_to_kv() {
+  console.log('Adding new active validators to KV, if any...');
   let gql_client = new GraphQLClient(GRAPHQL_API);
   let bd_api = new BigDipperApi(gql_client);
   const data = await bd_api.get_active_validators();
@@ -35,6 +36,7 @@ export async function remove_any_jailed_validators_from_kv() {
   // list of validators from api
   // loop throu validators from kv, and if
   // a validator from kv doesnt exist in api remove the kv
+  console.log('Removing jailed validators, if any');
   let gql_client = new GraphQLClient(GRAPHQL_API);
   let bd_api = new BigDipperApi(gql_client);
   const active_validators = await bd_api.get_active_validators();
@@ -58,7 +60,7 @@ export async function remove_any_jailed_validators_from_kv() {
 function create_hashmap_of_validators_addresses_from_kv(
   validators_from_KV: KVNamespaceListKey<unknown>[]
 ): { key: string } {
-  // keys incase contain prexifes, since they are from KV
+  // keys incase contain prefixes, since they are from KV
 
   const hashmap: { key: string } = { key: '' };
   for (let key of validators_from_KV) {
@@ -76,7 +78,7 @@ function create_hashmap_of_validators_addresses_from_api(
     operator_address: string;
   }[]
 ): { key: string } {
-  // keys incase contain prexifes, since they are from KV
+  // keys incase contain prefixes, since they are from KV
   const hashmap: { key: string } = { key: '' };
   for (let validator_address of validators_from_api) {
     if (hashmap.key !== validator_address.operator_address) {
@@ -92,18 +94,21 @@ async function add_new_active_validator_in_kv(address: string) {
   // for now manually put em in group 10
   const key = `grp_10:${address}`;
   await ACTIVE_VALIDATORS.put(key, data);
+  console.log('Added new validator to the list', address);
 }
 async function delete_stale_validator_from_kv(key: string) {
   await ACTIVE_VALIDATORS.delete(key);
+  console.log('Deleted stale validator from the list', key);
 }
 
 export async function update_delegator_to_validators_KV(
   validators_group: number
 ) {
+  console.log('Updating total delegator KV...');
   const validators = await ACTIVE_VALIDATORS.list({
     prefix: `grp_${validators_group}:`,
   });
-
+  console.log('updating group ', validators_group);
   for (let validator of validators.keys) {
     const validator_address = extract_group_number_and_address(
       validator.name
@@ -122,7 +127,8 @@ export async function update_delegator_to_validators_KV(
         // delegator has undelegated from all validators
         if (get_validator_for_delegator_from_kv.length === 0) {
           await TOTAL_DELEGATORS.delete(delegator);
-          return;
+          console.log('Deleted delegator ', delegator);
+          continue;
         }
         // delegator is still delegating, and delegated to new validator
         const updated_array = [
@@ -131,11 +137,13 @@ export async function update_delegator_to_validators_KV(
         ];
 
         await TOTAL_DELEGATORS.put(delegator, JSON.stringify(updated_array));
+        console.log('Updated delegator: ', delegator);
       } else {
         // delegator is delegating to its first validator
         const data = [];
         data.push(validator.name);
         await TOTAL_DELEGATORS.put(delegator, JSON.stringify(data));
+        console.log('Added new delegator', delegator);
       }
     }
   }
