@@ -12,7 +12,7 @@ export async function add_new_active_validators_to_kv() {
   const active_validators_from_kv = await ACTIVE_VALIDATORS.list();
   const active_validators_from_kv_hashmap =
     create_hashmap_of_validators_addresses_from_kv(
-      active_validators_from_kv.keys as []
+      active_validators_from_kv.keys as KVNamespaceListKey<unknown>[]
     );
 
   for (let latest_active_validator of latest_active_validators_from_api) {
@@ -56,13 +56,13 @@ export async function remove_any_jailed_validators_from_kv() {
 }
 
 function create_hashmap_of_validators_addresses_from_kv(
-  validators_from_KV: string[]
+  validators_from_KV: KVNamespaceListKey<unknown>[]
 ): { key: string } {
   // keys incase contain prexifes, since they are from KV
 
   const hashmap: { key: string } = { key: '' };
   for (let key of validators_from_KV) {
-    const key_to_look_up = extract_group_number_and_address(key).address;
+    const key_to_look_up = extract_group_number_and_address(key.name).address;
     if (hashmap.key !== key_to_look_up) {
       // since kv contains prefix like grp_1.. we need to extract address only
       hashmap.key = key_to_look_up;
