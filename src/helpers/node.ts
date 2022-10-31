@@ -74,11 +74,11 @@ export async function calculate_total_delegations_balance_for_delegator_in_ncheq
 }
 
 export async function calculate_total_unboding_delegations_balance_for_delegator_in_ncheq(
-  unbondingResp: UnbondingResponse
+  unbondingResp: UnbondingResponse,
+  current_offset: number
 ): Promise<number> {
   let total_unbonding_balance_in_ncheq = 0;
-  const next_key = unbondingResp.pagination.next_key;
-
+  const total_count = Number(unbondingResp.pagination.total);
   for (let i = 0; i < unbondingResp.unbonding_responses.length; i++) {
     for (
       let j = 0;
@@ -91,7 +91,7 @@ export async function calculate_total_unboding_delegations_balance_for_delegator
     }
   }
 
-  if (next_key !== null) {
+  if (current_offset < total_count) {
     const node_api = new NodeApi(REST_API);
     const delegator_address =
       unbondingResp.unbonding_responses[0].delegator_address;
@@ -99,12 +99,14 @@ export async function calculate_total_unboding_delegations_balance_for_delegator
     const resp =
       await node_api.staking_get_all_unboding_delegations_for_delegator(
         delegator_address,
-        next_key
+        current_offset,
+        true
       );
 
     total_unbonding_balance_in_ncheq +=
       await calculate_total_unboding_delegations_balance_for_delegator_in_ncheq(
-        resp
+        resp,
+        current_offset + PAGINATION_LIMIT
       );
   }
 
@@ -138,7 +140,7 @@ export async function get_all_delegators_for_a_validator(
     delegationsResp = await node_api.staking_get_delegators_per_validator(
       validator_address,
       offset,
-      false // we dont need to get total_count on subsequent queries.
+      false // we dont need to get total_count on subsequent queries
     );
     if (offset > total_delegators_count) {
       break;

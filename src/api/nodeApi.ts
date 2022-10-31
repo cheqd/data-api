@@ -89,14 +89,18 @@ export class NodeApi {
 
   async staking_get_all_unboding_delegations_for_delegator(
     address: string,
-    next_key?: string
+    offset: number,
+    should_count_total: boolean
   ) {
+    // order of qeury params: count_total -> offset -> limit
+    const pagination_count_total = should_count_total
+      ? 'pagination.count_total=true'
+      : 'pagination.count_total=false';
+    const pagination_limit = `&pagination.limit=${PAGINATION_LIMIT}`;
+    const pagination_offset = `&pagination.offset=${offset}`;
+    // NOTE: be cautios of new lines or spaces. Might malform the request url
     const resp = await fetch(
-      `${
-        this.base_rest_api_url
-      }/cosmos/staking/v1beta1/delegators/${address}/unbonding_delegations${
-        next_key ? `?pagination.key=${next_key}` : ''
-      }`
+      `${this.base_rest_api_url}/cosmos/staking/v1beta1/delegators/${address}/unbonding_delegations?${pagination_count_total}${pagination_offset}${pagination_limit}`
     );
 
     return (await resp.json()) as UnbondingResponse;
