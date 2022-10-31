@@ -1,3 +1,4 @@
+import { PAGINATION_LIMIT } from '../helpers/constants';
 import {
   Account,
   Coin,
@@ -50,14 +51,20 @@ export class NodeApi {
 
   async staking_get_delegators_per_validator(
     address: string,
-    next_key?: string
+    offset: number,
+    should_count_total: boolean
   ): Promise<ValidatorDetailResponse> {
+    const pagination_count_total = should_count_total
+      ? 'pagination.count_total=true'
+      : 'pagination.count_total=false';
+    const pagination_limit = `&pagination.limit=${PAGINATION_LIMIT}`;
+    const pagination_offset = `&pagination.offset=${offset}`;
     let resp = await fetch(
-      `${
-        this.base_rest_api_url
-      }/cosmos/staking/v1beta1/validators/${address}/delegations?pagination.limit=10${
-        next_key ? `&pagination.key=${next_key}` : ''
-      }`
+      `${this.base_rest_api_url}/cosmos/staking/v1beta1/validators/${address}/delegations?
+      ${pagination_count_total}
+      ${pagination_limit}
+      ${pagination_offset}
+      `
     );
 
     return (await resp.json()) as ValidatorDetailResponse;

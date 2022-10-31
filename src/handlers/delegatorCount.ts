@@ -1,5 +1,5 @@
 import { Request } from 'itty-router';
-import { get_all_delegators_for_a_validator } from '../helpers/node';
+import { NodeApi } from '../api/nodeApi';
 
 export async function handler(request: Request): Promise<Response> {
   const address = request.params?.['validator_address'];
@@ -7,9 +7,14 @@ export async function handler(request: Request): Promise<Response> {
   if (!address) {
     throw new Error('No address specified or wrong address format.');
   }
+  const node_api = new NodeApi(REST_API);
+  const resp = await node_api.staking_get_delegators_per_validator(
+    address,
+    0,
+    true
+  );
 
-  const resp = await get_all_delegators_for_a_validator(address);
-  const delegators_count = resp.length;
+  const total_delegators = resp.pagination.total;
 
-  return new Response(delegators_count.toString());
+  return new Response(total_delegators.toString());
 }

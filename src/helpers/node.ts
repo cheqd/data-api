@@ -1,6 +1,7 @@
 import { NodeApi } from '../api/nodeApi';
 import { Account } from '../types/bigDipper';
 import { Coin, DelegationsResponse, UnbondingResponse } from '../types/node';
+import { PAGINATION_LIMIT } from './constants';
 
 export function total_balance_ncheq(account: Account): number {
   let balance = Number(
@@ -109,54 +110,35 @@ export async function get_all_delegators_for_a_validator(
   validator_address: string
 ): Promise<string[]> {
   const node_api = new NodeApi(REST_API);
-  let delegationsResp = await node_api.staking_get_delegators_per_validator(
-    validator_address
-  );
-  let delegators = [];
-  let next_key =
-    delegationsResp.pagination.next_key !== null
-      ? clean_up_specail_characters_from_pagination_key(
-          delegationsResp.pagination.next_key
-        )
-      : null;
+  let offset = 0;
 
-  while (next_key !== null || delegationsResp.delegation_responses.length > 0) {
+  let delegationsResp = await node_api.staking_get_delegators_per_validator(
+    validator_address,
+    offset,
+    true // we set it to true to get total_delegators_count
+  );
+  const total_delegators_count = Number(delegationsResp.pagination.total);
+  const delegators = [];
+
+  while (
+    offset < total_delegators_count ||
+    delegationsResp.delegation_responses.length > 0
+  ) {
     for (let i = 0; i < delegationsResp.delegation_responses.length; i++) {
       const delegator =
         delegationsResp.delegation_responses[i].delegation.delegator_address;
       delegators.push(delegator);
     }
-    if (next_key !== null) {
-      delegationsResp = await node_api.staking_get_delegators_per_validator(
-        validator_address,
-        next_key
-      );
-      next_key =
-        delegationsResp.pagination.next_key !== null
-          ? clean_up_specail_characters_from_pagination_key(
-              delegationsResp.pagination.next_key
-            )
-          : null;
-    } else {
+    offset += PAGINATION_LIMIT;
+    delegationsResp = await node_api.staking_get_delegators_per_validator(
+      validator_address,
+      offset,
+      false // we dont need to get total_count on subsequent queries.
+    );
+    if (offset > total_delegators_count) {
       break;
     }
-    console.log(delegationsResp);
   }
 
   return delegators;
-}
-
-export function clean_up_specail_characters_from_pagination_key(
-  unclean_key: string
-): string {
-  const specail_char_1 = '/';
-  const specail_char_2 = '+';
-  const specail_char_1_placeholder = '%2F';
-  const specail_char_2_placeholder = '%2B';
-
-  return unclean_key
-    .split(specail_char_1)
-    .join(specail_char_1_placeholder)
-    .split(specail_char_2)
-    .join(specail_char_2_placeholder);
 }
