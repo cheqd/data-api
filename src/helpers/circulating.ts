@@ -10,7 +10,7 @@ export function extract_group_number_and_address(key: string) {
   };
 }
 
-export async function updateGroupBalances(groupNumber: number) {
+export async function updateCirculatingSupply(groupNumber: number) {
   const cached = await CIRCULATING_SUPPLY_WATCHLIST.list({
     prefix: `grp_${groupNumber}:`,
   });

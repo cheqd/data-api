@@ -1,17 +1,13 @@
-import { BigDipperApi } from '../api/bigDipperApi';
-import { updateGroupBalances } from '../helpers/balanceGroup';
-import { GraphQLClient } from '../helpers/graphql';
-import {
-  add_new_active_validators_to_kv,
-  remove_any_jailed_validators_from_kv,
-  update_delegator_to_validators_KV,
-} from '../helpers/totalDelegators';
+import { updateCirculatingSupply } from '../helpers/circulating';
+import { updateValidatorKV } from '../helpers/validators';
 import { filterArbitrageOpportunities } from './arbitrageOpportunities';
 
 export async function webhookTriggers(event: Event) {
   console.log('Triggering webhook...');
   await sendPriceDiscrepancies();
-  await updateGroupBalances(getRandomGroup(Number(CIRCULATING_SUPPLY_GROUPS)));
+  await updateCirculatingSupply(getRandomGroup(Number(CIRCULATING_SUPPLY_GROUPS)));
+  await de
+  
   const gql_client = new GraphQLClient(GRAPHQL_API);
   const bd_api = new BigDipperApi(gql_client);
   const active_validators_resp = await bd_api.get_active_validators();
