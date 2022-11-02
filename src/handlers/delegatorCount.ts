@@ -1,6 +1,5 @@
 import { Request } from 'itty-router';
-import { NodeApi } from '../api/nodeApi';
-import { ActiveValidatorsKV } from '../helpers/totalDelegators';
+import { ActiveValidatorsKV } from '../helpers/validators';
 
 export async function handler(request: Request): Promise<Response> {
   const address = request.params?.['validator_address'];
@@ -9,22 +8,18 @@ export async function handler(request: Request): Promise<Response> {
     throw new Error('No address specified or wrong address format.');
   }
 
-  const total_delegators_from_cache =
+  try {
+    const total_delegators_from_cache =
     await try_getting_delegators_count_from_KV(address);
-  if (total_delegators_from_cache) {
-    return new Response(total_delegators_from_cache.toString());
+    if(!total_delegators_from_cache) {
+      throw new Error('No delegators count cached for given validator');
+    }
+    return new Response(JSON.stringify(total_delegators_from_cache));
   }
-
-  const node_api = new NodeApi(REST_API);
-  const resp = await node_api.staking_get_delegators_per_validator(
-    address,
-    0,
-    true
-  );
-
-  const total_delegators = resp.pagination.total;
-
-  return new Response(total_delegators.toString());
+  catch (error) {
+    console.log(error);
+    throw new Error('Error while getting delegators count for validator');
+  }
 }
 
 async function try_getting_delegators_count_from_KV(validator_address: string) {
