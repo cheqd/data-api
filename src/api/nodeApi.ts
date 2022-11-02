@@ -40,10 +40,7 @@ export class NodeApi {
     let resp = await fetch(
       `${this.base_rest_api_url}/cosmos/distribution/v1beta1/delegators/${address}/rewards`
     );
-    let respJson = (await resp.json()) as {
-      rewards: Record<string, any>[];
-      total: Coin[];
-    };
+    let respJson = (await resp.json()) as RewardsResponse
 
     return Number(respJson?.total?.[0]?.amount ?? '0');
   }

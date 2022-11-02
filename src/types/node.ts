@@ -120,7 +120,7 @@ export interface UnbondingResponse {
   };
 }
 
-export interface CachedTotalDelegatorsCount {
-  totalDeleagatorsCount: number;
-  updatedAt: string;
+export interface RewardsResponse {
+    rewards: Record<string, any>[];
+    total: Coin[];
 }
