@@ -6,7 +6,6 @@ import { handler as liquidBalanceHandler } from './handlers/liquidBalance';
 import { handler as vestingBalanceHandler } from './handlers/vestingBalance';
 import { handler as vestedBalanceHandler } from './handlers/vestedBalance';
 import { handler as delegatorCountHandler } from './handlers/delegatorCount';
-import { handler as totalDelegatorsHandler } from './handlers/totalDelegators';
 import { handler as totalStakedCoinsHandler } from './handlers/totalStakedCoins';
 import { handler as allArbitrageOpportunitiesHandler } from './handlers/allArbitrageOpportunities';
 import { handler as arbitrageOpportunitiesHandler } from './handlers/arbitrageOpportunities';
@@ -30,7 +29,6 @@ function registerRoutes(router: Router) {
   router.get('/balances/total/:address', totalBalanceHandler);
   router.get('/balances/vested/:address', vestedBalanceHandler);
   router.get('/balances/vesting/:address', vestingBalanceHandler);
-  router.get('/staking/delegators/total', totalDelegatorsHandler);
   router.get('/staking/delegators/:validator_address', delegatorCountHandler);
   router.get('/supply/circulating', circulatingSupplyHandler);
   router.get('/supply/staked', totalStakedCoinsHandler);
