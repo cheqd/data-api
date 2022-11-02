@@ -2,8 +2,19 @@ import { extract_group_number_and_address } from './circulating';
 import { get_all_delegators_for_a_validator } from './node';
 import { BigDipperApi } from '../api/bigDipperApi';
 import { ActiveValidatorsResponse } from '../types/bigDipper';
+import { GraphQLClient } from './graphql';
+import { NodeApi } from '../api/nodeApi';
 
-export async function add_new_active_validators_to_kv(
+export async function updateActiveValidatorsKV() {
+  const gql_client = new GraphQLClient(GRAPHQL_API);
+  const bd_api = new BigDipperApi(gql_client);
+  const active_validators_resp = await bd_api.get_active_validators();
+
+  await remove_any_jailed_validators_from_kv(active_validators_resp);
+  await add_new_active_validators_to_kv(active_validators_resp);
+}
+
+async function add_new_active_validators_to_kv(
   active_validators: ActiveValidatorsResponse
 ) {
   console.log('Adding new active validators to KV, if any...');
@@ -24,18 +35,16 @@ export async function add_new_active_validators_to_kv(
 
     if (!is_active_validator_in_kv) {
       // can only update validator's voting power. it's delegator count is updated when TOTAL_DELEGATORS KV is updated.
-      set_voting_power_for_an_active_validator_in_kv(
+      put_an_active_validator_in_kv(
         latest_active_validator.operator_address,
-        {
-          votingPower:
-            latest_active_validator.validator.validator_voting_powers[0].voting_power.toString(),
-        }
+        latest_active_validator.validator.validator_voting_powers[0]
+          .voting_power
       );
     }
   }
 }
 
-export async function remove_any_jailed_validators_from_kv(
+async function remove_any_jailed_validators_from_kv(
   active_validators: ActiveValidatorsResponse
 ) {
   // list of validators form kv
@@ -90,48 +99,41 @@ function create_hashmap_of_validators_addresses_from_api(
   return hashmap;
 }
 
-async function set_voting_power_for_an_active_validator_in_kv(
+async function put_an_active_validator_in_kv(
   validator_address: string,
-  data: ActiveValidatorsKV
+  voting_power: number
 ) {
   // get validator from kv first
   // set it's voting power
   const validator_from_kv = (await ACTIVE_VALIDATORS.get(validator_address, {
     type: 'json',
   })) as ActiveValidatorsKV;
+
   if (validator_from_kv) {
-    validator_from_kv.votingPower = data.votingPower;
-    const updated_validator_data = JSON.stringify(validator_from_kv);
+    const data = {} as ActiveValidatorsKV;
+    const node_api = new NodeApi(REST_API);
+
+    const delegator_resp =
+      await node_api.staking_get_all_delegations_for_delegator(
+        validator_address,
+        0,
+        true
+      );
+    data.totalDelegatorsCount = delegator_resp.pagination.total;
+    data.updatedAt = new Date().toUTCString();
+    data.votingPower = voting_power.toString();
+
     const validator_group_with_smallest_voting_power =
       await get_validator_group_with_smallest_voting_power();
 
     const key = `grp_${validator_group_with_smallest_voting_power}:${validator_address}`;
-    await ACTIVE_VALIDATORS.put(key, updated_validator_data);
+    await ACTIVE_VALIDATORS.put(key, JSON.stringify(data));
     console.log('Added new validator to the list', validator_address);
   }
 }
 async function delete_stale_validator_from_kv(key: string) {
   await ACTIVE_VALIDATORS.delete(key);
   console.log('Deleted stale validator from the list', key);
-}
-
-async function set_total_delegators_count_for_a_validator(
-  validator_address: string,
-  total_delegators_count_for_a_validator: number
-) {
-  // get validator from kv first
-  // set it's total delegators count
-  const validator_from_kv = (await ACTIVE_VALIDATORS.get(validator_address, {
-    type: 'json',
-  })) as ActiveValidatorsKV;
-  if (validator_from_kv) {
-    validator_from_kv.totalDelegatorsCount =
-      total_delegators_count_for_a_validator.toString();
-    await ACTIVE_VALIDATORS.put(
-      validator_address,
-      JSON.stringify(validator_from_kv)
-    );
-  }
 }
 
 async function get_validator_group_with_smallest_voting_power(): Promise<number> {
@@ -168,4 +170,5 @@ async function get_validator_group_with_smallest_voting_power(): Promise<number>
 export interface ActiveValidatorsKV {
   totalDelegatorsCount?: string;
   votingPower?: string;
+  updatedAt?: string;
 }
