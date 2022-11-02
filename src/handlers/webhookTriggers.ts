@@ -11,7 +11,7 @@ import { filterArbitrageOpportunities } from './arbitrageOpportunities';
 export async function webhookTriggers(event: Event) {
   console.log('Triggering webhook...');
   await sendPriceDiscrepancies();
-  await updateGroupBalances(getRandomGroup(CIRCULATING_SUPPLY_GROUPS));
+  await updateGroupBalances(getRandomGroup(Number(CIRCULATING_SUPPLY_GROUPS)));
   const gql_client = new GraphQLClient(GRAPHQL_API);
   const bd_api = new BigDipperApi(gql_client);
   const active_validators_resp = await bd_api.get_active_validators();
@@ -19,7 +19,7 @@ export async function webhookTriggers(event: Event) {
   await remove_any_jailed_validators_from_kv(active_validators_resp);
   // also set total delegator count for a validator
   await update_delegator_to_validators_KV(
-    getRandomGroup(ACTIVE_VALIDATOR_GROUPS)
+    getRandomGroup(Number(ACTIVE_VALIDATOR_GROUPS))
   );
   await add_new_active_validators_to_kv(active_validators_resp);
 }

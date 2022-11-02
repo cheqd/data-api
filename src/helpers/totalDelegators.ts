@@ -191,7 +191,7 @@ async function get_validator_group_with_smallest_voting_power(): Promise<number>
   let voting_power_sum = 0;
   let validator_voting_power_total_arr = [];
 
-  for (let i = 1; i <= ACTIVE_VALIDATOR_GROUPS; i++) {
+  for (let i = 1; i <= Number(ACTIVE_VALIDATOR_GROUPS); i++) {
     const validator_group = i;
     const current_validator_group_data = await ACTIVE_VALIDATORS.list({
       prefix: `grp_${validator_group}:`,

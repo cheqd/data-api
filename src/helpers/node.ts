@@ -65,7 +65,7 @@ export async function calculate_total_delegations_balance_for_delegator_in_ncheq
     total_delegation_balance_in_ncheq +=
       await calculate_total_delegations_balance_for_delegator_in_ncheq(
         resp,
-        current_offset + REST_API_PAGINATION_LIMIT
+        current_offset + Number(REST_API_PAGINATION_LIMIT)
       );
   }
 
@@ -105,7 +105,7 @@ export async function calculate_total_unbonding_delegations_balance_for_delegato
     total_unbonding_balance_in_ncheq +=
       await calculate_total_unbonding_delegations_balance_for_delegator_in_ncheq(
         resp,
-        current_offset + REST_API_PAGINATION_LIMIT
+        current_offset + Number(REST_API_PAGINATION_LIMIT)
       );
   }
 
@@ -135,7 +135,7 @@ export async function get_all_delegators_for_a_validator(
         delegationsResp.delegation_responses[i].delegation.delegator_address;
       delegators.push(delegator);
     }
-    offset += REST_API_PAGINATION_LIMIT;
+    offset += Number(REST_API_PAGINATION_LIMIT);
     delegationsResp = await node_api.staking_get_delegators_per_validator(
       validator_address,
       offset,

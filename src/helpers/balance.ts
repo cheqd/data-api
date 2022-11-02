@@ -67,7 +67,7 @@ export async function get_account_balance_infos_from_node_api(
         0, // first call
         true
       ),
-      REST_API_PAGINATION_LIMIT // second call
+      Number(REST_API_PAGINATION_LIMIT) // second call
     );
 
   const total_unbonding_balance_in_ncheq =
@@ -77,7 +77,7 @@ export async function get_account_balance_infos_from_node_api(
         0, // first call
         true
       ),
-      REST_API_PAGINATION_LIMIT // second call
+      Number(REST_API_PAGINATION_LIMIT) // second call
     );
 
   return {
