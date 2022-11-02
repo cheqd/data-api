@@ -101,8 +101,10 @@ async function set_voting_power_for_an_active_validator_in_kv(
   if (validator_from_kv) {
     validator_from_kv.votingPower = data.votingPower;
     const updated_validator_data = JSON.stringify(validator_from_kv);
-    // for now manually put em in group 10
-    const key = `grp_10:${validator_address}`;
+    const validator_group_with_smallest_voting_power =
+      await get_validator_group_with_smallest_voting_power();
+
+    const key = `grp_${validator_group_with_smallest_voting_power}:${validator_address}`;
     await ACTIVE_VALIDATORS.put(key, updated_validator_data);
     console.log('Added new validator to the list', validator_address);
   }
@@ -185,6 +187,37 @@ async function set_total_delegators_count_for_a_validator(
   }
 }
 
+async function get_validator_group_with_smallest_voting_power(): Promise<number> {
+  let voting_power_sum = 0;
+  let validator_voting_power_total_arr = [];
+
+  for (let i = 1; i <= ACTIVE_VALIDATOR_GROUPS; i++) {
+    const validator_group = i;
+    const current_validator_group_data = await ACTIVE_VALIDATORS.list({
+      prefix: `grp_${validator_group}:`,
+    });
+
+    // accumulates total voting power for specific validator group
+    for (let validator of current_validator_group_data.keys) {
+      const validator_data = (await ACTIVE_VALIDATORS.get(
+        validator.name
+      )) as ActiveValidatorsKV;
+
+      if (validator_data && validator_data.votingPower) {
+        voting_power_sum += Number(validator_data.votingPower);
+      }
+    }
+    validator_voting_power_total_arr.push(voting_power_sum);
+    voting_power_sum = 0; // reset
+  }
+
+  let smallest_validator_group = 10; // fallback group is 10
+  smallest_validator_group = validator_voting_power_total_arr.sort(
+    (a, b) => a - b
+  )[0]; // sort by ASC
+
+  return smallest_validator_group;
+}
 export interface ActiveValidatorsKV {
   totalDelegatorsCount?: string;
   votingPower?: string;
