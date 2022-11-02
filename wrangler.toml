@@ -108,7 +108,7 @@ kv_namespaces = [
 
 # Cron triggers for staging worker
 [env.staging.triggers]
-crons = ["0/15 * * * *"]
+crons = ["0 * * * *"]
 
 ###############################################################
 ###               OPTIONAL: Build Configuration             ###
