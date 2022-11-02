@@ -1,4 +1,4 @@
-import { updateCachedBalance } from './balance';
+import { get_account_balance_infos_from_node_api } from './balance';
 
 export function extract_group_number_and_address(key: string) {
   const parts = key.split(':');
@@ -38,5 +38,21 @@ export async function updateGroupBalances(groupNumber: number) {
         );
       }
     }
+  }
+}
+
+export async function updateCachedBalance(addr: string, grpN: number) {
+  try {
+    const account_balance_infos = await get_account_balance_infos_from_node_api(
+      addr
+    );
+
+    const data = JSON.stringify(account_balance_infos);
+
+    await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_${grpN}:${addr}`, data);
+
+    console.log(`account "${addr}" balance updated. (${data})`);
+  } catch (e: any) {
+    console.log(`error updateCachedBalance: ${e}`);
   }
 }
