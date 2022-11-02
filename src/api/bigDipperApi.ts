@@ -1,10 +1,9 @@
 import { GraphQLClient } from '../helpers/graphql';
-import { TotalSupplyResponse } from '../types/bigDipper';
-import {
-  ActiveValidatorsResponse,
+import { 
+  TotalSupplyResponse,
   TotalStakedCoinsResponse,
-  ValidatorDelegationsCountResponse,
-} from '../types/node';
+  ActiveValidatorsResponse
+} from '../types/bigDipper';
 
 export class BigDipperApi {
   constructor(public readonly graphql_client: GraphQLClient) {}
@@ -26,6 +25,19 @@ export class BigDipperApi {
     );
   }
 
+  get_total_staked_coins = async (): Promise<string> => {
+    let query = `query StakingInfo{
+            staking_pool {
+                bonded_tokens
+            }
+        }`;
+
+    const resp = await this.graphql_client.query<{
+      data: TotalStakedCoinsResponse;
+    }>(query);
+    return resp.data.staking_pool[0].bonded_tokens;
+  }
+
   get_active_validators = async (): Promise<ActiveValidatorsResponse> => {
     const queryActiveValidators = `query ActiveValidators {
       validator_info(distinct_on: operator_address, where: {validator: {validator_statuses: {jailed: {_eq: false}}}}) {
@@ -41,18 +53,5 @@ export class BigDipperApi {
       data: ActiveValidatorsResponse;
     }>(queryActiveValidators);
     return activeValidator.data;
-  };
-
-  get_total_staked_coins = async (): Promise<string> => {
-    let query = `query StakingInfo{
-            staking_pool {
-                bonded_tokens
-            }
-        }`;
-
-    const resp = await this.graphql_client.query<{
-      data: TotalStakedCoinsResponse;
-    }>(query);
-    return resp.data.staking_pool[0].bonded_tokens;
-  };
+  }
 }
