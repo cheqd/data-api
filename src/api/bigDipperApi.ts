@@ -26,13 +26,17 @@ export class BigDipperApi {
     );
   }
 
-
   get_active_validators = async (): Promise<ActiveValidatorsResponse> => {
     const queryActiveValidators = `query ActiveValidators {
-        validator_info(distinct_on: operator_address, where: {validator: {validator_statuses: {jailed: {_eq: false}}}}) {
-          operator_address
+      validator_info(distinct_on: operator_address, where: {validator: {validator_statuses: {jailed: {_eq: false}}}}) {
+        operator_address
+        validator {
+          validator_voting_powers {
+            voting_power
+          }
         }
-      }`;
+      }
+    }`;
     const activeValidator = await this.graphql_client.query<{
       data: ActiveValidatorsResponse;
     }>(queryActiveValidators);
