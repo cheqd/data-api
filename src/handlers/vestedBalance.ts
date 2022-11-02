@@ -4,7 +4,7 @@ import {
   validate_cheqd_address,
 } from '../helpers/validate';
 import { NodeApi } from '../api/nodeApi';
-import { calculate_vested_coins, estimatedVesting } from '../helpers/vesting';
+import { estimatedVesting } from '../helpers/vesting';
 import { ncheq_to_cheq_fixed } from '../helpers/currency';
 
 export async function handler(request: Request): Promise<Response> {
