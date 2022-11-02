@@ -1,50 +1,10 @@
-import { BigDipperApi } from '../api/bigDipperApi';
 import { NodeApi } from '../api/nodeApi';
-import { Account } from '../types/bigDipper';
 import { AccountBalanceInfos } from '../types/node';
 import { ncheq_to_cheq_fixed } from './currency';
-import { GraphQLClient } from './graphql';
 import {
   calculate_total_delegations_balance_for_delegator_in_ncheq,
   calculate_total_unbonding_delegations_balance_for_delegator_in_ncheq,
 } from './node';
-
-function extract_account_infos(account: Account) {
-  let balance = Number(
-    account?.accountBalance?.coins.find((c) => c.denom === 'ncheq')?.amount ||
-      '0'
-  );
-
-  let delegated = 0;
-  if (
-    account?.delegationBalance?.coins &&
-    account?.delegationBalance?.coins.length > 0
-  ) {
-    delegated = Number(account?.delegationBalance?.coins[0]?.amount || '0');
-  }
-
-  let unbonding = 0;
-  if (
-    account?.unbondingBalance?.coins &&
-    account?.unbondingBalance?.coins.length > 0
-  ) {
-    unbonding = Number(account?.unbondingBalance?.coins[0]?.amount || '0');
-  }
-
-  let rewards = 0;
-  if (account?.rewardBalance?.length > 0) {
-    for (let i = 0; i < account?.rewardBalance.length; i++) {
-      rewards += Number(account?.rewardBalance[i]?.coins[0]?.amount || '0');
-    }
-  }
-
-  return {
-    balance,
-    rewards,
-    delegated,
-    unbonding,
-  };
-}
 
 export async function get_account_balance_infos_from_node_api(
   address: string
@@ -95,20 +55,4 @@ export async function get_account_balance_infos_from_node_api(
     unbonding: Number(ncheq_to_cheq_fixed(total_unbonding_balance_in_ncheq)),
     timeUpdated: new Date().toUTCString(),
   };
-}
-
-export async function updateCachedBalance(addr: string, grpN: number) {
-  try {
-    const account_balance_infos = await get_account_balance_infos_from_node_api(
-      addr
-    );
-
-    const data = JSON.stringify(account_balance_infos);
-
-    await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_${grpN}:${addr}`, data);
-
-    console.log(`account "${addr}" balance updated. (${data})`);
-  } catch (e: any) {
-    console.log(`error updateCachedBalance: ${e}`);
-  }
 }
