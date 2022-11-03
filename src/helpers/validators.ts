@@ -57,10 +57,7 @@ async function remove_any_jailed_validators_from_kv(
     create_hashmap_of_validators_addresses_from_api(active_validators);
 
   for (let validator_from_kv of active_validators_from_kv.keys) {
-    const key_to_look_up = extract_group_number_and_address(
-      validator_from_kv.name
-    ).address;
-    if (!active_validators_from_api_hash_map.has(key_to_look_up)) {
+    if (!active_validators_from_api_hash_map.has(validator_from_kv.name)) {
       delete_stale_validator_from_kv(validator_from_kv.name);
     }
   }
@@ -76,10 +73,9 @@ function create_hashmap_of_validators_addresses_from_kv(
   }
 
   for (let key of validators_from_KV) {
-    const key_to_look_up = extract_group_number_and_address(key.name).address;
-    if (!hashmap.has(key_to_look_up)) {
+    if (!hashmap.has(key.name)) {
       // since kv contains prefix like grp_1.. we need to extract address only
-      hashmap.set(key_to_look_up, key_to_look_up);
+      hashmap.set(key.name, key.name);
     }
   }
   return hashmap;
