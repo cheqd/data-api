@@ -4,6 +4,7 @@ import { ActiveValidatorsResponse } from '../types/bigDipper';
 import { GraphQLClient } from './graphql';
 import { NodeApi } from '../api/nodeApi';
 import { ActiveValidatorsKV } from '../types/KV';
+import { resolve } from 'path';
 
 export async function updateActiveValidatorsKV() {
   const gql_client = new GraphQLClient(GRAPHQL_API);
@@ -117,6 +118,8 @@ async function put_an_active_validator_in_kv(
   data.totalDelegatorsCount = delegator_resp.pagination.total;
   data.updatedAt = new Date().toUTCString();
   data.votingPower = voting_power.toString();
+
+  console.log(`Validator data ${data}`);
 
   const key = `${validator_address}`;
   await ACTIVE_VALIDATORS.put(key, JSON.stringify(data));

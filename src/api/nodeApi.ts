@@ -83,6 +83,8 @@ export class NodeApi {
       `${this.base_rest_api_url}/cosmos/staking/v1beta1/delegations/${address}?${pagination_count_total}&${pagination_limit}&${pagination_offset}`
     );
 
+    console.log(`Response status for delegator count ${resp.status}`);
+
     return (await resp.json()) as DelegationsResponse;
   }
 
