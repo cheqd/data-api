@@ -4,7 +4,7 @@ import { filterArbitrageOpportunities } from './arbitrageOpportunities';
 
 export async function webhookTriggers(event: Event) {
   console.log('Triggering webhook...');
-  // await sendPriceDiscrepancies(); // removed to test
+  await sendPriceDiscrepancies(); // removed to test
 
   await updateCirculatingSupply(
     getRandomGroup(Number(CIRCULATING_SUPPLY_GROUPS))
@@ -13,27 +13,31 @@ export async function webhookTriggers(event: Event) {
 }
 
 export async function sendPriceDiscrepancies() {
-  console.log('Sending price discrepancies...');
+  try {
+    console.log('Sending price discrepancies...');
 
-  const arbitrageOpportunities = await filterArbitrageOpportunities();
-  const hasArbitrageOpportunities = arbitrageOpportunities.length > 0;
-  if (hasArbitrageOpportunities) {
-    console.log('Arbitrage opportunities...');
-    try {
-      const init = {
-        body: JSON.stringify({
-          arbitrage_opportunities: arbitrageOpportunities,
-        }),
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json;charset=UTF-8',
-        },
-      };
+    const arbitrageOpportunities = await filterArbitrageOpportunities();
+    const hasArbitrageOpportunities = arbitrageOpportunities.length > 0;
+    if (hasArbitrageOpportunities) {
+      console.log('Arbitrage opportunities...');
+      try {
+        const init = {
+          body: JSON.stringify({
+            arbitrage_opportunities: arbitrageOpportunities,
+          }),
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json;charset=UTF-8',
+          },
+        };
 
-      await fetch(WEBHOOK_URL, init);
-    } catch (err: any) {
-      console.log(err);
+        await fetch(WEBHOOK_URL, init);
+      } catch (err: any) {
+        console.log(err);
+      }
     }
+  } catch (e) {
+    console.log('Error at: ', 'sendPriceDiscrepancies');
   }
 }
 

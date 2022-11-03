@@ -5,12 +5,16 @@ import { NodeApi } from '../api/nodeApi';
 import { ActiveValidatorsKV } from '../types/kv';
 
 export async function updateActiveValidatorsKV() {
-  const gql_client = new GraphQLClient(GRAPHQL_API);
-  const bd_api = new BigDipperApi(gql_client);
-  const active_validators_resp = await bd_api.get_active_validators();
+  try {
+    const gql_client = new GraphQLClient(GRAPHQL_API);
+    const bd_api = new BigDipperApi(gql_client);
+    const active_validators_resp = await bd_api.get_active_validators();
 
-  await remove_any_jailed_validators_from_kv(active_validators_resp);
-  await add_new_active_validators_to_kv(active_validators_resp);
+    await remove_any_jailed_validators_from_kv(active_validators_resp);
+    await add_new_active_validators_to_kv(active_validators_resp);
+  } catch (e) {
+    console.log('Error at: ', 'updateActiveValidatorsKV');
+  }
 }
 
 async function add_new_active_validators_to_kv(
@@ -103,13 +107,12 @@ async function put_an_active_validator_in_kv(
   const data = {} as ActiveValidatorsKV;
   const node_api = new NodeApi(REST_API);
 
-  const delegator_resp =
-    await node_api.staking_get_delegators_per_validator(
-      validator_address,
-      0,
-      true,
-      1 // set limit param to 1, lessen stress on node api
-    );
+  const delegator_resp = await node_api.staking_get_delegators_per_validator(
+    validator_address,
+    0,
+    true,
+    1 // set limit param to 1, lessen stress on node api
+  );
 
   data.totalDelegatorsCount = delegator_resp.pagination.total;
   data.updatedAt = new Date().toUTCString();
@@ -129,9 +132,9 @@ async function delete_stale_validator_from_kv(key: string) {
 export async function try_getting_delegators_count_from_KV(
   validator_address: string
 ) {
-  const validator_data = await ACTIVE_VALIDATORS.get(
+  const validator_data = (await ACTIVE_VALIDATORS.get(
     validator_address
-  ) as ActiveValidatorsKV;
+  )) as ActiveValidatorsKV;
 
   return validator_data.totalDelegatorsCount
     ? validator_data.totalDelegatorsCount
