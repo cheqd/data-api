@@ -96,7 +96,7 @@ async function put_an_active_validator_in_kv(validator_address: string) {
   console.log('putting new active validator', validator_address);
   const data = {} as ActiveValidatorsKV;
   const node_api = new NodeApi(REST_API);
-
+  console.log('data', JSON.stringify(data));
   const delegator_resp = await node_api.staking_get_delegators_per_validator(
     validator_address,
     0,
@@ -114,6 +114,7 @@ async function put_an_active_validator_in_kv(validator_address: string) {
   await ACTIVE_VALIDATORS.put(key, JSON.stringify(data));
   console.log('Added new validator to the list', key);
 }
+
 async function delete_stale_validator_from_kv(key: string) {
   await ACTIVE_VALIDATORS.delete(key);
   console.log('Deleted stale validator from the list', key);

@@ -56,16 +56,21 @@ export class NodeApi {
     const pagination_count_total = should_count_total
       ? 'pagination.count_total=true'
       : 'pagination.count_total=false';
-      const pagination_limit = `pagination.limit=${
-        limit ? limit : REST_API_PAGINATION_LIMIT
-      }`;
+    const pagination_limit = `pagination.limit=${
+      limit ? limit : REST_API_PAGINATION_LIMIT
+    }`;
     const pagination_offset = `pagination.offset=${offset}`;
     // NOTE: be cautious of newlines or spaces. Might make the request URL malformed
     let resp = await fetch(
       `${this.base_rest_api_url}/cosmos/staking/v1beta1/validators/${address}/delegations?${pagination_count_total}&${pagination_limit}&${pagination_offset}`
     );
-    console.log(resp.url);
-    return (await resp.json()) as ValidatorDetailResponse;
+
+    console.log('Response url', resp.url);
+    const respBody = await resp.json();
+
+    console.log('Resp body', respBody);
+
+    return respBody as ValidatorDetailResponse;
   }
 
   async staking_get_all_delegations_for_delegator(
