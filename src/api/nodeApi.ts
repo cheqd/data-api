@@ -46,12 +46,12 @@ export class NodeApi {
     return Number(respJson?.total?.[0]?.amount ?? '0');
   }
 
-  async staking_get_delegators_per_validator(
+  async staking_get_delegators_count_per_validator(
     address: string,
     offset: number,
     should_count_total: boolean,
     limit?: number
-  ): Promise<ValidatorDetailResponse> {
+  ): Promise<number> {
     console.log('address', address);
     console.log('limit', limit);
     console.log('offset', offset);
@@ -74,11 +74,11 @@ export class NodeApi {
     // https://api.cheqd.net/cosmos/staking/v1beta1/validators/cheqdvaloper1nxlprsp26qyjarp8c6mjf33rxvh7mll7uy5zhk/delegations?pagination.count_total=true&pagination.limit=1&pagination.offset=0
 
     console.log('Response url', resp.url);
-    const respBody = await resp.json();
+    const respBody = (await resp.json()) as { pagination: { total: string } };
 
     console.log('Resp body', respBody);
 
-    return respBody as ValidatorDetailResponse;
+    return Number(respBody.pagination.total);
   }
 
   async staking_get_all_delegations_for_delegator(

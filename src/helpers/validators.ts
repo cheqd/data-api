@@ -97,16 +97,17 @@ async function put_an_active_validator_in_kv(validator_address: string) {
   const data = {} as ActiveValidatorsKV;
   const node_api = new NodeApi(REST_API);
   console.log('data', JSON.stringify(data));
-  const delegator_resp = await node_api.staking_get_delegators_per_validator(
-    validator_address,
-    0,
-    true,
-    1 // set limit param to 1, lessen stress on node api
-  );
+  const delegator_count =
+    await node_api.staking_get_delegators_count_per_validator(
+      validator_address,
+      0,
+      true,
+      1 // set limit param to 1, lessen stress on node api
+    );
 
-  console.log('delegator resp', JSON.stringify(delegator_resp));
+  console.log('delegator resp', JSON.stringify(delegator_count));
 
-  data.totalDelegatorsCount = delegator_resp.pagination.total;
+  data.totalDelegatorsCount = delegator_count.toString();
   data.updatedAt = new Date().toUTCString();
   console.log(`Validator data ${JSON.stringify(data)}`);
 
