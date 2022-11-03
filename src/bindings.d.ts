@@ -6,7 +6,6 @@ declare global {
   const CIRCULATING_SUPPLY_WATCHLIST: KVNamespace;
   const ACTIVE_VALIDATORS: KVNamespace;
   const CIRCULATING_SUPPLY_GROUPS: number;
-  const ACTIVE_VALIDATOR_GROUPS: number;
   const MARKET_MONITORING_API: string;
   const WEBHOOK_URL: string;
 }

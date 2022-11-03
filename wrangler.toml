@@ -49,9 +49,7 @@ REST_API_PAGINATION_LIMIT = "50"
 GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"
 # Number of groups circulating supply watchlist is split into
 CIRCULATING_SUPPLY_GROUPS = "4"
-# Number of groups active validators are split into
-ACTIVE_VALIDATOR_GROUPS = "10"
-# Moniter market API base url
+# Market monitoring API endpoint
 MARKET_MONITORING_API = "https://market-monitoring.cheqd.net"
 
 # The necessary secrets are:
@@ -92,7 +90,7 @@ route = { pattern = "data-api-staging.cheqd.io/*", zone_id = "afe3b66243382f2714
 
 # Map of environment variables to set when deploying the Worker
 # Not inherited. @default `{}`
-vars = { ENVIRONMENT = "staging", TOKEN_EXPONENT = "9", REST_API = "https://api.cheqd.net", REST_API_PAGINATION_LIMIT = "50", GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql", CIRCULATING_SUPPLY_GROUPS = "4", ACTIVE_VALIDATOR_GROUPS = "10", MARKET_MONITORING_API = "https://market-monitoring-staging.cheqd.net" }
+vars = { ENVIRONMENT = "staging", TOKEN_EXPONENT = "9", REST_API = "https://api.cheqd.net", REST_API_PAGINATION_LIMIT = "50", GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql", CIRCULATING_SUPPLY_GROUPS = "4", MARKET_MONITORING_API = "https://market-monitoring-staging.cheqd.net" }
 
 # The necessary secrets are:
 # - WEBHOOK_URL
@@ -108,7 +106,7 @@ kv_namespaces = [
 
 # Cron triggers for staging worker
 [env.staging.triggers]
-crons = ["0 * * * *"]
+crons = ["0/5 * * * *"]
 
 ###############################################################
 ###               OPTIONAL: Build Configuration             ###
