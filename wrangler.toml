@@ -33,7 +33,7 @@ route = { pattern = "data-api.cheqd.io/*", zone_id = "afe3b66243382f27140e6feeaa
 # @default `[]`
 
 kv_namespaces = [
-  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "a9bc7aaa54ee4394ae6b9abe43e05ad6" }, { binding = "ACTIVE_VALIDATORS", id = "02a25d1f74f44e22ab3ee7c290c4b8e0" }
+  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "a9bc7aaa54ee4394ae6b9abe43e05ad6" }, { binding = "ACTIVE_VALIDATORS", id = "b9afd59ab39b4609905775bd651efd7f" }
 ]
 
 # Map of environment variables to set when deploying the Worker
