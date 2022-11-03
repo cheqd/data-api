@@ -32,7 +32,7 @@ While this figure is available from Cosmos SDK's built-in [`/cosmos/bank/v1beta1
 
 #### Endpoint
 
-`data-api.cheqd.io/supply/circulating`
+[`data-api.cheqd.io/supply/circulating`](https://data-api.cheqd.io/supply/circulating)
 
 #### Response
 
