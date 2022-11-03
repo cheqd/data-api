@@ -52,6 +52,10 @@ export class NodeApi {
     should_count_total: boolean,
     limit?: number
   ): Promise<ValidatorDetailResponse> {
+    console.log('address', address);
+    console.log('limit', limit);
+    console.log('offset', offset);
+
     // order of query params: count_total -> offset -> limit
     const pagination_count_total = should_count_total
       ? 'pagination.count_total=true'
@@ -60,10 +64,14 @@ export class NodeApi {
       limit ? limit : REST_API_PAGINATION_LIMIT
     }`;
     const pagination_offset = `pagination.offset=${offset}`;
+    console.log(
+      `Before request: ${this.base_rest_api_url}/cosmos/staking/v1beta1/validators/${address}/delegations?${pagination_count_total}&${pagination_limit}&${pagination_offset}`
+    );
     // NOTE: be cautious of newlines or spaces. Might make the request URL malformed
     let resp = await fetch(
       `${this.base_rest_api_url}/cosmos/staking/v1beta1/validators/${address}/delegations?${pagination_count_total}&${pagination_limit}&${pagination_offset}`
     );
+    // https://api.cheqd.net/cosmos/staking/v1beta1/validators/cheqdvaloper1nxlprsp26qyjarp8c6mjf33rxvh7mll7uy5zhk/delegations?pagination.count_total=true&pagination.limit=1&pagination.offset=0
 
     console.log('Response url', resp.url);
     const respBody = await resp.json();
