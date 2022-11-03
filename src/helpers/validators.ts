@@ -1,9 +1,9 @@
 import { extract_group_number_and_address } from './circulating';
-import { get_all_delegators_for_a_validator } from './node';
 import { BigDipperApi } from '../api/bigDipperApi';
 import { ActiveValidatorsResponse } from '../types/bigDipper';
 import { GraphQLClient } from './graphql';
 import { NodeApi } from '../api/nodeApi';
+import { ActiveValidatorsKV } from '../types/KV';
 
 export async function updateActiveValidatorsKV() {
   const gql_client = new GraphQLClient(GRAPHQL_API);
@@ -167,8 +167,15 @@ async function get_validator_group_with_smallest_voting_power(): Promise<number>
 
   return smallest_validator_group;
 }
-export interface ActiveValidatorsKV {
-  totalDelegatorsCount?: string;
-  votingPower?: string;
-  updatedAt?: string;
+
+export async function try_getting_delegators_count_from_KV(
+  validator_address: string
+) {
+  const validator_data = ACTIVE_VALIDATORS.get(
+    validator_address
+  ) as ActiveValidatorsKV;
+
+  return validator_data.totalDelegatorsCount
+    ? validator_data.totalDelegatorsCount
+    : null;
 }
