@@ -2,16 +2,7 @@ import { get_account_balance_infos_from_node_api } from './balance';
 import { ncheq_to_cheq_fixed } from '../helpers/currency';
 import { NodeApi } from '../api/nodeApi';
 import { AccountBalanceInfos } from '../types/node';
-
-export function extract_group_number_and_address(key: string) {
-  const parts = key.split(':');
-  let addr = parts[1];
-  let grpN = Number(parts[0].split('_')[1]);
-  return {
-    address: addr,
-    groupNumber: grpN,
-  };
-}
+import { extract_group_number_and_address } from './kv';
 
 export async function updateCirculatingSupply(groupNumber: number) {
   const cached = await CIRCULATING_SUPPLY_WATCHLIST.list({

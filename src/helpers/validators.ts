@@ -1,4 +1,4 @@
-import { extract_group_number_and_address } from './circulating';
+import { extract_group_number_and_address } from './kv';
 import { BigDipperApi } from '../api/bigDipperApi';
 import { ActiveValidatorsResponse } from '../types/bigDipper';
 import { GraphQLClient } from './graphql';
