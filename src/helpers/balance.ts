@@ -1,7 +1,11 @@
 import { NodeApi } from '../api/nodeApi';
-import { AccountBalanceInfos } from '../types/node';
+import { 
+  AccountBalanceInfos,
+  DelegationsResponse,
+  UnbondingResponse
+} from '../types/node';
 import { ncheq_to_cheq_fixed } from './currency';
-import { DelegationsResponse, UnbondingResponse } from '../types/node';
+import {  } from '../types/node';
 
 export async function get_account_balance_infos_from_node_api(
   address: string
