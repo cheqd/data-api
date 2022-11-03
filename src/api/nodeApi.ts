@@ -40,7 +40,7 @@ export class NodeApi {
     let resp = await fetch(
       `${this.base_rest_api_url}/cosmos/distribution/v1beta1/delegators/${address}/rewards`
     );
-    let respJson = (await resp.json()) as RewardsResponse
+    let respJson = (await resp.json()) as RewardsResponse;
 
     return Number(respJson?.total?.[0]?.amount ?? '0');
   }
@@ -67,13 +67,16 @@ export class NodeApi {
   async staking_get_all_delegations_for_delegator(
     address: string,
     offset: number,
-    should_count_total: boolean
+    should_count_total: boolean,
+    limit?: number
   ) {
     // order of query params: count_total -> offset -> limit
     const pagination_count_total = should_count_total
       ? 'pagination.count_total=true'
       : 'pagination.count_total=false';
-    const pagination_limit = `pagination.limit=${REST_API_PAGINATION_LIMIT}`;
+    const pagination_limit = `pagination.limit=${
+      limit ? limit : REST_API_PAGINATION_LIMIT
+    }`;
     const pagination_offset = `pagination.offset=${offset}`;
     // NOTE: be cautious of newlines or spaces. Might make the request URL malformed
     const resp = await fetch(

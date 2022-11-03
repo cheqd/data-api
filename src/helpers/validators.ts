@@ -109,7 +109,8 @@ async function put_an_active_validator_in_kv(
     type: 'json',
   })) as ActiveValidatorsKV;
 
-  if (validator_from_kv) {
+  if (!validator_from_kv) {
+    console.log('putting new active validator', validator_address);
     const data = {} as ActiveValidatorsKV;
     const node_api = new NodeApi(REST_API);
 
@@ -117,16 +118,15 @@ async function put_an_active_validator_in_kv(
       await node_api.staking_get_all_delegations_for_delegator(
         validator_address,
         0,
-        true
+        true,
+        1
       );
+
     data.totalDelegatorsCount = delegator_resp.pagination.total;
     data.updatedAt = new Date().toUTCString();
     data.votingPower = voting_power.toString();
 
-    const validator_group_with_smallest_voting_power =
-      await get_validator_group_with_smallest_voting_power();
-
-    const key = `grp_${validator_group_with_smallest_voting_power}:${validator_address}`;
+    const key = `${validator_address}`;
     await ACTIVE_VALIDATORS.put(key, JSON.stringify(data));
     console.log('Added new validator to the list', validator_address);
   }
@@ -134,38 +134,6 @@ async function put_an_active_validator_in_kv(
 async function delete_stale_validator_from_kv(key: string) {
   await ACTIVE_VALIDATORS.delete(key);
   console.log('Deleted stale validator from the list', key);
-}
-
-async function get_validator_group_with_smallest_voting_power(): Promise<number> {
-  let voting_power_sum = 0;
-  let validator_voting_power_total_arr = [];
-
-  for (let i = 1; i <= Number(ACTIVE_VALIDATOR_GROUPS); i++) {
-    const validator_group = i;
-    const current_validator_group_data = await ACTIVE_VALIDATORS.list({
-      prefix: `grp_${validator_group}:`,
-    });
-
-    // accumulates total voting power for specific validator group
-    for (let validator of current_validator_group_data.keys) {
-      const validator_data = (await ACTIVE_VALIDATORS.get(
-        validator.name
-      )) as ActiveValidatorsKV;
-
-      if (validator_data && validator_data.votingPower) {
-        voting_power_sum += Number(validator_data.votingPower);
-      }
-    }
-    validator_voting_power_total_arr.push(voting_power_sum);
-    voting_power_sum = 0; // reset
-  }
-
-  let smallest_validator_group = 10; // fallback group is 10
-  smallest_validator_group = validator_voting_power_total_arr.sort(
-    (a, b) => a - b
-  )[0]; // sort by ASC
-
-  return smallest_validator_group;
 }
 
 export async function try_getting_delegators_count_from_KV(
