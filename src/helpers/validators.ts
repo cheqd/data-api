@@ -104,7 +104,7 @@ async function put_an_active_validator_in_kv(
   const node_api = new NodeApi(REST_API);
 
   const delegator_resp =
-    await node_api.staking_get_all_delegations_for_delegator(
+    await node_api.staking_get_delegators_per_validator(
       validator_address,
       0,
       true,
