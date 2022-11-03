@@ -67,11 +67,14 @@ async function remove_any_jailed_validators_from_kv(
 }
 
 function create_hashmap_of_validators_addresses_from_kv(
-  validators_from_KV: KVNamespaceListKey<unknown>[]
+  validators_from_KV?: KVNamespaceListKey<unknown>[]
 ): Map<string, string> {
-  // keys incase contain prefixes, since they are from KV
-
   const hashmap = new Map();
+  // keys incase contain prefixes, since they are from KV
+  if (!validators_from_KV) {
+    return hashmap;
+  }
+
   for (let key of validators_from_KV) {
     const key_to_look_up = extract_group_number_and_address(key.name).address;
     if (!hashmap.has(key_to_look_up)) {
@@ -119,7 +122,7 @@ async function put_an_active_validator_in_kv(
         validator_address,
         0,
         true,
-        1
+        1 // set limit param to 1, lessen stress on node api
       );
 
     data.totalDelegatorsCount = delegator_resp.pagination.total;
