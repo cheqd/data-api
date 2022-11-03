@@ -1,10 +1,8 @@
-import { extract_group_number_and_address } from './kv';
 import { BigDipperApi } from '../api/bigDipperApi';
 import { ActiveValidatorsResponse } from '../types/bigDipper';
 import { GraphQLClient } from './graphql';
 import { NodeApi } from '../api/nodeApi';
-import { ActiveValidatorsKV } from '../types/KV';
-import { resolve } from 'path';
+import { ActiveValidatorsKV } from '../types/kv';
 
 export async function updateActiveValidatorsKV() {
   const gql_client = new GraphQLClient(GRAPHQL_API);
@@ -48,10 +46,8 @@ async function add_new_active_validators_to_kv(
 async function remove_any_jailed_validators_from_kv(
   active_validators: ActiveValidatorsResponse
 ) {
-  // list of validators form kv
-  // list of validators from api
-  // loop throu validators from kv, and if
-  // a validator from kv doesnt exist in api remove the kv
+  // Loop through validators from kv, and if
+  // a validator from KV doesn't exist in API remove from KV
   console.log('Removing jailed validators, if any');
   const active_validators_from_kv = await ACTIVE_VALIDATORS.list();
   const active_validators_from_api_hash_map =
@@ -68,7 +64,7 @@ function create_hashmap_of_validators_addresses_from_kv(
   validators_from_KV?: KVNamespaceListKey<unknown>[]
 ): Map<string, string> {
   const hashmap = new Map();
-  // keys incase contain prefixes, since they are from KV
+  // In case keys contain prefixes, since they are from KV
   if (!validators_from_KV) {
     return hashmap;
   }
@@ -85,7 +81,7 @@ function create_hashmap_of_validators_addresses_from_kv(
 function create_hashmap_of_validators_addresses_from_api(
   validators_from_api: ActiveValidatorsResponse
 ): Map<string, string> {
-  // keys incase contain prefixes, since they are from KV
+  // In case keys contain prefixes, since they are from KV
   const hashmap = new Map<string, string>();
   for (let validator of validators_from_api.validator_info) {
     if (!hashmap.has(validator.operator_address)) {
@@ -133,7 +129,7 @@ async function delete_stale_validator_from_kv(key: string) {
 export async function try_getting_delegators_count_from_KV(
   validator_address: string
 ) {
-  const validator_data = ACTIVE_VALIDATORS.get(
+  const validator_data = await ACTIVE_VALIDATORS.get(
     validator_address
   ) as ActiveValidatorsKV;
 
