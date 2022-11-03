@@ -23,13 +23,6 @@ export interface ActiveValidatorsResponse {
   validator_info: [
     {
       operator_address: string;
-      validator: {
-        validator_voting_powers: [
-          {
-            voting_power: number;
-          }
-        ];
-      };
     }
   ];
 }

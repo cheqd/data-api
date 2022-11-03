@@ -38,11 +38,7 @@ async function add_new_active_validators_to_kv(
 
     if (!is_active_validator_in_kv) {
       // can only update validator's voting power. it's delegator count is updated when TOTAL_DELEGATORS KV is updated.
-      put_an_active_validator_in_kv(
-        latest_active_validator.operator_address,
-        latest_active_validator.validator.validator_voting_powers[0]
-          .voting_power
-      );
+      put_an_active_validator_in_kv(latest_active_validator.operator_address);
     }
   }
 }
@@ -90,19 +86,13 @@ function create_hashmap_of_validators_addresses_from_api(
   for (let validator of validators_from_api.validator_info) {
     if (!hashmap.has(validator.operator_address)) {
       // since kv contains prefix like grp_1.. we need to extract address only
-      hashmap.set(
-        validator.operator_address,
-        validator.validator.validator_voting_powers[0].voting_power.toString()
-      );
+      hashmap.set(validator.operator_address, validator.operator_address);
     }
   }
   return hashmap;
 }
 
-async function put_an_active_validator_in_kv(
-  validator_address: string,
-  voting_power: number
-) {
+async function put_an_active_validator_in_kv(validator_address: string) {
   console.log('putting new active validator', validator_address);
   const data = {} as ActiveValidatorsKV;
   const node_api = new NodeApi(REST_API);
@@ -114,15 +104,15 @@ async function put_an_active_validator_in_kv(
     1 // set limit param to 1, lessen stress on node api
   );
 
+  console.log('delegator resp', JSON.stringify(delegator_resp));
+
   data.totalDelegatorsCount = delegator_resp.pagination.total;
   data.updatedAt = new Date().toUTCString();
-  data.votingPower = voting_power.toString();
+  console.log(`Validator data ${JSON.stringify(data)}`);
 
-  console.log(`Validator data ${data}`);
-
-  const key = `${validator_address}`;
+  const key = validator_address;
   await ACTIVE_VALIDATORS.put(key, JSON.stringify(data));
-  console.log('Added new validator to the list', validator_address);
+  console.log('Added new validator to the list', key);
 }
 async function delete_stale_validator_from_kv(key: string) {
   await ACTIVE_VALIDATORS.delete(key);

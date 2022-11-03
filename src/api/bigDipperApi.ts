@@ -1,8 +1,8 @@
 import { GraphQLClient } from '../helpers/graphql';
-import { 
+import {
   TotalSupplyResponse,
   TotalStakedCoinsResponse,
-  ActiveValidatorsResponse
+  ActiveValidatorsResponse,
 } from '../types/bigDipper';
 
 export class BigDipperApi {
@@ -36,22 +36,17 @@ export class BigDipperApi {
       data: TotalStakedCoinsResponse;
     }>(query);
     return resp.data.staking_pool[0].bonded_tokens;
-  }
+  };
 
   get_active_validators = async (): Promise<ActiveValidatorsResponse> => {
     const queryActiveValidators = `query ActiveValidators {
       validator_info(distinct_on: operator_address, where: {validator: {validator_statuses: {jailed: {_eq: false}}}}) {
         operator_address
-        validator {
-          validator_voting_powers {
-            voting_power
-          }
-        }
       }
     }`;
     const activeValidator = await this.graphql_client.query<{
       data: ActiveValidatorsResponse;
     }>(queryActiveValidators);
     return activeValidator.data;
-  }
+  };
 }
