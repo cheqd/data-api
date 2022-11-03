@@ -52,9 +52,7 @@ export class NodeApi {
     should_count_total: boolean,
     limit?: number
   ): Promise<number> {
-    console.log('address', address);
-    console.log('limit', limit);
-    console.log('offset', offset);
+    console.log('address', address, 'limit', limit, 'offset', offset);
 
     // order of query params: count_total -> offset -> limit
     const pagination_count_total = should_count_total
@@ -73,7 +71,7 @@ export class NodeApi {
     );
     // https://api.cheqd.net/cosmos/staking/v1beta1/validators/cheqdvaloper1nxlprsp26qyjarp8c6mjf33rxvh7mll7uy5zhk/delegations?pagination.count_total=true&pagination.limit=1&pagination.offset=0
 
-    console.log(JSON.stringify([...resp.headers]));
+    console.log(new Map(resp.headers));
     const respBody = (await resp.json()) as { pagination: { total: string } };
 
     console.log('Resp body', respBody);
