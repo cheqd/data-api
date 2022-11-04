@@ -4,7 +4,7 @@ import { filterArbitrageOpportunities } from './arbitrageOpportunities';
 
 export async function webhookTriggers(event: Event) {
   console.log('Triggering webhook...');
-  await sendPriceDiscrepancies(); // removed to test
+  await sendPriceDiscrepancies();
 
   await updateCirculatingSupply(
     getRandomGroup(Number(CIRCULATING_SUPPLY_GROUPS))

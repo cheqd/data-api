@@ -107,7 +107,8 @@ async function put_an_active_validator_in_kv(validator_address: string) {
 
   console.log('delegator resp', JSON.stringify(delegator_count));
 
-  data.totalDelegatorsCount = delegator_count.toString();
+  data.totalDelegatorsCount =
+    delegator_count === null ? 'null' : delegator_count.toString();
   data.updatedAt = new Date().toUTCString();
   console.log(`Validator data ${JSON.stringify(data)}`);
 
