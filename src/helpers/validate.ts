@@ -1,5 +1,5 @@
 // TODO: This doesn't take checksum into account
-export function validate_cheqd_address(address: string): boolean {
+export function isValidAddress(address: string): boolean {
     return /^(cheqd)1[a-z0-9]{38}$/.test(address)
 }
 

@@ -1,7 +1,7 @@
 import { Request } from 'itty-router';
 import {
   is_vesting_account_type,
-  validate_cheqd_address,
+  isValidAddress,
 } from '../helpers/validate';
 import { NodeApi } from '../api/nodeApi';
 import { estimatedVesting } from '../helpers/vesting';
@@ -10,7 +10,7 @@ import { ncheq_to_cheq_fixed } from '../helpers/currency';
 export async function handler(request: Request): Promise<Response> {
   const address = request.params?.['address'];
 
-  if (!address || !validate_cheqd_address(address)) {
+  if (!address || !isValidAddress(address)) {
     throw new Error('No address specified or wrong address format.');
   }
 
