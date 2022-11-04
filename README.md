@@ -199,18 +199,18 @@ The application expects these environment variables to be set on Cloudflare:
 
 Cached data for computationally-expensive queries are stored in [Cloudflare KV](https://developers.cloudflare.com/workers/learning/how-kv-works/).
 
-1. `CIRCULATING_SUPPLY_WATCHLIST`: This KV is pre-populated with a list of addresses to monitor for circulating supply. Initially, the *value* portion of this can be set to anything, since it will get replaced when [periodic cron triggers](https://developers.cloudflare.com/workers/platform/cron-triggers) run to set the account balance breakdown for this account. In case you have a lot of accounts to monitor, we recommend prefixing the *key* with a `grp_N` prefix which will stagger the API lookup across multiple cron executions.
+1. `CIRCULATING_SUPPLY_WATCHLIST`: This KV is pre-populated with a list of addresses to monitor for circulating supply. Initially, the *value* portion of this can be set to anything, since it will get replaced when [periodic cron triggers](https://developers.cloudflare.com/workers/platform/cron-triggers) run to set the account balance breakdown for this account. In case you have a lot of accounts to monitor, we recommend prefixing the *key* with a `group_N` prefix which will stagger the API lookup across multiple cron executions.
 2. `ACTIVE_VALIDATORS`: List of active validators, fetch from block explorer GraphQL API. When a cron trigger is executed, the total delegator count and update time is stored in this KV.
 
 ```jsonc
 // Sample watchlist JSON file structure
 [
   {
-    "key": "grp_1:cheqd1...xxx", // Group 1 prefix
+    "key": "group_1:cheqd1...xxx", // Group 1 prefix
     "value": "26-May-2022" // This can be any value, and will be updated with account balance breakdown periodically
   },
   {
-    "key": "grp_2:cheqd1...xxx", // Group 2 prefix
+    "key": "group_2:cheqd1...xxx", // Group 2 prefix
     "value": "26-May-2022"
   }
 ]

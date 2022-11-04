@@ -7,7 +7,7 @@ import { extract_group_number_and_address } from './kv';
 export async function updateCirculatingSupply(groupNumber: number) {
   try {
     const cached = await CIRCULATING_SUPPLY_WATCHLIST.list({
-      prefix: `grp_${groupNumber}:`,
+      prefix: `group_${groupNumber}:`,
     });
 
     console.log(
@@ -20,7 +20,7 @@ export async function updateCirculatingSupply(groupNumber: number) {
       let grpN = parts.groupNumber;
 
       const found = await CIRCULATING_SUPPLY_WATCHLIST.get(
-        `grp_${grpN}:${addr}`
+        `group_${grpN}:${addr}`
       );
       if (found) {
         console.log(`found ${key.name} (addr=${addr}) grp=${grpN}`);
@@ -29,7 +29,7 @@ export async function updateCirculatingSupply(groupNumber: number) {
 
         if (account !== null) {
           console.log(
-            `updating account (grp_${grpN}:${addr}) balance (${JSON.stringify(
+            `updating account (group_${grpN}:${addr}) balance (${JSON.stringify(
               account
             )})`
           );
@@ -49,7 +49,7 @@ export async function updateCachedBalance(addr: string, grpN: number) {
 
     const data = JSON.stringify(account_balance_infos);
 
-    await CIRCULATING_SUPPLY_WATCHLIST.put(`grp_${grpN}:${addr}`, data);
+    await CIRCULATING_SUPPLY_WATCHLIST.put(`group_${grpN}:${addr}`, data);
 
     console.log(`account "${addr}" balance updated. (${data})`);
   } catch (e: any) {
