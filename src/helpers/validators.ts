@@ -50,13 +50,14 @@ async function remove_any_jailed_validators_from_kv(
 ) {
   // Loop through validators from kv, and if
   // a validator from KV doesn't exist in API remove from KV
-  console.log('Removing jailed validators, if any');
+  console.log('Execute remove_any_jailed_validators_from_kv');
   const active_validators_from_kv = await ACTIVE_VALIDATORS.list();
   const active_validators_from_api_hash_map =
     create_hashmap_of_validators_addresses_from_api(active_validators);
 
   for (let validator_from_kv of active_validators_from_kv.keys) {
     if (!active_validators_from_api_hash_map.has(validator_from_kv.name)) {
+      console.log("Calling delete_stale_validator_from_kv", validator_from_kv.name);
       delete_stale_validator_from_kv(validator_from_kv.name);
     }
   }

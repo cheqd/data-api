@@ -6,9 +6,9 @@ concurrency:
 
 jobs:
   
-  call-lint:
-    name: "Lint"
-    uses: ./.github/workflows/lint.yml
+  # call-lint:
+  #   name: "Lint"
+  #   uses: ./.github/workflows/lint.yml
 
   call-deploy:
     name: "Deploy"
