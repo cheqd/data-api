@@ -82,7 +82,8 @@ export async function getCirculatingSupply(): Promise<number> {
     console.log('Total supply', total_supply);
     console.log(`Watchlist total balance: ${shareholders_total_balance}`);
 
-    return total_supply - shareholders_total_balance;
+    let circulating_supply = total_supply - shareholders_total_balance;
+    return circulating_supply.toString();
   } catch (e: any) {
     throw new Error(e.toString);
   }
