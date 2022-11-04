@@ -8,6 +8,6 @@ export function cheqd_to_ncheq(cheqd: number): number {
     return cheqd * TOKEN_DECIMALS;
 }
 
-export function convertToLargestDenom(ncheq: number): string {
+export function convertToMainTokenDenom(ncheq: number): string {
     return ncheq_to_cheqd(ncheq).toFixed(0);
 }

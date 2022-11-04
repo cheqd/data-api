@@ -1,5 +1,5 @@
 import { get_account_balance_infos_from_node_api } from './balance';
-import { convertToLargestDenom } from '../helpers/currency';
+import { convertToMainTokenDenom } from '../helpers/currency';
 import { NodeApi } from '../api/nodeApi';
 import { AccountBalanceInfos } from '../types/node';
 import { extract_group_number_and_address } from './kv';
@@ -63,7 +63,7 @@ export async function getCirculatingSupply(): Promise<number> {
   let gql_client = new GraphQLClient(GRAPHQL_API);
   let bd_api = new BigDipperApi(gql_client);
   let total_supply_ncheq = await bd_api.getTotalSupply();
-  const total_supply = Number(convertToLargestDenom(total_supply_ncheq));
+  const total_supply = Number(convertToMainTokenDenom(total_supply_ncheq));
 
   try {
     const cached = await CIRCULATING_SUPPLY_WATCHLIST.list();
