@@ -1,17 +1,13 @@
 import { updateCirculatingSupply } from '../helpers/circulating';
-import { updateActiveValidatorsKV } from '../helpers/validators';
 import { filterArbitrageOpportunities } from './arbitrageOpportunities';
 
 export async function webhookTriggers(event: ScheduledEvent) {
   console.log('Triggering webhook...');
-  // await sendPriceDiscrepancies();
+  await sendPriceDiscrepancies();
 
 /*   await updateCirculatingSupply(
     getRandomGroup(Number(CIRCULATING_SUPPLY_GROUPS))
   ); */
-  //if (event.cron === '*/1 * * * *') {
-    await updateActiveValidatorsKV();
-  //}
 }
 
 export async function sendPriceDiscrepancies() {
