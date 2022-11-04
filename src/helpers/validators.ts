@@ -11,7 +11,7 @@ export async function updateActiveValidatorsKV() {
     const active_validators_resp = await bd_api.get_active_validators();
 
     await remove_any_jailed_validators_from_kv(active_validators_resp);
-    await add_new_active_validators_to_kv(active_validators_resp);
+    //await add_new_active_validators_to_kv(active_validators_resp);
   } catch (e) {
     console.log('Error at: ', 'updateActiveValidatorsKV');
   }
