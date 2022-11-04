@@ -38,7 +38,7 @@ async function add_new_active_validators_to_kv(
 
     if (!is_active_validator_in_kv) {
       // can only update validator's voting power. it's delegator count is updated when TOTAL_DELEGATORS KV is updated.
-      put_an_active_validator_in_kv(latest_active_validator.operator_address);
+      await put_an_active_validator_in_kv(latest_active_validator.operator_address);
       // break after puttin first validator: TODO just for testing Remove this
       break;
     }
@@ -58,7 +58,7 @@ async function remove_any_jailed_validators_from_kv(
   for (let validator_from_kv of active_validators_from_kv.keys) {
     if (!active_validators_from_api_hash_map.has(validator_from_kv.name)) {
       console.log("Calling delete_stale_validator_from_kv", validator_from_kv.name);
-      delete_stale_validator_from_kv(validator_from_kv.name);
+      await delete_stale_validator_from_kv(validator_from_kv.name);
     }
   }
 }
