@@ -6,7 +6,7 @@
 
 ## ℹ️ Overview
 
-Cosmos SDK offers [APIs for built-in modules using gRPC, REST, and Tendermint RPC](https://docs.cosmos.network/master/core/grpc_rest.html). This project aims to provide simple REST APIs for data that default Cosmos SDK APIs can't provide.
+Cosmos SDK offers [APIs for built-in modules using gRPC, REST, and Tendermint RPC](https://docs.cosmos.network/main/core/grpc_rest.html). This project aims to provide simple REST APIs for data that default Cosmos SDK APIs can't provide.
 
 This collection of custom APIs can be deployed as a [Cloudflare Worker](https://workers.cloudflare.com/) or compatible serverless platforms.
 
@@ -32,7 +32,7 @@ While this figure is available from Cosmos SDK's built-in [`/cosmos/bank/v1beta1
 
 #### Endpoint
 
-`data-api.cheqd.io/supply/circulating`
+[`data-api.cheqd.io/supply/circulating`](https://data-api.cheqd.io/supply/circulating)
 
 #### Response
 
@@ -44,12 +44,7 @@ Cryptocurrency tracking websites such as [CoinMarketCap](https://coinmarketcap.c
 
 This figure is _not_ available from any Cosmos SDK API, because the [criteria for determining circulating vs "non-circulating" accounts is defined by CoinMarketCap](https://support.coinmarketcap.com/hc/en-us/articles/360043396252-Supply-Circulating-Total-Max-).
 
-This API calculates the circulating supply by **subtracting** the account balances of a defined list of wallet addresses ("circulating supply watchlist"). Different types of accounts defined in the watchlist are handled as follows:
-
-1. **Base accounts and Continuous Vesting accounts**: These will always have an entry in BigDipper block explorer, since these accounts have transactions that trigger indexing.
-2. **Delayed Vesting accounts**: These accounts present a complex scenario since BigDipper does _not_ index all delayed vesting accounts by default.
-   1. **If there have been ANY transactions involving the delayed vesting account**: Delayed vesting accounts can still stake their original vesting allowance, or the account holder may have transferred additional funds into the account. In this scenario, the account _will_ be indexed by BigDipper and the account balance can be fetched via the GraphQL API.
-   2. **If there have been NO transactions involving the delayed vesting account**: Delayed vesting accounts with no other transactions beyond the original creation are _not_ indexed by BigDipper. Balances for these accounts are fetched using the standard Cosmos SDK `/cosmos/bank/v1beta1/balances/<address>` REST API endpoint.
+This API calculates the circulating supply by **subtracting** the account balances of a defined list of wallet addresses ("circulating supply watchlist") from the total supply.
 
 ### 🥩 Total staked supply
 
@@ -64,34 +59,6 @@ Overall tokens staked, in CHEQ.
 #### Rationale
 
 Provides the overall amount staked pulled from the block explorer.
-
-### ➕ Overall number of delegators
-
-#### Endpoint
-
-[`data-api.cheqd.io/staking/delegators/total`](https://data-api.cheqd.io/staking/delegators/total)
-
-#### Response
-
-Total number of delegators across every validator on the network.
-
-#### Rationale
-
-The only way to derive this figure from the Cosmos SDK APIs is by iterating over every validator and counting the number of delegators.
-
-### 🗳 Delegator count by validator
-
-#### Endpoint
-
-[`data-api.cheqd.io/staking/delegators/<validator-address>`](https://data-api.cheqd.io/staking/delegators/cheqdvaloper1lg0vwuu888hu4arnt9egtqrm2662kcrtf2unrs)
-
-#### Response
-
-Number of delegators who delegate to a specific validator.
-
-#### Rationale
-
-There is no simple Cosmos SDK API to fetch the number of delegators for a given validator.
 
 ### 🔐 Vesting Account Balance
 
@@ -202,19 +169,34 @@ While our deployment uses Cloudflare Wrangler, the application itself could be m
 
 Wrangler CLI uses [`wrangler.toml` for configuring](https://developers.cloudflare.com/workers/wrangler/configuration/) the application. If you're using this for your own purposes, you will need to replace values for `account_id`, [Cloudflare KV](https://developers.cloudflare.com/workers/learning/how-kv-works/) bindings, `route`, etc. for the application to work correctly along with your own [Cloudflare API tokens](https://developers.cloudflare.com/api/tokens/create).
 
-For the circulating supply API endpoint, Cloudflare Workers will expect to find a Cloudflare KV namespace called `CIRCULATING_SUPPLY_WATCHLIST` with a list of addresses in the `key`. The application _only_ uses the key, so value can be anything.
+#### Environment variables
 
-Delayed vesting accounts that have never been involved in a transaction (as described above) should be prefixed with a `delayed:` prefix in the JSON file. Cloudflare allows [filtering KV pair `key`s by prefixes](https://developers.cloudflare.com/workers/runtime-apis/kv/#more-detail) when using a list operation.
+The application expects these environment variables to be set on Cloudflare:
+
+1. `TOKEN_EXPONENT`: Denominator for token (default `9` for CHEQ token).
+2. `REST_API`: REST API for a Cosmos/cheqd node to target for queries.
+3. `REST_API_PAGINATION_LIMIT`: Number of results to fetch in a single query, for queries that require iterating multiple times. (E.g., many account balance queries require this, to be able to get all delegations etc.)
+4. `GRAPHQL_API`: GraphQL API for a BigDipper explorer instance for some queries. E.g., the GraphQL API for [cheqd's block explorer](https://explorer.cheqd.io/) is `https://explorer-gql.cheqd.io/v1/graphql`.
+5. `CIRCULATING_SUPPLY_GROUPS`: Number of sub-groups the circulating supply watchlist is split into (see sample JSON file below). This is to ensure that any lookups from APIs can be spaced out.
+6. `MARKET_MONITORING_API`: Upstream API for running queries from CoinGecko API (see the [market-monitoring repository](https://github.com/cheqd/market-monitoring)).
+7. `WEBHOOK_URL`: Zapier webhook URL to send market monitoring data to. Since this is a secret, it's not set in plaintext in `wrangler.toml` but passed via GitHub Actions secrets.
+
+#### Cloudflare KV bindings
+
+Cached data for computationally-expensive queries are stored in [Cloudflare KV](https://developers.cloudflare.com/workers/learning/how-kv-works/).
+
+1. `CIRCULATING_SUPPLY_WATCHLIST`: This KV is pre-populated with a list of addresses to monitor for circulating supply. Initially, the *value* portion of this can be set to anything, since it will get replaced when [periodic cron triggers](https://developers.cloudflare.com/workers/platform/cron-triggers) run to set the account balance breakdown for this account. In case you have a lot of accounts to monitor, we recommend prefixing the *key* with a `group_N` prefix which will stagger the API lookup across multiple cron executions.
+2. `ACTIVE_VALIDATORS`: List of active validators, fetch from block explorer GraphQL API. When a cron trigger is executed, the total delegator count and update time is stored in this KV.
 
 ```jsonc
 // Sample watchlist JSON file structure
 [
   {
-    "key": "cheqd1...xxx",
-    "value": "26-May-2022" // This can be any value
+    "key": "group_1:cheqd1...xxx", // Group 1 prefix
+    "value": "26-May-2022" // This can be any value, and will be updated with account balance breakdown periodically
   },
   {
-    "key": "delayed:cheqd1...xxx", // This is a delayed account that won't be indexed by BigDipper
+    "key": "group_2:cheqd1...xxx", // Group 2 prefix
     "value": "26-May-2022"
   }
 ]

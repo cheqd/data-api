@@ -21,7 +21,7 @@ jobs:
       
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
 
@@ -54,7 +54,7 @@ jobs:
       
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
 
@@ -70,3 +70,17 @@ jobs:
             WEBHOOK_URL
         env:
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+
+  cache-purge:
+    name: "Purge branch Actions cache"
+    needs: staging-deploy
+    runs-on: ubuntu-latest
+    
+    steps:
+
+      - name: "Delete Branch Cache Action"
+        uses: snnaplab/delete-branch-cache-action@v1.0.0
+        with:
+          # Specify explicitly because the ref at the time of merging will be a branch name such as 'main', 'develop'
+          ref: refs/pull/${{ github.event.number }}/merge
+          github-token: ${{ secrets.GITHUB_TOKEN }}

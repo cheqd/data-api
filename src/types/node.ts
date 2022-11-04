@@ -32,49 +32,24 @@ export class Coin {
   }
 }
 
-export class Delegation {
-  public amount: Coin;
-  public delegatorAddress: string;
-
-  constructor(amount: Coin, delegatorAddress: string) {
-    this.delegatorAddress = delegatorAddress;
-    this.amount = amount;
-  }
-}
-
-export interface ValidatorDelegationsCountResponse {
-  delegations: {
-    pagination: {
-      total: number;
-    };
-  };
-}
-
 export interface ValidatorDetailResponse {
   delegation_responses: [
     {
       delegation: {
         delegator_address: string;
         validator_address: string;
+        shares: string;
+      };
+      balance: {
+        denom: string;
+        amount: string;
       };
     }
   ];
-}
-
-export interface ActiveValidatorsResponse {
-  validator_info: [
-    {
-      operator_address: string;
-    }
-  ];
-}
-
-export interface TotalStakedCoinsResponse {
-  staking_pool: [
-    {
-      bonded_tokens: string;
-    }
-  ];
+  pagination: {
+    next_key: string;
+    total: string;
+  };
 }
 
 export interface AccountBalanceInfos {
@@ -125,4 +100,9 @@ export interface UnbondingResponse {
     next_key: string;
     total: string;
   };
+}
+
+export interface RewardsResponse {
+  rewards: Record<string, any>[];
+  total: Coin[];
 }

@@ -4,7 +4,7 @@ export async function fetchPrices() {
   let market_monitor_api = new MarketMonitorApi(
     `${MARKET_MONITORING_API}`
   );
-  return await market_monitor_api.get_market_monitor_data();
+  return await market_monitor_api.getMarketMonitoringData();
 }
 export async function handler(request: Request): Promise<Response> {
   const payload = await fetchPrices();
