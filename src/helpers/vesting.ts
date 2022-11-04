@@ -1,6 +1,6 @@
 import { Account } from '../types/node';
 import {
-  is_continuous_vesting_account_type,
+  isContinuousVestingAccount,
   isDelayedVestingAccount,
 } from './validate';
 
@@ -44,7 +44,7 @@ export function estimatedVesting(account: Account, t?: Date) {
     t = new Date();
   }
 
-  if (is_continuous_vesting_account_type(account?.['@type'])) {
+  if (isContinuousVestingAccount(account?.['@type'])) {
     const startsAt = account.start_time;
     const endsAt = account.base_vesting_account.end_time;
 

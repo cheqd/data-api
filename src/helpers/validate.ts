@@ -7,7 +7,7 @@ export function isVestingAccount(account_type: string): boolean {
     return account_type === '/cosmos.vesting.v1beta1.ContinuousVestingAccount' || account_type === '/cosmos.vesting.v1beta1.DelayedVestingAccount';
 }
 
-export function is_continuous_vesting_account_type(account_type: string): boolean {
+export function isContinuousVestingAccount(account_type: string): boolean {
     return account_type === '/cosmos.vesting.v1beta1.ContinuousVestingAccount';
 }
 
