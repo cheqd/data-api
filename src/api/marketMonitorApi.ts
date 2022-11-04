@@ -2,7 +2,7 @@ import { MarketMonitorData } from '../types/marketMonitor';
 export class MarketMonitorApi {
   constructor(public readonly base_market_monitor_api_url: string) {}
 
-  async get_market_monitor_data(): Promise<MarketMonitorData> {
+  async getMarketMonitoringData(): Promise<MarketMonitorData> {
     const requestOptions = {
       method: 'GET',
     };
