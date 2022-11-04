@@ -7,7 +7,7 @@ import {
 import { convertToMainTokenDenom } from './currency';
 import {  } from '../types/node';
 
-export async function get_account_balance_infos_from_node_api(
+export async function fetchAccountBalances(
   address: string
 ): Promise<AccountBalanceInfos | null> {
   const node_api = new NodeApi(REST_API);
@@ -22,7 +22,7 @@ export async function get_account_balance_infos_from_node_api(
     address
   );
   const total_delegation_balance_in_ncheq =
-    await calculate_total_delegations_balance_for_delegator_in_ncheq(
+    await calculateTotalDelegationBalance(
       await node_api.getAllDelegations(
         address,
         0, // first call
@@ -58,7 +58,7 @@ export async function get_account_balance_infos_from_node_api(
   };
 }
 
-export async function calculate_total_delegations_balance_for_delegator_in_ncheq(
+export async function calculateTotalDelegationBalance(
   delegationsResp: DelegationsResponse,
   current_offset: number
 ): Promise<number> {
@@ -83,7 +83,7 @@ export async function calculate_total_delegations_balance_for_delegator_in_ncheq
     );
 
     total_delegation_balance_in_ncheq +=
-      await calculate_total_delegations_balance_for_delegator_in_ncheq(
+      await calculateTotalDelegationBalance(
         resp,
         current_offset + Number(REST_API_PAGINATION_LIMIT)
       );

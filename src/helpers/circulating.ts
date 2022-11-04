@@ -1,4 +1,4 @@
-import { get_account_balance_infos_from_node_api } from './balance';
+import { fetchAccountBalances } from './balance';
 import { convertToMainTokenDenom } from '../helpers/currency';
 import { NodeApi } from '../api/nodeApi';
 import { AccountBalanceInfos } from '../types/node';
@@ -45,7 +45,7 @@ export async function updateCirculatingSupply(groupNumber: number) {
 
 export async function updateCachedBalance(addr: string, grpN: number) {
   try {
-    const account_balance_infos = await get_account_balance_infos_from_node_api(
+    const account_balance_infos = await fetchAccountBalances(
       addr
     );
 
