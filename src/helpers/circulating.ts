@@ -59,7 +59,7 @@ export async function updateCachedBalance(addr: string, grpN: number) {
   }
 }
 
-export async function get_circulating_supply(): Promise<number> {
+export async function getCirculatingSupply(): Promise<number> {
   let gql_client = new GraphQLClient(GRAPHQL_API);
   let bd_api = new BigDipperApi(gql_client);
   let total_supply_ncheq = await bd_api.getTotalSupply();
