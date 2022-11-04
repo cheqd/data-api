@@ -1,7 +1,7 @@
 import { Account } from '../types/node';
 import {
   is_continuous_vesting_account_type,
-  is_delayed_vesting_account_type,
+  isDelayedVestingAccount,
 } from './validate';
 
 // TODO: This method computes the amount of coins vested. This is not the same as coins that user can spend.
@@ -65,7 +65,7 @@ export function estimatedVesting(account: Account, t?: Date) {
       vesting,
     };
   }
-  if (is_delayed_vesting_account_type(account?.['@type'])) {
+  if (isDelayedVestingAccount(account?.['@type'])) {
     const endsAt = account.base_vesting_account.end_time;
 
     const originalVesting = Number(
