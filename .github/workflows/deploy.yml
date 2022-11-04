@@ -73,7 +73,7 @@ jobs:
 
   cache-purge:
     name: "Purge branch Actions cache"
-    needs: staging-deploy
+    needs: production-deploy
     runs-on: ubuntu-latest
     
     steps:
