@@ -14,7 +14,7 @@ compatibility_date = "2022-05-24"
 
 # Usage model for the Worker
 # Details: https://developers.cloudflare.com/workers/platform/limits
-usage_model = "unbound"
+usage_model = "bundled"
 
 
 ###############################################################
