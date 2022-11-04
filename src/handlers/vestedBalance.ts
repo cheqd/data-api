@@ -5,7 +5,7 @@ import {
 } from '../helpers/validate';
 import { NodeApi } from '../api/nodeApi';
 import { estimatedVesting } from '../helpers/vesting';
-import { ncheq_to_cheq_fixed } from '../helpers/currency';
+import { convertToLargestDenom } from '../helpers/currency';
 
 export async function handler(request: Request): Promise<Response> {
   const address = request.params?.['address'];
@@ -25,5 +25,5 @@ export async function handler(request: Request): Promise<Response> {
 
   let vested_coins = estimatedVesting(account)?.vested;
 
-  return new Response(ncheq_to_cheq_fixed(vested_coins!!));
+  return new Response(convertToLargestDenom(vested_coins!!));
 }

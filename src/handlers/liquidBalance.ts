@@ -2,7 +2,7 @@ import { Request } from "itty-router";
 import { isDelayedVestingAccount, isVestingAccount, isValidAddress } from "../helpers/validate";
 import { NodeApi } from "../api/nodeApi";
 import { calculate_vested_coins } from "../helpers/vesting";
-import { ncheq_to_cheq_fixed } from "../helpers/currency";
+import { convertToLargestDenom } from "../helpers/currency";
 
 export async function handler(request: Request): Promise<Response> {
     const address = request.params?.['address'];
@@ -23,7 +23,7 @@ export async function handler(request: Request): Promise<Response> {
         let rewards = Number(await (await api.distributionGetRewards(address)) ?? '0');
         let delegated = Number(account?.base_vesting_account?.delegated_free?.find(d => d.denom === "ncheq")?.amount ?? '0');
 
-        return new Response(ncheq_to_cheq_fixed(balance + rewards + delegated));
+        return new Response(convertToLargestDenom(balance + rewards + delegated));
     }
 
     let vested_coins = calculate_vested_coins(account);
@@ -31,5 +31,5 @@ export async function handler(request: Request): Promise<Response> {
     let rewards = Number(await (await api.distributionGetRewards(address)) ?? '0');
     let liquid_coins = vested_coins + balance + rewards;
 
-    return new Response(ncheq_to_cheq_fixed(liquid_coins));
+    return new Response(convertToLargestDenom(liquid_coins));
 }

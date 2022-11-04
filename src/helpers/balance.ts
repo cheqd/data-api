@@ -4,7 +4,7 @@ import {
   DelegationsResponse,
   UnbondingResponse
 } from '../types/node';
-import { ncheq_to_cheq_fixed } from './currency';
+import { convertToLargestDenom } from './currency';
 import {  } from '../types/node';
 
 export async function get_account_balance_infos_from_node_api(
@@ -43,17 +43,17 @@ export async function get_account_balance_infos_from_node_api(
 
   return {
     totalBalance: Number(
-      ncheq_to_cheq_fixed(
+      convertToLargestDenom(
         available_balance_in_ncheq +
           reward_balance_in_ncheq +
           total_delegation_balance_in_ncheq +
           total_unbonding_balance_in_ncheq
       )
     ),
-    availableBalance: Number(ncheq_to_cheq_fixed(available_balance_in_ncheq)),
-    rewards: Number(ncheq_to_cheq_fixed(reward_balance_in_ncheq)),
-    delegated: Number(ncheq_to_cheq_fixed(total_delegation_balance_in_ncheq)),
-    unbonding: Number(ncheq_to_cheq_fixed(total_unbonding_balance_in_ncheq)),
+    availableBalance: Number(convertToLargestDenom(available_balance_in_ncheq)),
+    rewards: Number(convertToLargestDenom(reward_balance_in_ncheq)),
+    delegated: Number(convertToLargestDenom(total_delegation_balance_in_ncheq)),
+    unbonding: Number(convertToLargestDenom(total_unbonding_balance_in_ncheq)),
     timeUpdated: new Date().toUTCString(),
   };
 }
