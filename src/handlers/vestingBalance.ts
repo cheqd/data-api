@@ -4,7 +4,7 @@ import {
   isValidAddress,
 } from '../helpers/validate';
 import { NodeApi } from '../api/nodeApi';
-import { estimatedVesting } from '../helpers/vesting';
+import { calculateVesting } from '../helpers/vesting';
 import { convertToMainTokenDenom } from '../helpers/currency';
 
 export async function handler(request: Request): Promise<Response> {
@@ -23,7 +23,7 @@ export async function handler(request: Request): Promise<Response> {
     );
   }
 
-  let vestingCoins = estimatedVesting(account)?.vesting;
+  let vestingCoins = calculateVesting(account)?.vesting;
 
   return new Response(convertToMainTokenDenom(vestingCoins!!));
 }
