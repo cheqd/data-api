@@ -32,16 +32,6 @@ export class Coin {
   }
 }
 
-export class Delegation {
-  public amount: Coin;
-  public delegatorAddress: string;
-
-  constructor(amount: Coin, delegatorAddress: string) {
-    this.delegatorAddress = delegatorAddress;
-    this.amount = amount;
-  }
-}
-
 export interface ValidatorDetailResponse {
   delegation_responses: [
     {
