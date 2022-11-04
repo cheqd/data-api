@@ -9,16 +9,7 @@ import {
 export class NodeApi {
   constructor(public readonly base_rest_api_url: string) {}
 
-  async bank_getTotalSupply_ncheq(): Promise<number> {
-    let resp = await fetch(
-      `${this.base_rest_api_url}/cosmos/bank/v1beta1/supply/ncheq`
-    );
-    let respJson = (await resp.json()) as { amount: { amount: number } };
-
-    return respJson.amount.amount;
-  }
-
-  async auth_get_account(address: string): Promise<Account> {
+  async getAccountInfo(address: string): Promise<Account> {
     let resp = await fetch(
       `${this.base_rest_api_url}/cosmos/auth/v1beta1/accounts/${address}`
     );
@@ -27,7 +18,7 @@ export class NodeApi {
     return respJson.account;
   }
 
-  async bank_get_account_balances(address: string): Promise<Coin[]> {
+  async getAvailableBalance(address: string): Promise<Coin[]> {
     let resp = await fetch(
       `${this.base_rest_api_url}/cosmos/bank/v1beta1/balances/${address}`
     );
@@ -36,7 +27,7 @@ export class NodeApi {
     return respJson.balances;
   }
 
-  async distribution_get_total_rewards(address: string): Promise<number> {
+  async distributionGetRewards(address: string): Promise<number> {
     let resp = await fetch(
       `${this.base_rest_api_url}/cosmos/distribution/v1beta1/delegators/${address}/rewards`
     );
@@ -45,7 +36,7 @@ export class NodeApi {
     return Number(respJson?.total?.[0]?.amount ?? '0');
   }
 
-  async staking_get_all_delegations_for_delegator(
+  async getAllDelegations(
     address: string,
     offset: number,
     should_count_total: boolean,
@@ -67,7 +58,7 @@ export class NodeApi {
     return (await resp.json()) as DelegationsResponse;
   }
 
-  async staking_get_all_unbonding_delegations_for_delegator(
+  async getAllUnbondingDelegations(
     address: string,
     offset: number,
     should_count_total: boolean

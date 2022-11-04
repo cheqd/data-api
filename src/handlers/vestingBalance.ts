@@ -15,7 +15,7 @@ export async function handler(request: Request): Promise<Response> {
   }
 
   let api = new NodeApi(REST_API);
-  const account = await api.auth_get_account(address);
+  const account = await api.getAccountInfo(address);
 
   if (!is_vesting_account_type(account['@type'])) {
     throw new Error(

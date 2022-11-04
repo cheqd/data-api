@@ -3,6 +3,8 @@ import { ncheq_to_cheq_fixed } from '../helpers/currency';
 import { NodeApi } from '../api/nodeApi';
 import { AccountBalanceInfos } from '../types/node';
 import { extract_group_number_and_address } from './kv';
+import { BigDipperApi } from '../api/bigDipperApi';
+import { GraphQLClient } from '../helpers/graphql';
 
 export async function updateCirculatingSupply(groupNumber: number) {
   try {
@@ -57,16 +59,11 @@ export async function updateCachedBalance(addr: string, grpN: number) {
   }
 }
 
-export async function getTotalSupply(): Promise<number> {
-  let node_api = new NodeApi(REST_API);
-  let total_supply_ncheq = await node_api.bank_getTotalSupply_ncheq();
-  const total_supply = Number(ncheq_to_cheq_fixed(total_supply_ncheq));
-
-  return total_supply;
-}
-
 export async function get_circulating_supply(): Promise<number> {
-  const total_supply = await getTotalSupply();
+  let gql_client = new GraphQLClient(GRAPHQL_API);
+  let bd_api = new BigDipperApi(gql_client);
+  let total_supply_ncheq = await bd_api.getTotalSupply();
+  const total_supply = Number(ncheq_to_cheq_fixed(total_supply_ncheq));
 
   try {
     const cached = await CIRCULATING_SUPPLY_WATCHLIST.list();

@@ -11,19 +11,19 @@ export async function get_account_balance_infos_from_node_api(
   address: string
 ): Promise<AccountBalanceInfos | null> {
   const node_api = new NodeApi(REST_API);
-  const available_balance = await node_api.bank_get_account_balances(address);
+  const available_balance = await node_api.getAvailableBalance(address);
 
   let available_balance_in_ncheq = 0;
   if (available_balance.length > 0) {
     available_balance_in_ncheq = Number(available_balance[0]?.amount);
   }
 
-  const reward_balance_in_ncheq = await node_api.distribution_get_total_rewards(
+  const reward_balance_in_ncheq = await node_api.distributionGetRewards(
     address
   );
   const total_delegation_balance_in_ncheq =
     await calculate_total_delegations_balance_for_delegator_in_ncheq(
-      await node_api.staking_get_all_delegations_for_delegator(
+      await node_api.getAllDelegations(
         address,
         0, // first call
         true
@@ -33,7 +33,7 @@ export async function get_account_balance_infos_from_node_api(
 
   const total_unbonding_balance_in_ncheq =
     await calculate_total_unbonding_delegations_balance_for_delegator_in_ncheq(
-      await node_api.staking_get_all_unbonding_delegations_for_delegator(
+      await node_api.getAllUnbondingDelegations(
         address,
         0, // first call
         true
@@ -76,7 +76,7 @@ export async function calculate_total_delegations_balance_for_delegator_in_ncheq
     const delegator_address =
       delegationsResp.delegation_responses[0].delegation.delegator_address;
 
-    const resp = await node_api.staking_get_all_delegations_for_delegator(
+    const resp = await node_api.getAllDelegations(
       delegator_address,
       current_offset, // our current offset will be updated by recursive call below
       true // we count total again , since it's implemented recursively
@@ -116,7 +116,7 @@ export async function calculate_total_unbonding_delegations_balance_for_delegato
       unbondingResp.unbonding_responses[0].delegator_address;
 
     const resp =
-      await node_api.staking_get_all_unbonding_delegations_for_delegator(
+      await node_api.getAllUnbondingDelegations(
         delegator_address,
         current_offset,
         true
