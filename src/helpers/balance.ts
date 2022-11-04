@@ -32,7 +32,7 @@ export async function fetchAccountBalances(
     );
 
   const total_unbonding_balance_in_ncheq =
-    await calculate_total_unbonding_delegations_balance_for_delegator_in_ncheq(
+    await calculateTotalUnbondingBalance(
       await node_api.getAllUnbondingDelegations(
         address,
         0, // first call
@@ -92,7 +92,7 @@ export async function calculateTotalDelegationBalance(
   return total_delegation_balance_in_ncheq;
 }
 
-export async function calculate_total_unbonding_delegations_balance_for_delegator_in_ncheq(
+export async function calculateTotalUnbondingBalance(
   unbondingResp: UnbondingResponse,
   current_offset: number
 ): Promise<number> {
@@ -123,7 +123,7 @@ export async function calculate_total_unbonding_delegations_balance_for_delegato
       );
 
     total_unbonding_balance_in_ncheq +=
-      await calculate_total_unbonding_delegations_balance_for_delegator_in_ncheq(
+      await calculateTotalUnbondingBalance(
         resp,
         current_offset + Number(REST_API_PAGINATION_LIMIT)
       );
