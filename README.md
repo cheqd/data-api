@@ -6,7 +6,7 @@
 
 ## ℹ️ Overview
 
-Cosmos SDK offers [APIs for built-in modules using gRPC, REST, and Tendermint RPC](https://docs.cosmos.network/master/core/grpc_rest.html). This project aims to provide simple REST APIs for data that default Cosmos SDK APIs can't provide.
+Cosmos SDK offers [APIs for built-in modules using gRPC, REST, and Tendermint RPC](https://docs.cosmos.network/main/core/grpc_rest.html). This project aims to provide simple REST APIs for data that default Cosmos SDK APIs can't provide.
 
 This collection of custom APIs can be deployed as a [Cloudflare Worker](https://workers.cloudflare.com/) or compatible serverless platforms.
 
@@ -59,20 +59,6 @@ Overall tokens staked, in CHEQ.
 #### Rationale
 
 Provides the overall amount staked pulled from the block explorer.
-
-### 🗳 Delegator count by validator
-
-#### Endpoint
-
-[`data-api.cheqd.io/staking/delegators/<validator-address>`](https://data-api.cheqd.io/staking/delegators/cheqdvaloper1lg0vwuu888hu4arnt9egtqrm2662kcrtf2unrs)
-
-#### Response
-
-Number of delegators who delegate to a specific validator.
-
-#### Rationale
-
-Running a query to fetch list of delegators per validator can be a computationally-expensive query. This API periodically caches the response.
 
 ### 🔐 Vesting Account Balance
 
@@ -190,7 +176,7 @@ The application expects these environment variables to be set on Cloudflare:
 1. `TOKEN_EXPONENT`: Denominator for token (default `9` for CHEQ token).
 2. `REST_API`: REST API for a Cosmos/cheqd node to target for queries.
 3. `REST_API_PAGINATION_LIMIT`: Number of results to fetch in a single query, for queries that require iterating multiple times. (E.g., many account balance queries require this, to be able to get all delegations etc.)
-4. `GRAPHQL_API`: GraphQL API for a BigDipper explorer instance for some queries. E.g., the GraphQL API for [cheqd's block explorer](https://explorer.cheqd.io/) is [`https://explorer-gql.cheqd.io/v1/graphql`](https://explorer-gql.cheqd.io/v1/graphql).
+4. `GRAPHQL_API`: GraphQL API for a BigDipper explorer instance for some queries. E.g., the GraphQL API for [cheqd's block explorer](https://explorer.cheqd.io/) is `https://explorer-gql.cheqd.io/v1/graphql`.
 5. `CIRCULATING_SUPPLY_GROUPS`: Number of sub-groups the circulating supply watchlist is split into (see sample JSON file below). This is to ensure that any lookups from APIs can be spaced out.
 6. `MARKET_MONITORING_API`: Upstream API for running queries from CoinGecko API (see the [market-monitoring repository](https://github.com/cheqd/market-monitoring)).
 7. `WEBHOOK_URL`: Zapier webhook URL to send market monitoring data to. Since this is a secret, it's not set in plaintext in `wrangler.toml` but passed via GitHub Actions secrets.
