@@ -6,12 +6,12 @@ concurrency:
 
 jobs:
   
-  # call-lint:
-  #   name: "Lint"
-  #   uses: ./.github/workflows/lint.yml
+  call-lint:
+    name: "Lint"
+    uses: ./.github/workflows/lint.yml
 
   call-deploy:
     name: "Deploy"
-    # needs: call-lint
+    needs: call-lint
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
