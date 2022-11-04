@@ -3,8 +3,7 @@ import {
   Coin,
   DelegationsResponse,
   UnbondingResponse,
-  RewardsResponse,
-  ValidatorDetailResponse,
+  RewardsResponse
 } from '../types/node';
 
 export class NodeApi {
@@ -46,44 +45,6 @@ export class NodeApi {
     return Number(respJson?.total?.[0]?.amount ?? '0');
   }
 
-  async staking_get_delegators_count_per_validator(
-    address: string,
-    offset: number,
-    should_count_total: boolean,
-    limit?: number
-  ): Promise<number | null> {
-    try {
-      console.log('address', address, 'limit', limit, 'offset', offset);
-
-      // order of query params: count_total -> offset -> limit
-      const pagination_count_total = should_count_total
-        ? 'pagination.count_total=true'
-        : 'pagination.count_total=false';
-      const pagination_limit = `pagination.limit=${
-        limit ? limit : REST_API_PAGINATION_LIMIT
-      }`;
-      const pagination_offset = `pagination.offset=${offset}`;
-      console.log(
-        `Before request: ${this.base_rest_api_url}/cosmos/staking/v1beta1/validators/${address}/delegations?${pagination_count_total}&${pagination_limit}&${pagination_offset}`
-      );
-      // NOTE: be cautious of newlines or spaces. Might make the request URL malformed
-      let resp = await fetch(
-        `${this.base_rest_api_url}/cosmos/staking/v1beta1/validators/${address}/delegations?${pagination_count_total}&${pagination_limit}&${pagination_offset}`
-      );
-      // https://api.cheqd.net/cosmos/staking/v1beta1/validators/cheqdvaloper1nxlprsp26qyjarp8c6mjf33rxvh7mll7uy5zhk/delegations?pagination.count_total=true&pagination.limit=1&pagination.offset=0
-
-      console.log(new Map(resp.headers));
-      const respBody = (await resp.json()) as { pagination: { total: string } };
-
-      console.log('Resp body', respBody);
-
-      return Number(respBody.pagination.total);
-    } catch (e) {
-      console.log('Error', e);
-      return null;
-    }
-  }
-
   async staking_get_all_delegations_for_delegator(
     address: string,
     offset: number,
@@ -102,8 +63,6 @@ export class NodeApi {
     const resp = await fetch(
       `${this.base_rest_api_url}/cosmos/staking/v1beta1/delegations/${address}?${pagination_count_total}&${pagination_limit}&${pagination_offset}`
     );
-
-    console.log(`Response status for delegator count ${resp.status}`);
 
     return (await resp.json()) as DelegationsResponse;
   }
@@ -125,13 +84,5 @@ export class NodeApi {
     );
 
     return (await resp.json()) as UnbondingResponse;
-  }
-
-  async get_latest_block_height(): Promise<number> {
-    const resp = await fetch(`${this.base_rest_api_url}/blocks/latest`);
-    let respJson = (await resp.json()) as {
-      block: { header: { height: number } };
-    };
-    return Number(respJson.block.header.height);
   }
 }
