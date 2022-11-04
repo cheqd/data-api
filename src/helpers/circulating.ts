@@ -57,16 +57,16 @@ export async function updateCachedBalance(addr: string, grpN: number) {
   }
 }
 
-export async function get_total_supply(): Promise<number> {
+export async function getTotalSupply(): Promise<number> {
   let node_api = new NodeApi(REST_API);
-  let total_supply_ncheq = await node_api.bank_get_total_supply_ncheq();
+  let total_supply_ncheq = await node_api.bank_getTotalSupply_ncheq();
   const total_supply = Number(ncheq_to_cheq_fixed(total_supply_ncheq));
 
   return total_supply;
 }
 
 export async function get_circulating_supply(): Promise<number> {
-  const total_supply = await get_total_supply();
+  const total_supply = await getTotalSupply();
 
   try {
     const cached = await CIRCULATING_SUPPLY_WATCHLIST.list();

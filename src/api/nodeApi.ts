@@ -9,7 +9,7 @@ import {
 export class NodeApi {
   constructor(public readonly base_rest_api_url: string) {}
 
-  async bank_get_total_supply_ncheq(): Promise<number> {
+  async bank_getTotalSupply_ncheq(): Promise<number> {
     let resp = await fetch(
       `${this.base_rest_api_url}/cosmos/bank/v1beta1/supply/ncheq`
     );
