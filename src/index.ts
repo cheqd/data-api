@@ -11,7 +11,7 @@ import { handler as allArbitrageOpportunitiesHandler } from './handlers/allArbit
 import { handler as arbitrageOpportunitiesHandler } from './handlers/arbitrageOpportunities';
 import { webhookTriggers } from './handlers/webhookTriggers';
 
-addEventListener('scheduled', (event: any) => {
+addEventListener('scheduled', (event: ScheduledEvent) => {
   event.waitUntil(webhookTriggers(event));
 });
 
