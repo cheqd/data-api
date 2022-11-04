@@ -1,7 +1,7 @@
 import { Request } from "itty-router";
 import { isDelayedVestingAccount, isVestingAccount, isValidAddress } from "../helpers/validate";
 import { NodeApi } from "../api/nodeApi";
-import { calculate_vested_coins } from "../helpers/vesting";
+import { calculateVestedBalance } from "../helpers/vesting";
 import { convertToMainTokenDenom } from "../helpers/currency";
 
 export async function handler(request: Request): Promise<Response> {
@@ -26,7 +26,7 @@ export async function handler(request: Request): Promise<Response> {
         return new Response(convertToMainTokenDenom(balance + rewards + delegated));
     }
 
-    let vested_coins = calculate_vested_coins(account);
+    let vested_coins = calculateVestedBalance(account);
     let balance = Number(await (await api.getAvailableBalance(address)).find(b => b.denom === "ncheq")?.amount ?? '0')
     let rewards = Number(await (await api.distributionGetRewards(address)) ?? '0');
     let liquid_coins = vested_coins + balance + rewards;

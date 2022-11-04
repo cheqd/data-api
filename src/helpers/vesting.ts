@@ -8,7 +8,7 @@ import {
 //  To calculate spendable tokens we need to take into account initial balance + sent and received tokens as well.
 //  Here is the explanation of how to do it properly:
 //  https://docs.cosmos.network/master/modules/auth/05_vesting.html#transferring-sending
-export function calculate_vested_coins(account: Account): number {
+export function calculateVestedBalance(account: Account): number {
   if (
     account?.['@type'] === '/cosmos.vesting.v1beta1.DelayedVestingAccount' &&
     Date.now() < account?.base_vesting_account?.end_time * 1000
@@ -34,7 +34,7 @@ export function calculate_vested_coins(account: Account): number {
 export function calculate_vesting_coins(account: Account): number {
   return (
     Number(account.base_vesting_account.original_vesting[0].amount) -
-    calculate_vested_coins(account)
+    calculateVestedBalance(account)
   );
 }
 
