@@ -4,7 +4,7 @@ import { getCirculatingSupply } from '../helpers/circulating';
 export async function handler(request: Request): Promise<Response> {
   try {
     let circulating_supply = await getCirculatingSupply();
-    return new Response(Number(circulating_supply));
+    return new Response(circulating_supply);
   }
   catch (err: any) {
     console.log(err);
