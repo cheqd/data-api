@@ -1,5 +1,5 @@
 import { Request } from "itty-router";
-import { is_delayed_vesting_account_type, is_vesting_account_type, isValidAddress } from "../helpers/validate";
+import { is_delayed_vesting_account_type, isVestingAccount, isValidAddress } from "../helpers/validate";
 import { NodeApi } from "../api/nodeApi";
 import { calculate_vested_coins } from "../helpers/vesting";
 import { ncheq_to_cheq_fixed } from "../helpers/currency";
@@ -14,7 +14,7 @@ export async function handler(request: Request): Promise<Response> {
     let api = new NodeApi(REST_API);
     const account = await api.getAccountInfo(address)
 
-    if (!is_vesting_account_type(account["@type"])) {
+    if (!isVestingAccount(account["@type"])) {
         throw new Error(`Only vesting accounts are supported. Accounts type '${account["@type"]}'.`)
     }
 
