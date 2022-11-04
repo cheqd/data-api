@@ -42,14 +42,6 @@ export class Delegation {
   }
 }
 
-export interface ValidatorDelegationsCountResponse {
-  delegations: {
-    pagination: {
-      total: number;
-    };
-  };
-}
-
 export interface ValidatorDetailResponse {
   delegation_responses: [
     {
@@ -121,6 +113,6 @@ export interface UnbondingResponse {
 }
 
 export interface RewardsResponse {
-    rewards: Record<string, any>[];
-    total: Coin[];
+  rewards: Record<string, any>[];
+  total: Coin[];
 }
