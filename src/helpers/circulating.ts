@@ -1,8 +1,7 @@
 import { fetchAccountBalances } from './balance';
 import { convertToMainTokenDenom } from '../helpers/currency';
-import { NodeApi } from '../api/nodeApi';
 import { AccountBalanceInfos } from '../types/node';
-import { extract_group_number_and_address } from './kv';
+import { extractPrefixAndKey } from './kv';
 import { BigDipperApi } from '../api/bigDipperApi';
 import { GraphQLClient } from '../helpers/graphql';
 
@@ -17,7 +16,7 @@ export async function updateCirculatingSupply(groupNumber: number) {
     );
 
     for (const key of cached.keys) {
-      const parts = extract_group_number_and_address(key.name);
+      const parts = extractPrefixAndKey(key.name);
       let addr = parts.address;
       let grpN = parts.groupNumber;
 
