@@ -5,9 +5,9 @@ export async function webhookTriggers(event: ScheduledEvent) {
   console.log('Triggering webhook...');
   await sendPriceDiscrepancies();
 
-/*   await updateCirculatingSupply(
+  await updateCirculatingSupply(
     getRandomGroup(Number(CIRCULATING_SUPPLY_GROUPS))
-  ); */
+  );
 }
 
 export async function sendPriceDiscrepancies() {
