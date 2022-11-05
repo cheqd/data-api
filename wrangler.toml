@@ -57,7 +57,7 @@ MARKET_MONITORING_API = "https://market-monitoring.cheqd.net"
 # Run `echo <VALUE> | wrangler secret put <NAME>` for each of these
 
 [triggers]
-crons = [ "0 */2 * * *" ]
+crons = [ "0 * * * *" ]
 
 ###############################################################
 ###             SECTION 3: Local Development                ###
