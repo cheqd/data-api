@@ -38,7 +38,8 @@ export async function sendPriceDiscrepancies() {
 }
 
 function getHour(): number {
-  let hour = Number(new Date().getHours());
+  // This function only works when CIRCULATING_SUPPLY_GROUPS is set to 24
+  let hour = Number( (new Date().getHours()) + 1 ); // getHours() returns 0-23
   return hour;
 }
 
