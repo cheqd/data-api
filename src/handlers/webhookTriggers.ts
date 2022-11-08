@@ -6,7 +6,7 @@ export async function webhookTriggers(event: ScheduledEvent) {
   await sendPriceDiscrepancies();
 
   await updateCirculatingSupply(
-    getRandomGroup(Number(CIRCULATING_SUPPLY_GROUPS))
+    getHour();
   );
 }
 
@@ -37,6 +37,11 @@ export async function sendPriceDiscrepancies() {
   } catch (e) {
     console.log('Error at: ', 'sendPriceDiscrepancies');
   }
+}
+
+function getHour(): number {
+  let hour = Number(new Date().getHours());
+  return hour;
 }
 
 function getRandomGroup(group: number): number {
