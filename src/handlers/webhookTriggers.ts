@@ -5,9 +5,7 @@ export async function webhookTriggers(event: ScheduledEvent) {
   console.log('Triggering webhook...');
   await sendPriceDiscrepancies();
 
-  await updateCirculatingSupply(
-    getHour();
-  );
+  await updateCirculatingSupply(getHour());
 }
 
 export async function sendPriceDiscrepancies() {
