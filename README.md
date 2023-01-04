@@ -2,7 +2,7 @@
 
 [![GitHub license](https://img.shields.io/github/license/cheqd/data-api?color=blue&style=flat-square)](https://github.com/cheqd/data-api/blob/main/LICENSE) [![GitHub contributors](https://img.shields.io/github/contributors/cheqd/data-api?label=contributors%20%E2%9D%A4%EF%B8%8F&style=flat-square)](https://github.com/cheqd/data-api/graphs/contributors)
 
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/cheqd/data-api/Workflow%20Dispatch?label=workflows&style=flat-square)](https://github.com/cheqd/data-api/actions/workflows/dispatch.yml) ![GitHub repo size](https://img.shields.io/github/repo-size/cheqd/data-api?style=flat-square)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/cheqd/data-api/dispatch.yml?label=workflows&style=flat-square)](https://github.com/cheqd/.github/actions/workflows/dispatch.yml) ![GitHub repo size](https://img.shields.io/github/repo-size/cheqd/data-api?style=flat-square)
 
 ## ℹ️ Overview
 
