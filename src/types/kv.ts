@@ -1,4 +1,4 @@
 export interface ActiveValidatorsKV {
-  totalDelegatorsCount?: string;
-  updatedAt?: string;
+	totalDelegatorsCount?: string;
+	updatedAt?: string;
 }

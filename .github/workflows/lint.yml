@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Run Markdown link check
         uses: gaurav-nelson/github-action-markdown-link-check@v1
@@ -26,12 +26,12 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0 # Required to fetch version
     
     - name: Run Super Linter
-      uses: github/super-linter/slim@v4
+      uses: github/super-linter/slim@v5
       env:
         IGNORE_GITIGNORED_FILES: true
         DEFAULT_BRANCH: main
