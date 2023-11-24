@@ -11,31 +11,31 @@ import { handler as arbitrageOpportunitiesHandler } from './handlers/arbitrageOp
 import { webhookTriggers } from './handlers/webhookTriggers';
 
 addEventListener('scheduled', (event: ScheduledEvent) => {
-  event.waitUntil(webhookTriggers(event));
+	event.waitUntil(webhookTriggers(event));
 });
 
 addEventListener('fetch', (event: FetchEvent) => {
-  const router = Router<Request, IHTTPMethods>();
-  registerRoutes(router);
-  event.respondWith(router.handle(event.request).catch(handleError));
+	const router = Router<Request, IHTTPMethods>();
+	registerRoutes(router);
+	event.respondWith(router.handle(event.request).catch(handleError));
 });
 
 function registerRoutes(router: Router) {
-  router.get('/', totalSupplyHandler);
-  router.get('/arbitrage', arbitrageOpportunitiesHandler);
-  router.get('/arbitrage/all', allArbitrageOpportunitiesHandler);
-  router.get('/balances/liquid/:address', liquidBalanceHandler);
-  router.get('/balances/total/:address', totalBalanceHandler);
-  router.get('/balances/vested/:address', vestedBalanceHandler);
-  router.get('/balances/vesting/:address', vestingBalanceHandler);
-  router.get('/supply/circulating', circulatingSupplyHandler);
-  router.get('/supply/staked', totalStakedCoinsHandler);
-  router.get('/supply/total', totalSupplyHandler);
+	router.get('/', totalSupplyHandler);
+	router.get('/arbitrage', arbitrageOpportunitiesHandler);
+	router.get('/arbitrage/all', allArbitrageOpportunitiesHandler);
+	router.get('/balances/liquid/:address', liquidBalanceHandler);
+	router.get('/balances/total/:address', totalBalanceHandler);
+	router.get('/balances/vested/:address', vestedBalanceHandler);
+	router.get('/balances/vesting/:address', vestingBalanceHandler);
+	router.get('/supply/circulating', circulatingSupplyHandler);
+	router.get('/supply/staked', totalStakedCoinsHandler);
+	router.get('/supply/total', totalSupplyHandler);
 
-  // 404 for all other requests
-  router.all('*', () => new Response('Not Found.', { status: 404 }));
+	// 404 for all other requests
+	router.all('*', () => new Response('Not Found.', { status: 404 }));
 }
 
 function handleError(error: Error): Response {
-  return new Response(error.message || 'Server Error', { status: 500 });
+	return new Response(error.message || 'Server Error', { status: 500 });
 }
