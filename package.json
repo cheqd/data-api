@@ -15,7 +15,7 @@
     "format": "prettier --write 'src/**/*.{js,ts,cjs,mjs}' 'tests/**/*.{js,ts,cjs,mjs}'"
   },
   "dependencies": {
-    "itty-router": "^3.0.12"
+    "itty-router": "^4.0.23"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20231121.0",
