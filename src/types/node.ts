@@ -1,108 +1,108 @@
 export type Account = {
-  '@type': string;
-  start_time: number;
-  base_vesting_account: {
-    base_account: BaseAccount;
-    original_vesting: Coin[];
-    delegated_free?: Coin[];
-    delegated_vesting?: Coin[];
-    end_time: number;
-  };
+	'@type': string;
+	start_time: number;
+	base_vesting_account: {
+		base_account: BaseAccount;
+		original_vesting: Coin[];
+		delegated_free?: Coin[];
+		delegated_vesting?: Coin[];
+		end_time: number;
+	};
 };
 
 export type BaseAccount = {
-  address: string;
-  pub_key: PublicKey;
-  account_number: string;
-  sequence: string;
+	address: string;
+	pub_key: PublicKey;
+	account_number: string;
+	sequence: string;
 };
 
 export type PublicKey = {
-  '@type': string;
-  key: string;
+	'@type': string;
+	key: string;
 };
 
 export class Coin {
-  public denom: string;
-  public amount: string;
+	public denom: string;
+	public amount: string;
 
-  constructor(denom: string, amount: string) {
-    this.denom = denom;
-    this.amount = amount;
-  }
+	constructor(denom: string, amount: string) {
+		this.denom = denom;
+		this.amount = amount;
+	}
 }
 
 export interface ValidatorDetailResponse {
-  delegation_responses: [
-    {
-      delegation: {
-        delegator_address: string;
-        validator_address: string;
-        shares: string;
-      };
-      balance: {
-        denom: string;
-        amount: string;
-      };
-    }
-  ];
-  pagination: {
-    next_key: string;
-    total: string;
-  };
+	delegation_responses: [
+		{
+			delegation: {
+				delegator_address: string;
+				validator_address: string;
+				shares: string;
+			};
+			balance: {
+				denom: string;
+				amount: string;
+			};
+		},
+	];
+	pagination: {
+		next_key: string;
+		total: string;
+	};
 }
 
 export interface AccountBalanceInfos {
-  totalBalance: number;
-  availableBalance: number;
-  rewards: number;
-  delegated: number;
-  unbonding: number;
-  timeUpdated: string;
+	totalBalance: number;
+	availableBalance: number;
+	rewards: number;
+	delegated: number;
+	unbonding: number;
+	timeUpdated: string;
 }
 
 export interface DelegationsResponse {
-  delegation_responses: [
-    {
-      delegation: {
-        delegator_address: string;
-        validator_address: string;
-        shares: string;
-      };
-      balance: {
-        denom: string;
-        amount: string;
-      };
-    }
-  ];
-  pagination: {
-    next_key: string;
-    total: string;
-  };
+	delegation_responses: [
+		{
+			delegation: {
+				delegator_address: string;
+				validator_address: string;
+				shares: string;
+			};
+			balance: {
+				denom: string;
+				amount: string;
+			};
+		},
+	];
+	pagination: {
+		next_key: string;
+		total: string;
+	};
 }
 
 export interface UnbondingResponse {
-  unbonding_responses: [
-    {
-      delegator_address: string;
-      validator_address: string;
-      entries: [
-        {
-          creation_height: string;
-          completion_time: string;
-          initial_balance: string;
-          balance: string;
-        }
-      ];
-    }
-  ];
-  pagination: {
-    next_key: string;
-    total: string;
-  };
+	unbonding_responses: [
+		{
+			delegator_address: string;
+			validator_address: string;
+			entries: [
+				{
+					creation_height: string;
+					completion_time: string;
+					initial_balance: string;
+					balance: string;
+				},
+			];
+		},
+	];
+	pagination: {
+		next_key: string;
+		total: string;
+	};
 }
 
 export interface RewardsResponse {
-  rewards: Record<string, any>[];
-  total: Coin[];
+	rewards: Record<string, any>[];
+	total: Coin[];
 }

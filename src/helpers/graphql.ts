@@ -1,24 +1,23 @@
 export class GraphQLClient {
-    constructor(public readonly base_url: string) {
-    }
+	constructor(public readonly base_url: string) {}
 
-    async query<T>(query: string, variables: Object = {}): Promise<T> {
-        let req = {
-            query,
-            variables,
-        }
+	async query<T>(query: string, variables: Object = {}): Promise<T> {
+		let req = {
+			query,
+			variables,
+		};
 
-        let resp = await fetch(this.base_url, {
-            method: "POST",
-            body: JSON.stringify(req)
-        })
+		let resp = await fetch(this.base_url, {
+			method: 'POST',
+			body: JSON.stringify(req),
+		});
 
-        let json: { errors: any } = await resp.json()
+		let json: { errors: any } = await resp.json();
 
-        if (json.errors) {
-            throw new Error(`Query failed: ${JSON.stringify(json.errors)}`)
-        }
+		if (json.errors) {
+			throw new Error(`Query failed: ${JSON.stringify(json.errors)}`);
+		}
 
-        return json as T;
-    }
+		return json as T;
+	}
 }
