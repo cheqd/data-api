@@ -23,7 +23,7 @@ export async function handler(request: Request): Promise<Response> {
 			account?.base_vesting_account?.base_account?.sequence !== '0'
 				? Number(
 						(await (await api.getAvailableBalance(address)).find((b) => b.denom === 'ncheq')?.amount) ?? '0'
-				  )
+					)
 				: 0;
 		let rewards = Number((await await api.distributionGetRewards(address)) ?? '0');
 		let delegated = Number(
