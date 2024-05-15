@@ -7,9 +7,12 @@ export async function fetchAccountBalances(address: string): Promise<AccountBala
 	const node_api = new NodeApi(REST_API);
 	const available_balance = await node_api.getAvailableBalance(address);
 
+	// Filter the balances to find the one with denom 'ncheq'
+	const ncheqBalance = available_balance.find(balance => balance.denom === 'ncheq');
+
 	let available_balance_in_ncheq = 0;
 	if (available_balance.length > 0) {
-		available_balance_in_ncheq = Number(available_balance[0]?.amount);
+		available_balance_in_ncheq = ncheqBalance ? Number(ncheqBalance.amount) : 0;;
 	}
 
 	const reward_balance_in_ncheq = await node_api.distributionGetRewards(address);
