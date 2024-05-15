@@ -13,7 +13,7 @@
   "scripts": {
     "start": "npx wrangler dev",
     "publish": "npx wrangler publish",
-    "format": "prettier --write 'src/**/*.{js,ts,cjs,mjs}' 'tests/**/*.{js,ts,cjs,mjs}'"
+    "format": "prettier --write '**/*.{js,ts,cjs,mjs}'"
   },
   "dependencies": {
     "itty-router": "^3.0.12"
