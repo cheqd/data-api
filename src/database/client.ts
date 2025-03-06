@@ -8,11 +8,11 @@ const DEFAULT_POSTGRES_TIMEOUT = 30000;
 export async function dbInit(env?: any): Promise<{ db: any; client: Client }> {
 	try {
 		// Create a single PostgreSQL client
-		const connectionString = env?.HYPERDRIVE?.connectionString || HYPERDRIVE_CONNECTION_STRING;
+		const connectionString = env.HYPERDRIVE.connectionString;
 		
 		const client = new Client({
 			connectionString,
-			application_name: `DATA_API_${ENVIRONMENT}`,
+			application_name: `DATA_API_${env.ENVIRONMENT}`,
 			query_timeout: DEFAULT_POSTGRES_TIMEOUT,
 			statement_timeout: DEFAULT_POSTGRES_TIMEOUT,
 			connectionTimeoutMillis: DEFAULT_POSTGRES_TIMEOUT / 5, // 6s

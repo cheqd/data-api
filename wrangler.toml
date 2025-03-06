@@ -55,7 +55,6 @@ CIRCULATING_SUPPLY_GROUPS = "24"
 # Market monitoring API endpoint
 MARKET_MONITORING_API = "https://market-monitoring.cheqd.net"
 ENVIRONMENT = "production"
-HYPERDRIVE_CONNECTION_STRING = "postgresql://username:password@hostname:port/database"
 
 # The necessary secrets are:
 # - WEBHOOK_URL
@@ -156,4 +155,4 @@ id = "eae4fd023cf2476d8ac00a8fd2eca217"
 # Add this to the top-level configuration (production)
 [[hyperdrive]]
 binding = "HYPERDRIVE"
-id = "your-production-hyperdrive-id"
+id = "prod-id"
