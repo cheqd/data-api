@@ -63,6 +63,11 @@ ENVIRONMENT = "production"
 [triggers]
 crons = [ "0 * * * *" ]
 
+# Hyperdrive configuration
+[[hyperdrive]]
+binding = "HYPERDRIVE"
+id = "prod-id"
+
 # Placement configuration for the Worker
 [placement]
 mode = "smart"
@@ -151,8 +156,3 @@ id = "eae4fd023cf2476d8ac00a8fd2eca217"
 
 # Add polyfills for node builtin modules and globals?
 # node_compat = "false"
-
-# Add this to the top-level configuration (production)
-[[hyperdrive]]
-binding = "HYPERDRIVE"
-id = "prod-id"
