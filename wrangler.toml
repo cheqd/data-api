@@ -66,7 +66,7 @@ crons = [ "0 * * * *" ]
 # Hyperdrive configuration
 [[hyperdrive]]
 binding = "HYPERDRIVE"
-id = "prod-id"
+id = "e0f74fa3cda64fbaa011da21b7c4c6c7"
 
 # Placement configuration for the Worker
 [placement]
