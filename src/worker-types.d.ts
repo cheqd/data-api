@@ -5,11 +5,15 @@ declare global {
 		REST_API: string;
 		REST_API_PAGINATION_LIMIT: string;
 		GRAPHQL_API: string;
+		TESTNET_GRAPHQL_API: string;
 		CIRCULATING_SUPPLY_GROUPS: string;
 		MARKET_MONITORING_API: string;
+		ENVIRONMENT: string;
+		BIGDIPPER_URL: string;
 		WEBHOOK_URL: string;
 
 		// Bindings
+		HYPERDRIVE: Hyperdrive;
 		CIRCULATING_SUPPLY_WATCHLIST: KVNamespace;
 	}
 

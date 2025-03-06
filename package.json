@@ -13,16 +13,22 @@
   "scripts": {
     "start": "npx wrangler dev",
     "publish": "npx wrangler publish",
-    "format": "prettier --write '**/*.{js,ts,cjs,mjs}'"
+    "format": "prettier --write '**/*.{js,ts,cjs,mjs}'",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit push"
   },
   "dependencies": {
-    "itty-router": "^3.0.12"
+    "drizzle-orm": "^0.40.0",
+    "itty-router": "^3.0.12",
+    "pg": "^8.13.3"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250303.0",
     "@types/node": "^20.17.23",
+    "@types/pg": "^8.11.11",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
+    "drizzle-kit": "^0.30.5",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-typescript": "^3.0.0",

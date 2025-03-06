@@ -1,11 +1,25 @@
 import { updateCirculatingSupply } from '../helpers/circulating';
 import { filterArbitrageOpportunities } from './arbitrageOpportunities';
+import { Network } from '../types/network';
+import { syncNetworkData } from '../helpers/identity';
 
 export async function webhookTriggers(env: Env) {
 	console.log('Triggering webhook...');
 	await sendPriceDiscrepancies(env);
 
 	await updateCirculatingSupply(getHour(), env);
+	await syncIdentityData(env);
+}
+
+export async function syncIdentityData(env: Env) {
+	try {
+		// Sync mainnet data
+		await syncNetworkData(Network.MAINNET, env);
+		// Sync testnet data
+		await syncNetworkData(Network.TESTNET, env);
+	} catch (error) {
+		console.error('Error syncing identity data:', (error as Error).message);
+	}
 }
 
 export async function sendPriceDiscrepancies(env: Env) {
@@ -27,7 +41,7 @@ export async function sendPriceDiscrepancies(env: Env) {
 					},
 				};
 
-				await fetch(WEBHOOK_URL, init);
+				await fetch(env.WEBHOOK_URL, init);
 			} catch (err: any) {
 				console.log(err);
 			}

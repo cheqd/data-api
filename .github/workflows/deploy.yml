@@ -26,11 +26,11 @@ jobs:
           cache-dependency-path: '**/package-lock.json'
 
       - name: Publish to Cloudflare
-        uses: cloudflare/wrangler-action@v3.5.0
+        uses: cloudflare/wrangler-action@v3
         with:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          wranglerVersion: '3.17.1'
+          wranglerVersion: '3.112.0'
           preCommands: npm ci
           command: publish --env staging
           secrets: |
@@ -59,11 +59,11 @@ jobs:
           cache-dependency-path: '**/package-lock.json'
 
       - name: Publish to Cloudflare
-        uses: cloudflare/wrangler-action@v3.5.0
+        uses: cloudflare/wrangler-action@v3
         with:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          wranglerVersion: '3.17.1'
+          wranglerVersion: '3.112.0'
           preCommands: npm ci
           command: publish
           secrets: |
