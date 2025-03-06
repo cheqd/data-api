@@ -1,18 +1,18 @@
 import { updateCirculatingSupply } from '../helpers/circulating';
 import { filterArbitrageOpportunities } from './arbitrageOpportunities';
 
-export async function webhookTriggers(event: ScheduledEvent) {
+export async function webhookTriggers(env: Env) {
 	console.log('Triggering webhook...');
-	await sendPriceDiscrepancies();
+	await sendPriceDiscrepancies(env);
 
-	await updateCirculatingSupply(getHour());
+	await updateCirculatingSupply(getHour(), env);
 }
 
-export async function sendPriceDiscrepancies() {
+export async function sendPriceDiscrepancies(env: Env) {
 	try {
 		console.log('Sending price discrepancies...');
 
-		const arbitrageOpportunities = await filterArbitrageOpportunities();
+		const arbitrageOpportunities = await filterArbitrageOpportunities(env);
 		const hasArbitrageOpportunities = arbitrageOpportunities.length > 0;
 		if (hasArbitrageOpportunities) {
 			console.log('Arbitrage opportunities...');

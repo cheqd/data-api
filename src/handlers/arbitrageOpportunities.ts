@@ -1,13 +1,14 @@
 import { MarketMonitorApi } from '../api/marketMonitorApi';
 import { ArbitrageOpportunity } from '../types/marketMonitor';
+import { IRequest } from 'itty-router';
 
-async function fetchPrices() {
-	let market_monitor_api = new MarketMonitorApi(`${MARKET_MONITORING_API}`);
+async function fetchPrices(env: Env) {
+	let market_monitor_api = new MarketMonitorApi(`${env.MARKET_MONITORING_API}`);
 	return await market_monitor_api.getMarketMonitoringData();
 }
 
-export async function filterArbitrageOpportunities(): Promise<ArbitrageOpportunity[]> {
-	const payload = await fetchPrices();
+export async function filterArbitrageOpportunities(env: Env): Promise<ArbitrageOpportunity[]> {
+	const payload = await fetchPrices(env);
 	const arbitrage_opportunities = [];
 	for (let i = 0; i < payload.arbitrageOpportunities.length; i++) {
 		if (payload.arbitrageOpportunities[i].arbitragePossible) {
@@ -16,8 +17,8 @@ export async function filterArbitrageOpportunities(): Promise<ArbitrageOpportuni
 	}
 	return arbitrage_opportunities;
 }
-export async function handler(request: Request): Promise<Response> {
-	const arbitrage_opportunities = await filterArbitrageOpportunities();
+export async function handler(request: IRequest, env: Env): Promise<Response> {
+	const arbitrage_opportunities = await filterArbitrageOpportunities(env);
 	return new Response(JSON.stringify(arbitrage_opportunities, null, 2), {
 		headers: {
 			'content-type': 'application/json;charset=UTF-8',
