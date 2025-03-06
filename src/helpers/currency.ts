@@ -4,7 +4,7 @@ export function convertToLowestDenom(ncheq: number, env: Env): number {
 
 export function convertToMainTokenDenom(amount: number, exponent: number, decimals: number = 0): string {
 	const converted = amount / Math.pow(10, exponent);
-	
+
 	if (decimals === 0) {
 		return Math.round(converted).toString();
 	} else {
