@@ -24,12 +24,12 @@ export class NodeApi {
 		return Number(respJson?.total?.[0]?.amount ?? '0');
 	}
 
-	async getAllDelegations(address: string, offset: number, should_count_total: boolean, limit?: number) {
+	async getAllDelegations(address: string, offset: number, should_count_total: boolean, env: Env, limit?: number) {
 		// order of query params: count_total -> offset -> limit
 		const pagination_count_total = should_count_total
 			? 'pagination.count_total=true'
 			: 'pagination.count_total=false';
-		const pagination_limit = `pagination.limit=${limit ? limit : REST_API_PAGINATION_LIMIT}`;
+		const pagination_limit = `pagination.limit=${limit ? limit : env.REST_API_PAGINATION_LIMIT}`;
 		const pagination_offset = `pagination.offset=${offset}`;
 		// NOTE: be cautious of newlines or spaces. Might make the request URL malformed
 		const resp = await fetch(
@@ -39,12 +39,12 @@ export class NodeApi {
 		return (await resp.json()) as DelegationsResponse;
 	}
 
-	async getAllUnbondingDelegations(address: string, offset: number, should_count_total: boolean) {
+	async getAllUnbondingDelegations(address: string, offset: number, should_count_total: boolean, env: Env,) {
 		// order of query params: count_total -> offset -> limit
 		const pagination_count_total = should_count_total
 			? 'pagination.count_total=true'
 			: 'pagination.count_total=false';
-		const pagination_limit = `pagination.limit=${REST_API_PAGINATION_LIMIT}`;
+		const pagination_limit = `pagination.limit=${env.REST_API_PAGINATION_LIMIT}`;
 		const pagination_offset = `pagination.offset=${offset}`;
 		// NOTE: be cautious of new lines or spaces. Might make the request URL malformed
 		const resp = await fetch(

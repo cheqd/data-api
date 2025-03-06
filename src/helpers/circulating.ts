@@ -5,9 +5,9 @@ import { extractPrefixAndKey } from './kv';
 import { BigDipperApi } from '../api/bigDipperApi';
 import { GraphQLClient } from '../helpers/graphql';
 
-export async function updateCirculatingSupply(groupNumber: number) {
+export async function updateCirculatingSupply(groupNumber: number, env: Env) {
 	try {
-		const cached = await CIRCULATING_SUPPLY_WATCHLIST.list({
+		const cached = await env.CIRCULATING_SUPPLY_WATCHLIST.list({
 			prefix: `group_${groupNumber}:`,
 		});
 
@@ -18,11 +18,11 @@ export async function updateCirculatingSupply(groupNumber: number) {
 			let addr = parts.address;
 			let grpN = parts.groupNumber;
 
-			const found = await CIRCULATING_SUPPLY_WATCHLIST.get(`group_${grpN}:${addr}`);
+			const found = await env.CIRCULATING_SUPPLY_WATCHLIST.get(`group_${grpN}:${addr}`);
 			if (found) {
 				console.log(`found ${key.name} (addr=${addr}) grp=${grpN}`);
 
-				const account = await updateCachedBalance(addr, grpN);
+				const account = await updateCachedBalance(addr, grpN, env);
 
 				if (account !== null) {
 					console.log(`updating account (group_${grpN}:${addr}) balance (${JSON.stringify(account)})`);
@@ -34,13 +34,13 @@ export async function updateCirculatingSupply(groupNumber: number) {
 	}
 }
 
-export async function updateCachedBalance(addr: string, grpN: number) {
+export async function updateCachedBalance(addr: string, grpN: number, env: Env) {
 	try {
-		const account_balance_infos = await fetchAccountBalances(addr);
+		const account_balance_infos = await fetchAccountBalances(addr, env);
 
 		const data = JSON.stringify(account_balance_infos);
 
-		await CIRCULATING_SUPPLY_WATCHLIST.put(`group_${grpN}:${addr}`, data);
+		await env.CIRCULATING_SUPPLY_WATCHLIST.put(`group_${grpN}:${addr}`, data);
 
 		console.log(`account "${addr}" balance updated. (${data})`);
 	} catch (e: any) {
@@ -48,18 +48,18 @@ export async function updateCachedBalance(addr: string, grpN: number) {
 	}
 }
 
-export async function getCirculatingSupply(): Promise<number> {
-	let gql_client = new GraphQLClient(GRAPHQL_API);
+export async function getCirculatingSupply(env: Env): Promise<number> {
+	let gql_client = new GraphQLClient(env.GRAPHQL_API);
 	let bd_api = new BigDipperApi(gql_client);
 	let total_supply_ncheq = await bd_api.getTotalSupply();
-	const total_supply = Number(convertToMainTokenDenom(total_supply_ncheq));
+	const total_supply = Number(convertToMainTokenDenom(total_supply_ncheq, env.TOKEN_EXPONENT));
 
 	try {
-		const cached = await CIRCULATING_SUPPLY_WATCHLIST.list();
+		const cached = await env.CIRCULATING_SUPPLY_WATCHLIST.list();
 		console.log(`Total cached entries: ${cached.keys.length}`);
 		let shareholders_total_balance = Number(0);
 		for (const key of cached.keys) {
-			let data: AccountBalanceInfos | null = await CIRCULATING_SUPPLY_WATCHLIST.get(key.name, {
+			let data: AccountBalanceInfos | null = await env.CIRCULATING_SUPPLY_WATCHLIST.get(key.name, {
 				type: 'json',
 			});
 
@@ -72,7 +72,7 @@ export async function getCirculatingSupply(): Promise<number> {
 		console.log(`Watchlist total balance: ${shareholders_total_balance}`);
 
 		let circulating_supply = total_supply - shareholders_total_balance;
-		return circulating_supply.toString();
+		return circulating_supply;
 	} catch (e: any) {
 		throw new Error(e.toString);
 	}

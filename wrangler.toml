@@ -10,7 +10,8 @@ main = "src/index.ts"
 
 # Date in yyyy-mm-dd to determine which version of Workers runtime to use
 # Details: https://developers.cloudflare.com/workers/platform/compatibility-dates/
-compatibility_date = "2022-05-24"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat_v2"]
 
 # Usage model for the Worker
 # Details: https://developers.cloudflare.com/workers/platform/limits
@@ -33,24 +34,28 @@ route = { pattern = "data-api.cheqd.io/*", zone_id = "afe3b66243382f27140e6feeaa
 # @default `[]`
 
 kv_namespaces = [
-  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "270dbd79fa434edf9174fac7d5bc1bdf" }
+  { binding = "CIRCULATING_SUPPLY_WATCHLIST", id = "270dbd79fa434edf9174fac7d5bc1bdf", preview_id = "7ef26e427ef3487d9ad8497653f3065b" }
 ]
 
 # Map of environment variables to set when deploying the Worker
 # Not inherited. @default `{}`
 [vars]
 # Token lowest denom exponent. 1 CHEQ = 10^9 ncheq
-TOKEN_EXPONENT = "9"
+TOKEN_EXPONENT = 9
 # Standard Cosmosd SDK REST API endpoint for a node on target network
 REST_API = "https://api.cheqd.net"
 # REST API pagination limit
 REST_API_PAGINATION_LIMIT = "50"
-# GraphQL API endpoint for target network. Must be sourced from a BigDipper instance.
+# Mainnet GraphQL API endpoint for target network. Must be sourced from a BigDipper instance.
 GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql"
+# Testnet GraphQL API endpoint for target network. Must be sourced from a BigDipper instance.
+TESTNET_GRAPHQL_API = "https://testnet-gql.cheqd.io/v1/graphql"
 # Number of groups circulating supply watchlist is split into
 CIRCULATING_SUPPLY_GROUPS = "24"
 # Market monitoring API endpoint
 MARKET_MONITORING_API = "https://market-monitoring.cheqd.net"
+ENVIRONMENT = "production"
+HYPERDRIVE_CONNECTION_STRING = "postgresql://username:password@hostname:port/database"
 
 # The necessary secrets are:
 # - WEBHOOK_URL
@@ -58,6 +63,10 @@ MARKET_MONITORING_API = "https://market-monitoring.cheqd.net"
 
 [triggers]
 crons = [ "0 * * * *" ]
+
+# Placement configuration for the Worker
+[placement]
+mode = "smart"
 
 ###############################################################
 ###             SECTION 3: Local Development                ###
@@ -90,7 +99,7 @@ route = { pattern = "data-api-staging.cheqd.io/*", zone_id = "afe3b66243382f2714
 
 # Map of environment variables to set when deploying the Worker
 # Not inherited. @default `{}`
-vars = { ENVIRONMENT = "staging", TOKEN_EXPONENT = "9", REST_API = "https://api.cheqd.net", REST_API_PAGINATION_LIMIT = "50", GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql", CIRCULATING_SUPPLY_GROUPS = "24", MARKET_MONITORING_API = "https://market-monitoring-staging.cheqd.net" }
+vars = { ENVIRONMENT = "staging", TOKEN_EXPONENT = 9, REST_API = "https://api.cheqd.net", REST_API_PAGINATION_LIMIT = "50", GRAPHQL_API = "https://explorer-gql.cheqd.io/v1/graphql", CIRCULATING_SUPPLY_GROUPS = "24", MARKET_MONITORING_API = "https://market-monitoring-staging.cheqd.net", TESTNET_GRAPHQL_API = "https://testnet-gql.cheqd.io/v1/graphql" }
 
 # The necessary secrets are:
 # - WEBHOOK_URL
@@ -107,6 +116,11 @@ kv_namespaces = [
 # Cron triggers for staging worker
 [env.staging.triggers]
 crons = [ "0 * * * *" ]
+
+# Hyperdrive configuration
+[[env.staging.hyperdrive]]
+binding = "HYPERDRIVE"
+id = "eae4fd023cf2476d8ac00a8fd2eca217"
 
 ###############################################################
 ###               OPTIONAL: Build Configuration             ###
@@ -138,3 +152,8 @@ crons = [ "0 * * * *" ]
 
 # Add polyfills for node builtin modules and globals?
 # node_compat = "false"
+
+# Add this to the top-level configuration (production)
+[[hyperdrive]]
+binding = "HYPERDRIVE"
+id = "your-production-hyperdrive-id"

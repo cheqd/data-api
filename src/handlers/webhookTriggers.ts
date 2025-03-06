@@ -1,18 +1,32 @@
 import { updateCirculatingSupply } from '../helpers/circulating';
 import { filterArbitrageOpportunities } from './arbitrageOpportunities';
+import { Network } from '../types/network';
+import { syncNetworkData } from '../helpers/identity';
 
-export async function webhookTriggers(event: ScheduledEvent) {
+export async function webhookTriggers(env: Env) {
 	console.log('Triggering webhook...');
-	await sendPriceDiscrepancies();
+	await sendPriceDiscrepancies(env);
 
-	await updateCirculatingSupply(getHour());
+	await updateCirculatingSupply(getHour(), env);
+	await syncIdentityData(env);
 }
 
-export async function sendPriceDiscrepancies() {
+export async function syncIdentityData(env: Env) {
+	try {
+		// Sync mainnet data
+		await syncNetworkData(Network.MAINNET, env);
+		// Sync testnet data
+		await syncNetworkData(Network.TESTNET, env);
+	} catch (error) {
+		console.error('Error syncing identity data:', (error as Error).message);
+	}
+}
+
+export async function sendPriceDiscrepancies(env: Env) {
 	try {
 		console.log('Sending price discrepancies...');
 
-		const arbitrageOpportunities = await filterArbitrageOpportunities();
+		const arbitrageOpportunities = await filterArbitrageOpportunities(env);
 		const hasArbitrageOpportunities = arbitrageOpportunities.length > 0;
 		if (hasArbitrageOpportunities) {
 			console.log('Arbitrage opportunities...');
