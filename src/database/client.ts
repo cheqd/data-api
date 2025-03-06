@@ -9,7 +9,7 @@ export async function dbInit(env?: any): Promise<{ db: any; client: Client }> {
 	try {
 		// Create a single PostgreSQL client
 		const connectionString = env.HYPERDRIVE.connectionString;
-		
+
 		const client = new Client({
 			connectionString,
 			application_name: `DATA_API_${env.ENVIRONMENT}`,

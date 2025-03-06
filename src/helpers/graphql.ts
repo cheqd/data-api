@@ -18,7 +18,7 @@ export class GraphQLClient {
 			body: JSON.stringify(req),
 		});
 
-		let json = await resp.json() as any;
+		let json = (await resp.json()) as any;
 
 		if (json.errors) {
 			throw new Error(`Query failed: ${JSON.stringify(json.errors)}`);

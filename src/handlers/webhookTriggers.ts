@@ -41,7 +41,7 @@ export async function sendPriceDiscrepancies(env: Env) {
 					},
 				};
 
-				await fetch(WEBHOOK_URL, init);
+				await fetch(env.WEBHOOK_URL, init);
 			} catch (err: any) {
 				console.log(err);
 			}

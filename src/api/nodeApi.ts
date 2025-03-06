@@ -39,7 +39,7 @@ export class NodeApi {
 		return (await resp.json()) as DelegationsResponse;
 	}
 
-	async getAllUnbondingDelegations(address: string, offset: number, should_count_total: boolean, env: Env,) {
+	async getAllUnbondingDelegations(address: string, offset: number, should_count_total: boolean, env: Env) {
 		// order of query params: count_total -> offset -> limit
 		const pagination_count_total = should_count_total
 			? 'pagination.count_total=true'

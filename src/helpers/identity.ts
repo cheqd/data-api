@@ -430,13 +430,13 @@ export class SyncService {
 
 export async function syncNetworkData(network: Network, env: Env) {
 	console.log(`Syncing ${Network[network]} data...`);
-	
+
 	const dbInstance = await dbInit(env);
 	try {
 		// Use the correct GraphQL endpoint based on the network
 		const apiUrl = network === Network.MAINNET ? env.GRAPHQL_API : env.TESTNET_GRAPHQL_API;
 		const graphqlClient = new GraphQLClient(apiUrl);
-		
+
 		const bigDipperApi = new BigDipperApi(graphqlClient);
 		const syncService = new SyncService(bigDipperApi, dbInstance.db, network);
 		await syncService.syncData();
