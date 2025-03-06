@@ -23,18 +23,18 @@
     "pg": "^8.13.3"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240512.0",
-    "@types/node": "^20.12.12",
+    "@cloudflare/workers-types": "^4.20250303.0",
+    "@types/node": "^20.17.23",
     "@types/pg": "^8.11.11",
-    "@typescript-eslint/eslint-plugin": "^7.9.0",
-    "@typescript-eslint/parser": "^7.9.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "drizzle-kit": "^0.30.5",
-    "eslint": "^8.57.0",
+    "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-typescript": "^3.0.0",
-    "prettier": "^3.2.5",
-    "typescript": "^5.4.5",
-    "wrangler": "^3.112.0"
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2",
+    "wrangler": "^3.113.0"
   },
   "engines": {
     "node": ">=20.0.0"
