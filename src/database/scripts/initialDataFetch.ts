@@ -4,14 +4,15 @@ import { Network } from '../../types/network';
 import { SyncService } from '../../helpers/identity';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Client, ClientConfig } from 'pg';
+import fs from 'fs';
 
 export const clientConfig: ClientConfig = {
 	connectionString: process.env.DB_URL,
 };
 
-// clientConfig.ssl = {
-// 	ca: fs.readFileSync('/tmp/do-cert.pem').toString(),
-// };
+clientConfig.ssl = {
+	ca: fs.readFileSync('/tmp/do-cert.pem').toString(),
+};
 
 let client = new Client(clientConfig);
 
@@ -33,9 +34,9 @@ async function main() {
 		console.log('Fetching mainnet DIDs...');
 		await fetchNetworkDIDs(Network.MAINNET);
 
-		// // Fetch testnet DIDs
-		// console.log('Fetching testnet DIDs...');
-		// await fetchNetworkDIDs(Network.TESTNET);
+		// Fetch testnet DIDs
+		console.log('Fetching testnet DIDs...');
+		await fetchNetworkDIDs(Network.TESTNET);
 
 		// Then process all resources
 		console.log('Now fetching all resources...');
@@ -44,9 +45,9 @@ async function main() {
 		console.log('Fetching mainnet resources...');
 		await fetchNetworkResources(Network.MAINNET);
 
-		// // Fetch testnet resources
-		// console.log('Fetching testnet resources...');
-		// await fetchNetworkResources(Network.TESTNET);
+		// Fetch testnet resources
+		console.log('Fetching testnet resources...');
+		await fetchNetworkResources(Network.TESTNET);
 
 		console.log('Historic data fetch completed successfully');
 	} catch (error) {

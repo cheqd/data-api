@@ -2,14 +2,15 @@ import * as schema from '../schema';
 import { DenomTypes, OperationTypes } from '../../types/bigDipper';
 import { Client, ClientConfig } from 'pg';
 import { drizzle } from 'drizzle-orm/node-postgres';
+import fs from 'fs';
 
 export const clientConfig: ClientConfig = {
 	connectionString: process.env.DB_URL,
 };
 
-// clientConfig.ssl = {
-// 	ca: fs.readFileSync('/tmp/do-cert.pem').toString(),
-// };
+clientConfig.ssl = {
+	ca: fs.readFileSync('/tmp/do-cert.pem').toString(),
+};
 
 let client = new Client(clientConfig);
 
