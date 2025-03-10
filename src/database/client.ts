@@ -1,9 +1,11 @@
 import { Client } from 'pg';
-import { drizzle } from 'drizzle-orm/node-postgres';
+import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as schema from './schema';
 
 // Default timeout for PostgreSQL queries (30 seconds)
 const DEFAULT_POSTGRES_TIMEOUT = 30000;
+
+export type DrizzleClient = NodePgDatabase<typeof schema>;
 
 export async function dbInit(env?: any): Promise<{ db: any; client: Client }> {
 	try {
