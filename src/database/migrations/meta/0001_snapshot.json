@@ -1,0 +1,838 @@
+{
+  "id": "01fd2ccd-57f3-4381-84cc-9867d7f71366",
+  "prevId": "ffd093ad-db03-4306-a611-dd852234a027",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.denom_mainnet": {
+      "name": "denom_mainnet",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ledger_denom": {
+          "name": "ledger_denom",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "friendly_denom": {
+          "name": "friendly_denom",
+          "type": "denoms_enum_mainnet",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "exponent": {
+          "name": "exponent",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "denom_mainnet_ledger_denom_unique": {
+          "name": "denom_mainnet_ledger_denom_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "ledger_denom"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.denom_testnet": {
+      "name": "denom_testnet",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ledger_denom": {
+          "name": "ledger_denom",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "friendly_denom": {
+          "name": "friendly_denom",
+          "type": "denoms_enum_testnet",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "exponent": {
+          "name": "exponent",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "denom_testnet_ledger_denom_unique": {
+          "name": "denom_testnet_ledger_denom_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "ledger_denom"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.did_mainnet": {
+      "name": "did_mainnet",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "did_id": {
+          "name": "did_id",
+          "type": "varchar(54)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "operationType": {
+          "name": "operationType",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fee_payer": {
+          "name": "fee_payer",
+          "type": "varchar(44)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "name": "amount",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "denom": {
+          "name": "denom",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "block_height": {
+          "name": "block_height",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transaction_hash": {
+          "name": "transaction_hash",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "success": {
+          "name": "success",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_did_mainnet_tx_op_did": {
+          "name": "idx_did_mainnet_tx_op_did",
+          "columns": [
+            {
+              "expression": "transaction_hash",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "operationType",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "did_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "did_mainnet_operationType_operation_types_mainnet_id_fk": {
+          "name": "did_mainnet_operationType_operation_types_mainnet_id_fk",
+          "tableFrom": "did_mainnet",
+          "tableTo": "operation_types_mainnet",
+          "columnsFrom": [
+            "operationType"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "did_mainnet_denom_denom_mainnet_id_fk": {
+          "name": "did_mainnet_denom_denom_mainnet_id_fk",
+          "tableFrom": "did_mainnet",
+          "tableTo": "denom_mainnet",
+          "columnsFrom": [
+            "denom"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.did_testnet": {
+      "name": "did_testnet",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "did_id": {
+          "name": "did_id",
+          "type": "varchar(54)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "operation_type": {
+          "name": "operation_type",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fee_payer": {
+          "name": "fee_payer",
+          "type": "varchar(44)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "name": "amount",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "denom": {
+          "name": "denom",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "block_height": {
+          "name": "block_height",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transaction_hash": {
+          "name": "transaction_hash",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "success": {
+          "name": "success",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_did_testnet_tx_op_did": {
+          "name": "idx_did_testnet_tx_op_did",
+          "columns": [
+            {
+              "expression": "transaction_hash",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "operation_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "did_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "did_testnet_operation_type_operation_types_testnet_id_fk": {
+          "name": "did_testnet_operation_type_operation_types_testnet_id_fk",
+          "tableFrom": "did_testnet",
+          "tableTo": "operation_types_testnet",
+          "columnsFrom": [
+            "operation_type"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "did_testnet_denom_denom_testnet_id_fk": {
+          "name": "did_testnet_denom_denom_testnet_id_fk",
+          "tableFrom": "did_testnet",
+          "tableTo": "denom_testnet",
+          "columnsFrom": [
+            "denom"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.operation_types_mainnet": {
+      "name": "operation_types_mainnet",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "operation_type_enum_mainnet",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "operation_types_mainnet_type_unique": {
+          "name": "operation_types_mainnet_type_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "type"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.operation_types_testnet": {
+      "name": "operation_types_testnet",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "operation_type_enum_testnet",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "operation_types_testnet_type_unique": {
+          "name": "operation_types_testnet_type_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "type"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.resource_mainnet": {
+      "name": "resource_mainnet",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "resource_id": {
+          "name": "resource_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "resource_type": {
+          "name": "resource_type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "resource_name": {
+          "name": "resource_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "operation_type": {
+          "name": "operation_type",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "did_id": {
+          "name": "did_id",
+          "type": "varchar(54)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fee_payer": {
+          "name": "fee_payer",
+          "type": "varchar(44)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "name": "amount",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "denom": {
+          "name": "denom",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "block_height": {
+          "name": "block_height",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transaction_hash": {
+          "name": "transaction_hash",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "success": {
+          "name": "success",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_resource_mainnet_tx_op_resource": {
+          "name": "idx_resource_mainnet_tx_op_resource",
+          "columns": [
+            {
+              "expression": "transaction_hash",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "operation_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "resource_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "resource_mainnet_operation_type_operation_types_mainnet_id_fk": {
+          "name": "resource_mainnet_operation_type_operation_types_mainnet_id_fk",
+          "tableFrom": "resource_mainnet",
+          "tableTo": "operation_types_mainnet",
+          "columnsFrom": [
+            "operation_type"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "resource_mainnet_denom_denom_mainnet_id_fk": {
+          "name": "resource_mainnet_denom_denom_mainnet_id_fk",
+          "tableFrom": "resource_mainnet",
+          "tableTo": "denom_mainnet",
+          "columnsFrom": [
+            "denom"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.resource_testnet": {
+      "name": "resource_testnet",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "resource_id": {
+          "name": "resource_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "resource_type": {
+          "name": "resource_type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "resource_name": {
+          "name": "resource_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "operation_type": {
+          "name": "operation_type",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "did_id": {
+          "name": "did_id",
+          "type": "varchar(54)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fee_payer": {
+          "name": "fee_payer",
+          "type": "varchar(44)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "name": "amount",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "denom": {
+          "name": "denom",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "block_height": {
+          "name": "block_height",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transaction_hash": {
+          "name": "transaction_hash",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "success": {
+          "name": "success",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_resource_testnet_tx_op_resource": {
+          "name": "idx_resource_testnet_tx_op_resource",
+          "columns": [
+            {
+              "expression": "transaction_hash",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "operation_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "resource_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "resource_testnet_operation_type_operation_types_testnet_id_fk": {
+          "name": "resource_testnet_operation_type_operation_types_testnet_id_fk",
+          "tableFrom": "resource_testnet",
+          "tableTo": "operation_types_testnet",
+          "columnsFrom": [
+            "operation_type"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "resource_testnet_denom_denom_testnet_id_fk": {
+          "name": "resource_testnet_denom_denom_testnet_id_fk",
+          "tableFrom": "resource_testnet",
+          "tableTo": "denom_testnet",
+          "columnsFrom": [
+            "denom"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.denoms_enum_mainnet": {
+      "name": "denoms_enum_mainnet",
+      "schema": "public",
+      "values": [
+        "ncheq"
+      ]
+    },
+    "public.denoms_enum_testnet": {
+      "name": "denoms_enum_testnet",
+      "schema": "public",
+      "values": [
+        "ncheq"
+      ]
+    },
+    "public.operation_type_enum_mainnet": {
+      "name": "operation_type_enum_mainnet",
+      "schema": "public",
+      "values": [
+        "cheqd.did.v2.MsgCreateDidDoc",
+        "cheqd.did.v2.MsgUpdateDidDoc",
+        "cheqd.did.v2.MsgDeactivateDidDoc",
+        "cheqd.resource.v2.MsgCreateResource"
+      ]
+    },
+    "public.operation_type_enum_testnet": {
+      "name": "operation_type_enum_testnet",
+      "schema": "public",
+      "values": [
+        "cheqd.did.v2.MsgCreateDidDoc",
+        "cheqd.did.v2.MsgUpdateDidDoc",
+        "cheqd.did.v2.MsgDeactivateDidDoc",
+        "cheqd.resource.v2.MsgCreateResource"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

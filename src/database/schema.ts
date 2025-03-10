@@ -71,7 +71,7 @@ export const resourceMainnet = pgTable(
 			.notNull()
 			.references(() => denomMainnet.id, { onDelete: 'no action', onUpdate: 'no action' }),
 		blockHeight: bigint('block_height', { mode: 'bigint' }).notNull(),
-		transactionHash: varchar('transaction_hash', { length: 64 }).notNull().unique(),
+		transactionHash: varchar('transaction_hash', { length: 64 }).notNull(),
 		createdAt: timestamp('created_at').notNull(),
 		success: boolean('success').notNull(),
 	},
@@ -82,7 +82,7 @@ export const resourceMainnet = pgTable(
 
 export const denomMainnet = pgTable('denom_mainnet', {
 	id: serial('id').primaryKey().notNull(),
-	ledgerDenom: varchar('ledger_denom').notNull(),
+	ledgerDenom: varchar('ledger_denom').notNull().unique(),
 	friendlyDenom: denomsEnumMainnet('friendly_denom').notNull(),
 	exponent: integer('exponent').notNull(),
 	description: varchar('description').notNull(),
@@ -138,7 +138,7 @@ export const resourceTestnet = pgTable(
 			.notNull()
 			.references(() => denomTestnet.id, { onDelete: 'no action', onUpdate: 'no action' }),
 		blockHeight: bigint('block_height', { mode: 'bigint' }).notNull(),
-		transactionHash: varchar('transaction_hash', { length: 64 }).notNull().unique(),
+		transactionHash: varchar('transaction_hash', { length: 64 }).notNull(),
 		createdAt: timestamp('created_at').notNull(),
 		success: boolean('success').notNull(),
 	},
@@ -149,7 +149,7 @@ export const resourceTestnet = pgTable(
 
 export const denomTestnet = pgTable('denom_testnet', {
 	id: serial('id').primaryKey().notNull(),
-	ledgerDenom: varchar('ledger_denom').notNull(),
+	ledgerDenom: varchar('ledger_denom').notNull().unique(),
 	friendlyDenom: denomsEnumTestnet('friendly_denom').notNull(),
 	exponent: integer('exponent').notNull(),
 	description: varchar('description').notNull(),
