@@ -9,8 +9,9 @@ import { handler as totalStakedCoinsHandler } from './handlers/totalStakedCoins'
 import { handler as allArbitrageOpportunitiesHandler } from './handlers/allArbitrageOpportunities';
 import { handler as arbitrageOpportunitiesHandler } from './handlers/arbitrageOpportunities';
 import { webhookTriggers } from './handlers/webhookTriggers';
+import { registerAnalyticsRoutes } from './routes/analytics';
 
-function registerRoutes(router: ReturnType<typeof Router>, env: Env) {
+function registerRoutes(router: ReturnType<typeof Router>, env: Env, ctx: ExecutionContext) {
 	router.get('/', (request) => totalSupplyHandler(request, env));
 	router.get('/arbitrage', (request) => arbitrageOpportunitiesHandler(request, env));
 	router.get('/arbitrage/all', (request) => allArbitrageOpportunitiesHandler(request, env));
@@ -22,6 +23,9 @@ function registerRoutes(router: ReturnType<typeof Router>, env: Env) {
 	router.get('/supply/staked', (request) => totalStakedCoinsHandler(request, env));
 	router.get('/supply/total', (request) => totalSupplyHandler(request, env));
 
+	// Register analytics routes
+	registerAnalyticsRoutes(router, env, ctx);
+
 	// 404 for all other requests
 	router.all('*', () => new Response('Not Found.', { status: 404 }));
 }
@@ -31,9 +35,9 @@ function handleError(error: Error): Response {
 }
 
 export default {
-	async fetch(request: IRequest, env: Env, ctx: ExecutionContext) {
+	async fetch(request: IRequest, env: Env, ctx: ExecutionContext): Promise<Response> {
 		const router = Router();
-		registerRoutes(router, env);
+		registerRoutes(router, env, ctx);
 		return router.handle(request).catch((error) => handleError(error));
 	},
 	async scheduled(controller: ScheduledController, env: Env, ctx: ExecutionContext) {

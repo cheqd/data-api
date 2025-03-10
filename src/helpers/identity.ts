@@ -53,7 +53,7 @@ export class SyncService {
 	) {}
 
 	async syncData() {
-		console.log(`Starting data sync for ${Network[this.network]}...`);
+		console.log(`Starting data sync for ${this.network}...`);
 
 		// Always process all DIDs first
 		console.log(`Processing all DIDs first...`);
@@ -63,14 +63,14 @@ export class SyncService {
 		console.log(`Now processing all resources...`);
 		await this.syncResources();
 
-		console.log(`${Network[this.network]} data sync completed successfully`);
+		console.log(`${this.network} data sync completed successfully`);
 	}
 
 	async syncDids() {
 		const network = this.network;
 		const didTable = TABLES[network].did;
 
-		console.log(`Syncing DIDs for ${Network[network]}...`);
+		console.log(`Syncing DIDs for ${network}...`);
 
 		// Get the latest processed did block height
 		const lastDid = await this.db.select().from(didTable).orderBy({ blockHeight: 'desc' }).limit(1);
@@ -254,7 +254,7 @@ export class SyncService {
 		const network = this.network;
 		const resourceTable = TABLES[network].resource;
 
-		console.log(`Syncing Resources for ${Network[network]}...`);
+		console.log(`Syncing Resources for ${network}...`);
 
 		// Get the latest processed resource block height
 		const lastResource = await this.db.select().from(resourceTable).orderBy({ blockHeight: 'desc' }).limit(1);
@@ -429,7 +429,7 @@ export class SyncService {
 }
 
 export async function syncNetworkData(network: Network, env: Env) {
-	console.log(`Syncing ${Network[network]} data...`);
+	console.log(`Syncing ${network} data...`);
 
 	const dbInstance = await dbInit(env);
 	try {
@@ -440,7 +440,7 @@ export async function syncNetworkData(network: Network, env: Env) {
 		const bigDipperApi = new BigDipperApi(graphqlClient);
 		const syncService = new SyncService(bigDipperApi, dbInstance.db, network);
 		await syncService.syncData();
-		console.log(`${Network[network]} data sync completed successfully`);
+		console.log(`${network} data sync completed successfully`);
 	} finally {
 		await dbClose(dbInstance);
 	}
