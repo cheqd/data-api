@@ -1,8 +1,10 @@
+import { GraphQLVariables, GraphQLResponse } from '../types/graphql';
+
 export class GraphQLClient {
 	constructor(public readonly base_url: string) {}
 
-	async query<T>(options: { query: string; variables?: any } | string): Promise<T> {
-		let req: { query: string; variables?: any };
+	async query<T>(options: { query: string; variables?: GraphQLVariables } | string): Promise<T> {
+		let req: { query: string; variables?: GraphQLVariables };
 
 		if (typeof options === 'string') {
 			req = { query: options };
@@ -18,12 +20,12 @@ export class GraphQLClient {
 			body: JSON.stringify(req),
 		});
 
-		const json = (await resp.json()) as any;
+		const json = (await resp.json()) as GraphQLResponse<T>;
 
 		if (json.errors) {
 			throw new Error(`Query failed: ${JSON.stringify(json.errors)}`);
 		}
 
-		return json as T;
+		return json.data as T;
 	}
 }
