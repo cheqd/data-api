@@ -35,10 +35,14 @@ jobs:
       env:
         IGNORE_GITIGNORED_FILES: true
         DEFAULT_BRANCH: main
+        LINTER_RULES_PATH: .github/linters
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         LOG_LEVEL: WARN
         VALIDATE_ALL_CODEBASE: true
         MULTI_STATUS: true
+        
+        JAVASCRIPT_ES_CONFIG_FILE: eslint.config.mjs
+        TYPESCRIPT_ES_CONFIG_FILE: eslint.config.mjs
 
         VALIDATE_GITHUB_ACTIONS: true
         VALIDATE_JAVASCRIPT_ES: true
