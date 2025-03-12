@@ -1,0 +1,53 @@
+extends:
+  - eslint:recommended
+  - plugin:@typescript-eslint/recommended
+  - plugin:prettier/recommended
+  - plugin:drizzle/recommended
+
+ignorePatterns:
+  - build/
+  - dist/
+  - node_nodules/
+  - .wrangler/
+  - '*.ignore'
+
+plugins:
+  - '@typescript-eslint'
+  - drizzle
+
+globals:
+  process: readonly
+  Buffer: readonly
+  __dirname: readonly
+  __filename: readonly
+  require: readonly
+  module: readonly
+  exports: readonly
+  # Add additional globals from "globals.node" if necessary
+
+parser: '@typescript-eslint/parser'
+
+parserOptions:
+  ecmaVersion: 2018
+  sourceType: module
+
+rules:
+  drizzle/enforce-delete-with-where:
+    - error
+    - drizzleObjectName:
+        - dbClient
+        - db
+  drizzle/enforce-update-with-where:
+    - error
+    - drizzleObjectName:
+        - dbClient
+        - db
+  '@typescript-eslint/no-unused-vars':
+    - error
+    - args: all
+      argsIgnorePattern: '^_'
+      caughtErrors: all
+      caughtErrorsIgnorePattern: '^_'
+      destructuredArrayIgnorePattern: '^_'
+      varsIgnorePattern: '^_'
+      ignoreRestSiblings: true
