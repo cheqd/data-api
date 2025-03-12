@@ -120,7 +120,7 @@ Total account balance for specified account, in CHEQ.
 
 The standard Cosmos SDK REST API for account balances returns JSON with the account balances along with its denomination, usually the lowest denomination. This is hard to parse in applications such as Google Sheets (e.g., to monitor the account balance by fetching a response from a REST API directly in Google Sheets). This API returns a plain number that can be directly plugged into such applications, without having to parse JSON.
 
-## 📊 Identity Analytics
+### 📊 Identity Analytics
 
 #### Endpoints
 
