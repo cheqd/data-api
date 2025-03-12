@@ -10,7 +10,7 @@ import {
 	operationTypesTestnet,
 } from '../database/schema';
 import { Network } from '../types/network';
-import { TransactionDetails } from '../types/bigDipper';
+import { TransactionDetails, OperationType, DenomType } from '../types/bigDipper';
 import { eq, and, max } from 'drizzle-orm';
 import { dbInit, dbClose } from '../database/client';
 import { GraphQLClient } from './graphql';
@@ -132,7 +132,7 @@ export class SyncService {
 			const opType = await this.db
 				.select()
 				.from(tables.operationTypes)
-				.where(eq(tables.operationTypes.ledgerOperationType, tx.operationType))
+				.where(eq(tables.operationTypes.ledgerOperationType, tx.operationType as OperationType))
 				.limit(1);
 
 			if (opType.length === 0) {
@@ -147,7 +147,7 @@ export class SyncService {
 				.where(
 					and(
 						eq(tables.did.transactionHash, tx.transactionHash),
-						eq(tables.did.operationType, opType[0].id),
+						eq(tables.did.operationType, BigInt(opType[0].id)),
 						eq(tables.did.didId, tx.didId)
 					)
 				)
@@ -178,7 +178,7 @@ export class SyncService {
 			const denomRecord = await this.db
 				.select()
 				.from(tables.denom)
-				.where(eq(tables.denom.ledgerDenom, tx.denom || 'ncheq'))
+				.where(eq(tables.denom.ledgerDenom, (tx.denom || 'ncheq') as DenomType))
 				.limit(1);
 
 			if (denomRecord.length === 0) {
@@ -311,7 +311,7 @@ export class SyncService {
 			const opType = await this.db
 				.select()
 				.from(tables.operationTypes)
-				.where(eq(tables.operationTypes.ledgerOperationType, tx.operationType))
+				.where(eq(tables.operationTypes.ledgerOperationType, tx.operationType as OperationType))
 				.limit(1);
 
 			if (opType.length === 0) {
@@ -326,7 +326,7 @@ export class SyncService {
 				.where(
 					and(
 						eq(tables.resource.transactionHash, tx.transactionHash),
-						eq(tables.resource.operationType, opType[0].id),
+						eq(tables.resource.operationType, BigInt(opType[0].id)),
 						eq(tables.resource.resourceId, tx.resourceId)
 					)
 				)
@@ -359,7 +359,7 @@ export class SyncService {
 			const denomRecord = await this.db
 				.select()
 				.from(tables.denom)
-				.where(eq(tables.denom.ledgerDenom, tx.denom || 'ncheq'))
+				.where(eq(tables.denom.ledgerDenom, (tx.denom || 'ncheq') as DenomType))
 				.limit(1);
 
 			if (denomRecord.length === 0) {
