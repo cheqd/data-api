@@ -7,7 +7,6 @@ declare global {
 		GRAPHQL_API: string;
 		TESTNET_GRAPHQL_API: string;
 		CIRCULATING_SUPPLY_GROUPS: string;
-		MARKET_MONITORING_API: string;
 		ENVIRONMENT: string;
 		BIGDIPPER_URL: string;
 		WEBHOOK_URL: string;
