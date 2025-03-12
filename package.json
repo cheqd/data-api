@@ -20,11 +20,11 @@
   "dependencies": {
     "drizzle-orm": "^0.40.0",
     "itty-router": "^3.0.12",
-    "pg": "^8.13.3"
+    "pg": "^8.14.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250303.0",
-    "@types/node": "^20.17.23",
+    "@cloudflare/workers-types": "^4.20250311.0",
+    "@types/node": "^20.17.24",
     "@types/pg": "^8.11.11",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
@@ -34,7 +34,7 @@
     "eslint-config-typescript": "^3.0.0",
     "prettier": "^3.5.3",
     "typescript": "^5.8.2",
-    "wrangler": "^3.113.0"
+    "wrangler": "^3.114.1"
   },
   "engines": {
     "node": ">=20.0.0"

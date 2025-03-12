@@ -1,5 +1,5 @@
 import * as schema from '../schema';
-import { DenomTypes, OperationTypes } from '../../types/bigDipper';
+import { DenomTypes, OperationTypes, FriendlyOperationType } from '../../types/bigDipper';
 import { Client, ClientConfig } from 'pg';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import fs from 'fs';
@@ -23,20 +23,24 @@ async function seedDatabase() {
 			.insert(schema.operationTypesMainnet)
 			.values([
 				{
-					type: OperationTypes.CREATE_DID,
-					description: 'Create a DID',
+					ledgerOperationType: OperationTypes.CREATE_DID,
+					friendlyOperationType: FriendlyOperationType.CREATE_DID,
+					description: 'Create a DID Document',
 				},
 				{
-					type: OperationTypes.UPDATE_DID,
-					description: 'Update a DID',
+					ledgerOperationType: OperationTypes.UPDATE_DID,
+					friendlyOperationType: FriendlyOperationType.UPDATE_DID,
+					description: 'Update a DID Document',
 				},
 				{
-					type: OperationTypes.DEACTIVATE_DID,
-					description: 'Deactivate a DID',
+					ledgerOperationType: OperationTypes.DEACTIVATE_DID,
+					friendlyOperationType: FriendlyOperationType.DEACTIVATE_DID,
+					description: 'Deactivate a DID Document',
 				},
 				{
-					type: OperationTypes.CREATE_RESOURCE,
-					description: 'Create a Resource',
+					ledgerOperationType: OperationTypes.CREATE_RESOURCE,
+					friendlyOperationType: FriendlyOperationType.CREATE_RESOURCE,
+					description: 'Create a DID-Linked Resource',
 				},
 			])
 			.onConflictDoNothing();
@@ -44,8 +48,8 @@ async function seedDatabase() {
 			.insert(schema.denomMainnet)
 			.values([
 				{
-					ledgerDenom: 'ncheq',
-					friendlyDenom: DenomTypes.NCHEQ,
+					ledgerDenom: DenomTypes.NCHEQ,
+					friendlyDenom: 'CHEQ',
 					exponent: 9,
 					description: 'Cheqd Native Token',
 				},
@@ -55,20 +59,24 @@ async function seedDatabase() {
 			.insert(schema.operationTypesTestnet)
 			.values([
 				{
-					type: OperationTypes.CREATE_DID,
-					description: 'Create a DID',
+					ledgerOperationType: OperationTypes.CREATE_DID,
+					friendlyOperationType: FriendlyOperationType.CREATE_DID,
+					description: 'Create a DID Document',
 				},
 				{
-					type: OperationTypes.UPDATE_DID,
-					description: 'Update a DID',
+					ledgerOperationType: OperationTypes.UPDATE_DID,
+					friendlyOperationType: FriendlyOperationType.UPDATE_DID,
+					description: 'Update a DID Document',
 				},
 				{
-					type: OperationTypes.DEACTIVATE_DID,
-					description: 'Deactivate a DID',
+					ledgerOperationType: OperationTypes.DEACTIVATE_DID,
+					friendlyOperationType: FriendlyOperationType.DEACTIVATE_DID,
+					description: 'Deactivate a DID Document',
 				},
 				{
-					type: OperationTypes.CREATE_RESOURCE,
-					description: 'Create a Resource',
+					ledgerOperationType: OperationTypes.CREATE_RESOURCE,
+					friendlyOperationType: FriendlyOperationType.CREATE_RESOURCE,
+					description: 'Create a DID-Linked Resource',
 				},
 			])
 			.onConflictDoNothing();
@@ -76,8 +84,8 @@ async function seedDatabase() {
 			.insert(schema.denomTestnet)
 			.values([
 				{
-					ledgerDenom: 'ncheq',
-					friendlyDenom: DenomTypes.NCHEQ,
+					ledgerDenom: DenomTypes.NCHEQ,
+					friendlyDenom: 'CHEQ',
 					exponent: 9,
 					description: 'Cheqd Native Token',
 				},

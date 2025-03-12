@@ -11,7 +11,7 @@ import {
 } from '../database/schema';
 import { Network } from '../types/network';
 import { TransactionDetails } from '../types/bigDipper';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, max } from 'drizzle-orm';
 import { Client } from 'pg';
 import { dbInit, dbClose } from '../database/client';
 import { GraphQLClient } from './graphql';
@@ -45,6 +45,10 @@ const TABLES: Record<
 	},
 };
 
+interface BlockHeightResult {
+	maxBlock: bigint | null;
+}
+
 export class SyncService {
 	constructor(
 		private readonly bigDipperApi: BigDipperApi,
@@ -53,7 +57,7 @@ export class SyncService {
 	) {}
 
 	async syncData() {
-		console.log(`Starting data sync for ${Network[this.network]}...`);
+		console.log(`Starting data sync for ${this.network}...`);
 
 		// Always process all DIDs first
 		console.log(`Processing all DIDs first...`);
@@ -63,25 +67,31 @@ export class SyncService {
 		console.log(`Now processing all resources...`);
 		await this.syncResources();
 
-		console.log(`${Network[this.network]} data sync completed successfully`);
+		console.log(`${this.network} data sync completed successfully`);
 	}
 
 	async syncDids() {
 		const network = this.network;
 		const didTable = TABLES[network].did;
 
-		console.log(`Syncing DIDs for ${Network[network]}...`);
+		console.log(`Syncing DIDs for ${network}...`);
 
-		// Get the latest processed did block height
-		const lastDid = await this.db.select().from(didTable).orderBy({ blockHeight: 'desc' }).limit(1);
+		// Get the highest block height using Drizzle's max function
+		const lastDid = await this.db
+			.select({
+				maxBlock: max(didTable.blockHeight),
+			})
+			.from(didTable)
+			.then((result: BlockHeightResult[]) => result[0]);
+
+		// Convert BigInt to Number for the API call
+		const lastBlockHeight = Number(lastDid?.maxBlock || 0n);
 
 		let offset = 0;
 		const limit = 100;
 		let hasMore = true;
 		let totalProcessed = 0;
 		let totalSkipped = 0;
-
-		const lastBlockHeight = lastDid.length > 0 ? Number(lastDid[0].blockHeight) : 0;
 
 		const processedOperations = new Set<string>();
 
@@ -145,7 +155,7 @@ export class SyncService {
 			const opType = await this.db
 				.select()
 				.from(tables.operationTypes)
-				.where(eq(tables.operationTypes.type, tx.operationType))
+				.where(eq(tables.operationTypes.ledgerOperationType, tx.operationType))
 				.limit(1);
 
 			if (opType.length === 0) {
@@ -254,12 +264,18 @@ export class SyncService {
 		const network = this.network;
 		const resourceTable = TABLES[network].resource;
 
-		console.log(`Syncing Resources for ${Network[network]}...`);
+		console.log(`Syncing Resources for ${network}...`);
 
-		// Get the latest processed resource block height
-		const lastResource = await this.db.select().from(resourceTable).orderBy({ blockHeight: 'desc' }).limit(1);
+		// Get the highest block height using Drizzle's max function
+		const lastResource = await this.db
+			.select({
+				maxBlock: max(resourceTable.blockHeight),
+			})
+			.from(resourceTable)
+			.then((result: BlockHeightResult[]) => result[0]);
 
-		const lastBlockHeight = lastResource.length > 0 ? Number(lastResource[0].blockHeight) : 0;
+		// Convert BigInt to Number for the API call
+		const lastBlockHeight = Number(lastResource?.maxBlock || 0n);
 		console.log(`Last processed block height: ${lastBlockHeight}`);
 
 		let offset = 0;
@@ -331,7 +347,7 @@ export class SyncService {
 			const opType = await this.db
 				.select()
 				.from(tables.operationTypes)
-				.where(eq(tables.operationTypes.type, tx.operationType))
+				.where(eq(tables.operationTypes.ledgerOperationType, tx.operationType))
 				.limit(1);
 
 			if (opType.length === 0) {
@@ -429,7 +445,7 @@ export class SyncService {
 }
 
 export async function syncNetworkData(network: Network, env: Env) {
-	console.log(`Syncing ${Network[network]} data...`);
+	console.log(`Syncing ${network} data...`);
 
 	const dbInstance = await dbInit(env);
 	try {
@@ -440,7 +456,7 @@ export async function syncNetworkData(network: Network, env: Env) {
 		const bigDipperApi = new BigDipperApi(graphqlClient);
 		const syncService = new SyncService(bigDipperApi, dbInstance.db, network);
 		await syncService.syncData();
-		console.log(`${Network[network]} data sync completed successfully`);
+		console.log(`${network} data sync completed successfully`);
 	} finally {
 		await dbClose(dbInstance);
 	}
