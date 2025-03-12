@@ -5,7 +5,7 @@ import { exportAllAnalytics, exportResourceAnalytics, exportDidAnalytics } from 
 import { validateDateRange, ValidationError, validateFeePayer, validateDidId } from '../helpers/validate';
 import { generateExportFilename } from '../helpers/csv';
 import { AnalyticsQueryParams } from '../types/analytics';
-import { OperationType, OperationTypes, DenomTypes, FriendlyOperationType } from '../types/bigDipper';
+import { OperationTypes, DenomTypes, FriendlyOperationType } from '../types/bigDipper';
 import { Network, EntityType } from '../types/network';
 
 function validateQueryParams(params: AnalyticsQueryParams, network: Network): { isValid: boolean; error?: string } {
@@ -17,7 +17,10 @@ function validateQueryParams(params: AnalyticsQueryParams, network: Network): { 
 
 		// Validate operation type
 		if (params.ledgerOperationType) {
-			if (!Object.values(OperationTypes).includes(params.ledgerOperationType as OperationType)) {
+			const ledgerOpType = params.ledgerOperationType.trim().toLowerCase();
+			const allowedTypes = Object.values(OperationTypes).map((t) => t.toLowerCase());
+
+			if (!allowedTypes.includes(ledgerOpType)) {
 				return {
 					isValid: false,
 					error: `Invalid operation type: ${params.ledgerOperationType}. Valid types: ${Object.values(OperationTypes).join(', ')}`,
@@ -27,12 +30,13 @@ function validateQueryParams(params: AnalyticsQueryParams, network: Network): { 
 
 		// Validate operation type (simple string check with allowed values)
 		if (params.operationType) {
-			const opType = params.operationType.trim();
+			const opType = params.operationType.trim().toLowerCase();
+			const allowedTypes = Object.values(FriendlyOperationType).map((t) => t.toLowerCase());
 
-			if (!Object.values(FriendlyOperationType).includes(opType as FriendlyOperationType)) {
+			if (!allowedTypes.includes(opType)) {
 				return {
 					isValid: false,
-					error: `Invalid operation type: ${opType}. Valid types: ${Object.values(FriendlyOperationType).join(', ')}`,
+					error: `Invalid operation type: ${params.operationType}. Valid types: ${Object.values(FriendlyOperationType).join(', ')}`,
 				};
 			}
 		}
@@ -91,20 +95,51 @@ function validateQueryParams(params: AnalyticsQueryParams, network: Network): { 
 }
 
 function parseQueryParams(url: URL): AnalyticsQueryParams {
+	// Case-insensitive parameter lookup helper
+	const getParam = (name: string): string | null => {
+		// Try exact match first
+		if (url.searchParams.has(name)) {
+			return url.searchParams.get(name);
+		}
+
+		// Try case-insensitive match
+		for (const [key, value] of url.searchParams.entries()) {
+			if (key.toLowerCase() === name.toLowerCase()) {
+				return value;
+			}
+		}
+
+		return null;
+	};
+
+	const hasParam = (name: string): boolean => {
+		// Try exact match first
+		if (url.searchParams.has(name)) {
+			return true;
+		}
+
+		// Try case-insensitive match
+		for (const key of url.searchParams.keys()) {
+			if (key.toLowerCase() === name.toLowerCase()) {
+				return true;
+			}
+		}
+
+		return false;
+	};
+
 	return {
-		startDate: url.searchParams.has('startDate') ? url.searchParams.get('startDate') : null,
-		endDate: url.searchParams.has('endDate') ? url.searchParams.get('endDate') : null,
-		operationType: url.searchParams.has('operationType') ? url.searchParams.get('operationType') : null,
-		ledgerOperationType: url.searchParams.has('ledgerOperationType')
-			? url.searchParams.get('ledgerOperationType')
-			: null,
-		feePayer: url.searchParams.has('feePayer') ? url.searchParams.get('feePayer') : null,
-		didId: url.searchParams.has('didId') ? url.searchParams.get('didId') : null,
-		denom: url.searchParams.has('denom') ? url.searchParams.get('denom') : null,
-		ledgerDenom: url.searchParams.has('ledgerDenom') ? url.searchParams.get('ledgerDenom') : null,
-		success: url.searchParams.has('success') ? url.searchParams.get('success') === 'true' : null,
-		page: url.searchParams.has('page') ? parseInt(url.searchParams.get('page') || '1', 10) : 1,
-		limit: url.searchParams.has('limit') ? parseInt(url.searchParams.get('limit') || '100', 10) : 100,
+		startDate: getParam('startDate'),
+		endDate: getParam('endDate'),
+		operationType: getParam('operationType'),
+		ledgerOperationType: getParam('ledgerOperationType'),
+		feePayer: getParam('feePayer'),
+		didId: getParam('didId'),
+		denom: getParam('denom'),
+		ledgerDenom: getParam('ledgerDenom'),
+		success: hasParam('success') ? getParam('success') === 'true' : null,
+		page: hasParam('page') ? parseInt(getParam('page') || '1', 10) : 1,
+		limit: hasParam('limit') ? parseInt(getParam('limit') || '100', 10) : 100,
 	};
 }
 

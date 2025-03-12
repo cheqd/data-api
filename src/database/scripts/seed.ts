@@ -3,14 +3,14 @@ import { DenomTypes, OperationTypes, FriendlyOperationType } from '../../types/b
 import { Client, ClientConfig } from 'pg';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import fs from 'fs';
-import { eq } from 'drizzle-orm';
+
 export const clientConfig: ClientConfig = {
 	connectionString: process.env.DB_URL,
 };
 
-// clientConfig.ssl = {
-// 	ca: fs.readFileSync('/tmp/do-cert.pem').toString(),
-// };
+clientConfig.ssl = {
+	ca: fs.readFileSync('/tmp/do-cert.pem').toString(),
+};
 
 let client = new Client(clientConfig);
 

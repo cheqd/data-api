@@ -72,15 +72,15 @@ async function fetchNetworkDIDs(network: Network) {
 		const syncService = new SyncService(bigDipperApi, db, network);
 		await syncService.syncDids();
 
-		console.log(`${Network[network]} DIDs fetch completed successfully`);
+		console.log(`${network} DIDs fetch completed successfully`);
 	} catch (error) {
-		console.error(`Error fetching ${Network[network]} DIDs:`, (error as Error).message);
+		console.error(`Error fetching ${network} DIDs:`, (error as Error).message);
 		throw error;
 	}
 }
 
 async function fetchNetworkResources(network: Network) {
-	console.log(`Fetching ${Network[network]} resources...`);
+	console.log(`Fetching ${network} resources...`);
 
 	try {
 		// Use the correct GraphQL API URL based on the network
@@ -94,9 +94,9 @@ async function fetchNetworkResources(network: Network) {
 		const syncService = new SyncService(bigDipperApi, db, network);
 		await syncService.syncResources();
 
-		console.log(`${Network[network]} resources fetch completed successfully`);
+		console.log(`${network} resources fetch completed successfully`);
 	} catch (error) {
-		console.error(`Error fetching ${Network[network]} resources:`, (error as Error).message);
+		console.error(`Error fetching ${network} resources:`, (error as Error).message);
 		throw error;
 	}
 }

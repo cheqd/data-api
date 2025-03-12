@@ -1,4 +1,4 @@
-import { and, eq, gte, lte, count, desc, sql } from 'drizzle-orm';
+import { and, eq, gte, lte, count, desc, sql, ilike } from 'drizzle-orm';
 import {
 	didMainnet,
 	didTestnet,
@@ -11,7 +11,6 @@ import {
 } from '../database/schema';
 import { AnalyticsQueryParams, AnalyticsResponse } from '../types/analytics';
 import { DrizzleClient } from '../database/client';
-import { DenomType, OperationType, FriendlyOperationType } from '../types/bigDipper';
 import { serializeBigInt } from './csv';
 import { Network } from '../types/network';
 import { validateDateRange } from './validate';
@@ -42,13 +41,13 @@ export function buildQueryConditions(
 	conditions.push(gte(table.createdAt, start));
 	conditions.push(lte(table.createdAt, end));
 
-	// Add conditions without validation (validation already done in handler)
+	// Add conditions with case-insensitive comparison
 	if (params.feePayer !== null) {
 		conditions.push(eq(table.feePayer, params.feePayer));
 	}
 
 	if (params.didId !== null) {
-		conditions.push(eq(table.didId, params.didId));
+		conditions.push(ilike(table.didId, params.didId));
 	}
 
 	if (params.success !== null) {
@@ -56,19 +55,19 @@ export function buildQueryConditions(
 	}
 
 	if (params.operationType !== null) {
-		conditions.push(eq(operationTypesTable.friendlyOperationType, params.operationType as FriendlyOperationType));
+		conditions.push(ilike(operationTypesTable.friendlyOperationType, params.operationType));
 	}
 
 	if (params.ledgerOperationType !== null) {
-		conditions.push(eq(operationTypesTable.ledgerOperationType, params.ledgerOperationType as OperationType));
+		conditions.push(ilike(operationTypesTable.ledgerOperationType, params.ledgerOperationType));
 	}
 
 	if (params.ledgerDenom !== null) {
-		conditions.push(eq(denomTable.ledgerDenom, params.ledgerDenom as DenomType));
+		conditions.push(ilike(denomTable.ledgerDenom, params.ledgerDenom));
 	}
 
 	if (params.denom !== null) {
-		conditions.push(eq(denomTable.friendlyDenom, params.denom));
+		conditions.push(ilike(denomTable.friendlyDenom, params.denom));
 	}
 
 	return conditions;
