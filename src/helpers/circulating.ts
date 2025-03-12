@@ -29,8 +29,9 @@ export async function updateCirculatingSupply(groupNumber: number, env: Env) {
 				}
 			}
 		}
-	} catch (e) {
-		console.log('Error at: ', 'updateCirculatingSupply');
+	} catch (error: unknown) {
+		const errorMessage = error instanceof Error ? error.message : String(error);
+		console.error(`Error in updateCirculatingSupply: ${errorMessage}`);
 	}
 }
 
@@ -43,8 +44,10 @@ export async function updateCachedBalance(addr: string, grpN: number, env: Env) 
 		await env.CIRCULATING_SUPPLY_WATCHLIST.put(`group_${grpN}:${addr}`, data);
 
 		console.log(`account "${addr}" balance updated. (${data})`);
-	} catch (e: any) {
-		console.log(`error updateCachedBalance: ${e}`);
+	} catch (error: unknown) {
+		const errorMessage = error instanceof Error ? error.message : String(error);
+		console.error(`Error updating cached balance for address ${addr}: ${errorMessage}`);
+		return null; // Explicitly return null to indicate failure
 	}
 }
 
@@ -73,7 +76,9 @@ export async function getCirculatingSupply(env: Env): Promise<number> {
 
 		const circulating_supply = total_supply - shareholders_total_balance;
 		return circulating_supply;
-	} catch (e: any) {
-		throw new Error(e.toString);
+	} catch (error: unknown) {
+		const errorMessage = error instanceof Error ? error.message : String(error);
+		console.error(`Error calculating circulating supply: ${errorMessage}`);
+		throw new Error(`Failed to calculate circulating supply: ${errorMessage}`);
 	}
 }
