@@ -146,7 +146,7 @@ function parseQueryParams(url: URL): AnalyticsQueryParams {
 export async function handler(
 	request: IRequest,
 	env: Env,
-	ctx: ExecutionContext,
+	_ctx: ExecutionContext,
 	network: Network,
 	entityType?: EntityType
 ): Promise<Response> {
