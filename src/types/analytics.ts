@@ -12,8 +12,23 @@ export interface AnalyticsQueryParams {
 	limit: number;
 }
 
+export interface AnalyticsItem {
+	didId?: string;
+	resourceId?: string;
+	resourceType?: string;
+	resourceName?: string;
+	operationType: string;
+	feePayer: string;
+	amount: number | string;
+	denom: string;
+	blockHeight: number;
+	transactionHash: string;
+	createdAt: string | Date;
+	success: boolean;
+}
+
 export interface AnalyticsResponse {
-	items: any[];
+	items: AnalyticsItem[]; // Changed from any[]
 	totalCount: number;
 	page: number;
 	limit: number;
