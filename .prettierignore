@@ -1,11 +1,9 @@
 # Ignore folders
 .DS_Store
 .github
-.svelte-kit
 node_modules
 build
 dist
-package
 playwright
 playwright-report
 
