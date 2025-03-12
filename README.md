@@ -126,19 +126,15 @@ The standard Cosmos SDK REST API for account balances returns JSON with the acco
 
 ##### Mainnet
 
-[`data-api.cheqd.io/analytics/mainnet`](https://data-api.cheqd.io/analytics/mainnet)
-
-[`data-api.cheqd.io/analytics/mainnet/did`](https://data-api.cheqd.io/analytics/mainnet/did)
-
-[`data-api.cheqd.io/analytics/mainnet/resource`](https://data-api.cheqd.io/analytics/mainnet/resource)
+* **DID Documents**: [`data-api.cheqd.io/analytics/mainnet/did`](https://data-api.cheqd.io/analytics/mainnet/did)
+* **DID-Linked Resources (DLRs)**: [`data-api.cheqd.io/analytics/mainnet/resource`](https://data-api.cheqd.io/analytics/mainnet/resource)
+* **DIDs and DLRs combined** (harder to paginate): [`data-api.cheqd.io/analytics/mainnet`](https://data-api.cheqd.io/analytics/mainnet)
 
 ##### Testnet
 
-[`data-api.cheqd.io/analytics/testnet`](https://data-api.cheqd.io/analytics/testnet)
-
-[`data-api.cheqd.io/analytics/testnet/did`](https://data-api.cheqd.io/analytics/testnet/did)
-
-[`data-api.cheqd.io/analytics/testnet/resource`](https://data-api.cheqd.io/analytics/testnet/resource)
+* **DID Documents**: [`data-api.cheqd.io/analytics/testnet/did`](https://data-api.cheqd.io/analytics/testnet/did)
+* **DID-Linked Resources (DLRs)**: [`data-api.cheqd.io/analytics/testnet/resource`](https://data-api.cheqd.io/analytics/mainnet/resource)
+* **DIDs and DLRs combined** (harder to paginate): [`data-api.cheqd.io/analytics/testnet`](https://data-api.cheqd.io/analytics/mainnet)
 
 #### Response
 
@@ -146,28 +142,30 @@ Returns the identity transactions data for the specified network in JSON format.
 By default, the endpoint returns the data for the **last 30 days**.
 
 If `did` or `resource` is not specified, it will both DID and DLR analytics data, sorted by date in descending order.
-By default, the response is paginated with a limit of 100 results per page.
+By default, the response is paginated with a limit of **100 results per page**. It's harder to paginate through responses on the combined endpoints, so where possible it is recommended to query DIDs and DLRs separately.
 
-#### Query Parameters
+#### Optional Query Parameters
 
-* `startDate`: Start date for the analytics data.
-* `endDate`: End date for the analytics data.
+These optional query paramaters can be used to filter the results that are returned from the API.
+
+* `startDate`: Start date for the analytics data. If you provide *just* this parameter, the *current* date will be considered the end date.
+* `endDate`: End date for the analytics data. If you provide *just* this parameter, the start date will be considered as 30 days prior to this date.
 * `operationType`: Operation type for the analytics data. It accepts the following values:
   * `createDid`
   * `updateDid`
   * `deactivateDid`
   * `createResource`
-* `ledgerOperationType`: Ledger operation type for the analytics data. It accepts the following values:
+* `ledgerOperationType`: Ledger operation type for the analytics data. (Only relevant if the underlying operation types on ledger go through a breaking change in version number and you want to filter by specific operation type. Otherwise, use above.)
   * `cheqd.did.v2.MsgCreateDid`
   * `cheqd.did.v2.MsgUpdateDid`
   * `cheqd.did.v2.MsgDeactivateDid`
   * `cheqd.resource.v2.MsgCreateResource`
-* `denom`: Friendly denomination used for paying fees, e.g. `CHEQ` or `USDC`.
+* `denom`: Friendly denomination used for paying fees, e.g. `CHEQ` or `USDC`. Note that by default the results are returned in **main denomination**, i.e., the on-ledger value in `ncheq` is convert to CHEQ.
 * `ledgerDenom`: Ledger denomination used for paying fees, e.g. `ncheq` or `ibc/498A0751C798A0D9A389AA3691123DADA57DAA4FE165D5C75894505B876BA6E4`.
-* `feePayer`: Fee payer address.
-* `success`: Whether transaction was successful.
-* `page`: Page number for pagination.
-* `limit`: Number of results per page.
+* `feePayer`: Fee payer address, e.g., `cheqd1...xx`.
+* `success` (boolean; default: `true`): Whether transaction was successful or not. By default, only successful transactions are returned. Allows for specifically fetching failed transaction details.
+* `page` (default: `1`): Page number for pagination.
+* `limit` (default: `100`): Number of results per page.
 
 #### Rationale
 
@@ -182,7 +180,25 @@ curl -X GET "https://data-api.cheqd.io/analytics/mainnet?startDate=2024-01-01&en
 Response:
 
 ```json
-{"items":[{"didId":"did:cheqd:mainnet:f1a32c8b-bd76-450d-b5c2-46b1b92db74d","operationType":"createDid","feePayer":"cheqd15yqrljq6h7u8et30hqrwwaz8f9m62jvztlpc9t","amount":50,"denom":"CHEQ","blockHeight":"11709907","transactionHash":"36EEBB3E4551CC9BB1A70FACB9775AB8DD12F5ABF931A60322558C03F91822B9","createdAt":"2024-01-25T19:49:35.093Z","success":true}],"totalCount":7,"page":1,"limit":1,"totalPages":7}
+{
+  "items": [
+    {
+      "didId": "did:cheqd:mainnet:f1a32c8b-bd76-450d-b5c2-46b1b92db74d",
+      "operationType": "createDid",
+      "feePayer": "cheqd15yqrljq6h7u8et30hqrwwaz8f9m62jvztlpc9t",
+      "amount": 50,
+      "denom": "CHEQ",
+      "blockHeight": "11709907",
+      "transactionHash": "36EEBB3E4551CC9BB1A70FACB9775AB8DD12F5ABF931A60322558C03F91822B9",
+      "createdAt": "2024-01-25T19:49:35.093Z",
+      "success": true
+    }
+  ],
+  "totalCount": 7,
+  "page": 1,
+  "limit": 1,
+  "totalPages": 7
+}
 ```
 
 ## 🧑‍💻🛠 Developer Guide
