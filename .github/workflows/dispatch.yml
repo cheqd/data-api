@@ -1,17 +1,29 @@
 name: "Workflow Dispatch"
 on: push
-concurrency: 
+concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  
+
   call-lint:
     name: "Lint"
     uses: ./.github/workflows/lint.yml
 
-  call-deploy:
-    name: "Deploy"
-    needs: call-lint
-    uses: ./.github/workflows/deploy.yml
+  call-build:
+    name: "Build & Test"
+    uses: ./.github/workflows/build.yml
+
+  call-staging:
+    name: "Deploy staging"
+    if: ${{ github.ref_name != 'main' }}
+    needs: [call-lint, call-build]
+    uses: ./.github/workflows/staging.yml
+    secrets: inherit
+
+  call-release:
+    name: "Release"
+    if: ${{ github.ref_protected == true }}
+    needs: [call-lint, call-build]
+    uses: ./.github/workflows/release.yml
     secrets: inherit
