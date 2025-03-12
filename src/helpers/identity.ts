@@ -12,25 +12,17 @@ import {
 import { Network } from '../types/network';
 import { TransactionDetails } from '../types/bigDipper';
 import { eq, and, max } from 'drizzle-orm';
-import { Client } from 'pg';
 import { dbInit, dbClose } from '../database/client';
 import { GraphQLClient } from './graphql';
+import { DrizzleClient } from '../database/client';
 
-interface DbInstance {
-	db: any;
-	client: Client;
+// Define the block height result type
+interface BlockHeightResult {
+	maxBlock: bigint | null;
 }
 
-// Define table mappings based on network type
-const TABLES: Record<
-	Network,
-	{
-		did: any;
-		resource: any;
-		denom: any;
-		operationTypes: any;
-	}
-> = {
+// Define table mappings based on network type using the actual schema types
+const TABLES = {
 	[Network.MAINNET]: {
 		did: didMainnet,
 		resource: resourceMainnet,
@@ -45,37 +37,28 @@ const TABLES: Record<
 	},
 };
 
-interface BlockHeightResult {
-	maxBlock: bigint | null;
-}
-
 export class SyncService {
 	constructor(
 		private readonly bigDipperApi: BigDipperApi,
-		private readonly db: DbInstance['db'],
+		private readonly db: DrizzleClient,
 		private readonly network: Network
 	) {}
 
 	async syncData() {
 		console.log(`Starting data sync for ${this.network}...`);
-
 		// Always process all DIDs first
 		console.log(`Processing all DIDs first...`);
 		await this.syncDids();
-
 		// Then process all resources
 		console.log(`Now processing all resources...`);
 		await this.syncResources();
-
 		console.log(`${this.network} data sync completed successfully`);
 	}
 
 	async syncDids() {
 		const network = this.network;
 		const didTable = TABLES[network].did;
-
 		console.log(`Syncing DIDs for ${network}...`);
-
 		// Get the highest block height using Drizzle's max function
 		const lastDid = await this.db
 			.select({
@@ -83,10 +66,8 @@ export class SyncService {
 			})
 			.from(didTable)
 			.then((result: BlockHeightResult[]) => result[0]);
-
 		// Convert BigInt to Number for the API call
 		const lastBlockHeight = Number(lastDid?.maxBlock || 0n);
-
 		let offset = 0;
 		const limit = 100;
 		let hasMore = true;
@@ -94,16 +75,13 @@ export class SyncService {
 		let totalSkipped = 0;
 
 		const processedOperations = new Set<string>();
-
 		while (hasMore) {
 			console.log(`Fetching DIDs batch: offset=${offset}, limit=${limit}, minHeight=${lastBlockHeight}`);
 			const transactions = await this.bigDipperApi.getDids(limit, offset, lastBlockHeight);
-
 			if (transactions.length === 0) {
 				hasMore = false;
 				continue;
 			}
-
 			let batchInserted = 0;
 			let batchSkipped = 0;
 
@@ -128,7 +106,6 @@ export class SyncService {
 					totalSkipped++;
 				}
 			}
-
 			console.log(`Batch summary: ${batchInserted} inserted, ${batchSkipped} skipped`);
 
 			// If we got fewer than the limit, we've reached the end
@@ -151,7 +128,7 @@ export class SyncService {
 			const network = this.network;
 			const tables = TABLES[network];
 
-			// Get operation type ID
+			// Get operation type ID for this operation
 			const opType = await this.db
 				.select()
 				.from(tables.operationTypes)
@@ -162,9 +139,7 @@ export class SyncService {
 				console.error(`Operation type not found: ${tx.operationType}`);
 				throw new Error(`Operation type not found: ${tx.operationType}`);
 			}
-
 			console.log(`Found operation type: ${tx.operationType} -> ID: ${opType[0].id}`);
-
 			// Enhanced duplicate check with all three criteria
 			const existingRecord = await this.db
 				.select()
@@ -188,11 +163,9 @@ export class SyncService {
 			}
 
 			console.log(`No duplicate found, proceeding with insertion`);
-
 			// Transform DID ID if needed
 			if (tx.didId) {
 				const namespace = network === Network.MAINNET ? 'did:cheqd:mainnet:' : 'did:cheqd:testnet:';
-
 				// Check if the didId already has the namespace
 				if (!tx.didId.startsWith('did:cheqd:')) {
 					const originalDidId = tx.didId;
@@ -212,12 +185,11 @@ export class SyncService {
 				console.error(`Denom not found: ${tx.denom}`);
 				throw new Error(`Denom not found: ${tx.denom}`);
 			}
-
 			console.log(`Found denom: ${tx.denom} -> ID: ${denomRecord[0].id}`);
 
 			// Insert DID data
 			try {
-				const insertResult = await this.db.insert(tables.did).values({
+				await this.db.insert(tables.did).values({
 					didId: tx.didId,
 					operationType: opType[0].id,
 					feePayer: tx.feePayer,
@@ -263,9 +235,7 @@ export class SyncService {
 	async syncResources() {
 		const network = this.network;
 		const resourceTable = TABLES[network].resource;
-
 		console.log(`Syncing Resources for ${network}...`);
-
 		// Get the highest block height using Drizzle's max function
 		const lastResource = await this.db
 			.select({
@@ -273,11 +243,9 @@ export class SyncService {
 			})
 			.from(resourceTable)
 			.then((result: BlockHeightResult[]) => result[0]);
-
 		// Convert BigInt to Number for the API call
 		const lastBlockHeight = Number(lastResource?.maxBlock || 0n);
 		console.log(`Last processed block height: ${lastBlockHeight}`);
-
 		let offset = 0;
 		const limit = 100;
 		let hasMore = true;
@@ -286,16 +254,13 @@ export class SyncService {
 
 		// Add transaction hash tracking
 		const processedOperations = new Set<string>();
-
 		while (hasMore) {
 			console.log(`Fetching Resources batch: offset=${offset}, limit=${limit}, minHeight=${lastBlockHeight}`);
 			const transactions = await this.bigDipperApi.getResources(limit, offset, lastBlockHeight);
-
 			if (transactions.length === 0) {
 				hasMore = false;
 				continue;
 			}
-
 			let batchInserted = 0;
 			let batchSkipped = 0;
 
@@ -320,7 +285,6 @@ export class SyncService {
 					totalSkipped++;
 				}
 			}
-
 			console.log(`Batch summary: ${batchInserted} inserted, ${batchSkipped} skipped`);
 
 			// If we got fewer than the limit, we've reached the end
@@ -343,7 +307,7 @@ export class SyncService {
 			const network = this.network;
 			const tables = TABLES[network];
 
-			// Get operation type ID
+			// Get operation type ID for this operation
 			const opType = await this.db
 				.select()
 				.from(tables.operationTypes)
@@ -354,9 +318,7 @@ export class SyncService {
 				console.error(`Operation type not found: ${tx.operationType}`);
 				throw new Error(`Operation type not found: ${tx.operationType}`);
 			}
-
 			console.log(`Found operation type: ${tx.operationType} -> ID: ${opType[0].id}`);
-
 			// Enhanced duplicate check with all three criteria
 			const existingRecord = await this.db
 				.select()
@@ -378,15 +340,13 @@ export class SyncService {
 					`Existing record details: ID=${existingRecord[0].id}, height=${existingRecord[0].blockHeight}, created=${existingRecord[0].createdAt}`
 				);
 				console.log(`New record details: height=${tx.blockHeight}, created=${tx.timestamp}`);
-				return false;
+				return false; // Return false to indicate no insertion happened
 			}
 
 			console.log(`No duplicate found, proceeding with insertion`);
-
 			// Transform collection ID to DID
 			if (tx.didId) {
 				const namespace = network === Network.MAINNET ? 'did:cheqd:mainnet:' : 'did:cheqd:testnet:';
-
 				// Check if the didId already has the namespace
 				if (!tx.didId.startsWith('did:cheqd:')) {
 					const originalDidId = tx.didId;
@@ -406,7 +366,6 @@ export class SyncService {
 				console.error(`Denom not found: ${tx.denom}`);
 				throw new Error(`Denom not found: ${tx.denom}`);
 			}
-
 			console.log(`Found denom: ${tx.denom} -> ID: ${denomRecord[0].id}`);
 
 			// Insert resource data
