@@ -101,3 +101,11 @@ export const DenomTypes = {
 } as const;
 
 export type DenomType = (typeof DenomTypes)[keyof typeof DenomTypes];
+
+// Add this enum for friendly operation types
+export enum FriendlyOperationType {
+	CREATE_DID = 'createDid',
+	UPDATE_DID = 'updateDid',
+	DEACTIVATE_DID = 'deactivateDid',
+	CREATE_RESOURCE = 'createResource',
+}

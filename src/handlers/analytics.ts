@@ -5,7 +5,7 @@ import { exportAllAnalytics, exportResourceAnalytics, exportDidAnalytics } from 
 import { validateDateRange, ValidationError, validateFeePayer, validateDidId } from '../helpers/validate';
 import { generateExportFilename } from '../helpers/csv';
 import { AnalyticsQueryParams } from '../types/analytics';
-import { OperationType, OperationTypes, DenomTypes } from '../types/bigDipper';
+import { OperationType, OperationTypes, DenomTypes, FriendlyOperationType } from '../types/bigDipper';
 import { Network, EntityType } from '../types/network';
 
 function validateQueryParams(params: AnalyticsQueryParams, network: Network): { isValid: boolean; error?: string } {
@@ -16,24 +16,47 @@ function validateQueryParams(params: AnalyticsQueryParams, network: Network): { 
 		}
 
 		// Validate operation type
-		if (params.operationType) {
-			if (!Object.values(OperationTypes).includes(params.operationType as OperationType)) {
+		if (params.ledgerOperationType) {
+			if (!Object.values(OperationTypes).includes(params.ledgerOperationType as OperationType)) {
 				return {
 					isValid: false,
-					error: `Invalid operation type: ${params.operationType}. Valid types: ${Object.values(OperationTypes).join(', ')}`,
+					error: `Invalid operation type: ${params.ledgerOperationType}. Valid types: ${Object.values(OperationTypes).join(', ')}`,
 				};
 			}
 		}
 
-		// Validate denom
-		if (params.denom) {
-			const denom = params.denom.trim().toLowerCase();
-			const allowedDenoms = Object.values(DenomTypes).map((d) => d.toLowerCase());
+		// Validate operation type (simple string check with allowed values)
+		if (params.operationType) {
+			const opType = params.operationType.trim();
 
-			if (!allowedDenoms.includes(denom)) {
+			if (!Object.values(FriendlyOperationType).includes(opType as FriendlyOperationType)) {
 				return {
 					isValid: false,
-					error: `Invalid denom: ${params.denom}. Allowed values: ${Object.values(DenomTypes).join(', ')}`,
+					error: `Invalid operation type: ${opType}. Valid types: ${Object.values(FriendlyOperationType).join(', ')}`,
+				};
+			}
+		}
+
+		// Validate Ledger denom
+		if (params.ledgerDenom) {
+			const ledgerDenom = params.ledgerDenom.trim().toLowerCase();
+			const allowedDenoms = Object.values(DenomTypes).map((d) => d.toLowerCase());
+
+			if (!allowedDenoms.includes(ledgerDenom)) {
+				return {
+					isValid: false,
+					error: `Invalid denom: ${params.ledgerDenom}. Allowed values: ${Object.values(DenomTypes).join(', ')}`,
+				};
+			}
+		}
+
+		// Validate denom (simple string check)
+		if (params.denom) {
+			const denom = params.denom.trim();
+			if (!denom) {
+				return {
+					isValid: false,
+					error: 'Denom cannot be empty',
 				};
 			}
 		}
@@ -53,7 +76,7 @@ function validateQueryParams(params: AnalyticsQueryParams, network: Network): { 
 			if (!validateDidId(params.didId, network)) {
 				return {
 					isValid: false,
-					error: `Invalid DID ID format. Must be did:cheqd:${network === Network.MAINNET ? 'mainnet' : 'testnet'}:<uuid>`,
+					error: `Invalid DID ID format. Must be did:cheqd:${network === Network.MAINNET ? 'mainnet' : 'testnet'}:<identifier>`,
 				};
 			}
 		}
@@ -72,9 +95,13 @@ function parseQueryParams(url: URL): AnalyticsQueryParams {
 		startDate: url.searchParams.has('startDate') ? url.searchParams.get('startDate') : null,
 		endDate: url.searchParams.has('endDate') ? url.searchParams.get('endDate') : null,
 		operationType: url.searchParams.has('operationType') ? url.searchParams.get('operationType') : null,
+		ledgerOperationType: url.searchParams.has('ledgerOperationType')
+			? url.searchParams.get('ledgerOperationType')
+			: null,
 		feePayer: url.searchParams.has('feePayer') ? url.searchParams.get('feePayer') : null,
 		didId: url.searchParams.has('didId') ? url.searchParams.get('didId') : null,
 		denom: url.searchParams.has('denom') ? url.searchParams.get('denom') : null,
+		ledgerDenom: url.searchParams.has('ledgerDenom') ? url.searchParams.get('ledgerDenom') : null,
 		success: url.searchParams.has('success') ? url.searchParams.get('success') === 'true' : null,
 		page: url.searchParams.has('page') ? parseInt(url.searchParams.get('page') || '1', 10) : 1,
 		limit: url.searchParams.has('limit') ? parseInt(url.searchParams.get('limit') || '100', 10) : 100,
@@ -94,19 +121,6 @@ export async function handler(
 	try {
 		const params = parseQueryParams(url);
 		const isExport = url.pathname.endsWith('/export');
-
-		// If a specific entity type is provided, ignore operationType parameter
-		if (entityType && params.operationType) {
-			return new Response(
-				JSON.stringify({
-					error: `The operationType parameter cannot be used with the /${entityType} endpoint. Use the base /analytics/${network} endpoint instead.`,
-				}),
-				{
-					status: 400,
-					headers: { 'Content-Type': 'application/json' },
-				}
-			);
-		}
 
 		// Validate parameters
 		const validation = validateQueryParams(params, network);

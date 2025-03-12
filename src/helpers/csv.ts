@@ -105,16 +105,18 @@ export async function exportDidAnalytics(
 	const tables = getTables(network);
 
 	// Build base conditions
-	const conditions = buildQueryConditions(params, tables.did, tables.operationTypes);
+	const conditions = buildQueryConditions(params, tables.did, tables.operationTypes, tables.denom);
 
 	// Execute query without pagination
 	const items = await db
 		.select({
 			didId: tables.did.didId,
-			operationType: tables.operationTypes.type,
+			operationType: tables.operationTypes.friendlyOperationType,
+			ledgerOperationType: tables.operationTypes.ledgerOperationType,
 			feePayer: tables.did.feePayer,
-			amount: tables.did.amount,
+			amount: sql`${tables.did.amount}::decimal / POW(10, ${tables.denom.exponent})`,
 			denom: tables.denom.friendlyDenom,
+			ledgerDenom: tables.denom.ledgerDenom,
 			blockHeight: tables.did.blockHeight,
 			transactionHash: tables.did.transactionHash,
 			createdAt: tables.did.createdAt,
@@ -138,7 +140,7 @@ export async function exportResourceAnalytics(
 	const tables = getTables(network);
 
 	// Build base conditions
-	const conditions = buildQueryConditions(params, tables.resource, tables.operationTypes);
+	const conditions = buildQueryConditions(params, tables.resource, tables.operationTypes, tables.denom);
 
 	// Execute query without pagination
 	const items = await db
@@ -146,11 +148,13 @@ export async function exportResourceAnalytics(
 			resourceId: tables.resource.resourceId,
 			resourceType: tables.resource.resourceType,
 			resourceName: tables.resource.resourceName,
-			operationType: tables.operationTypes.type,
+			operationType: tables.operationTypes.friendlyOperationType,
+			ledgerOperationType: tables.operationTypes.ledgerOperationType,
 			didId: tables.resource.didId,
 			feePayer: tables.resource.feePayer,
-			amount: tables.resource.amount,
+			amount: sql`${tables.resource.amount}::decimal / POW(10, ${tables.denom.exponent})`,
 			denom: tables.denom.friendlyDenom,
+			ledgerDenom: tables.denom.ledgerDenom,
 			blockHeight: tables.resource.blockHeight,
 			transactionHash: tables.resource.transactionHash,
 			createdAt: tables.resource.createdAt,
@@ -174,10 +178,10 @@ export async function exportAllAnalytics(
 	const tables = getTables(network);
 
 	// Build conditions for DIDs
-	const didConditions = buildQueryConditions(params, tables.did, tables.operationTypes);
+	const didConditions = buildQueryConditions(params, tables.did, tables.operationTypes, tables.denom);
 
 	// Build conditions for Resources
-	const resourceConditions = buildQueryConditions(params, tables.resource, tables.operationTypes);
+	const resourceConditions = buildQueryConditions(params, tables.resource, tables.operationTypes, tables.denom);
 
 	// Fetch DIDs
 	const didItems = await db
@@ -188,10 +192,12 @@ export async function exportAllAnalytics(
 			resourceId: sql`NULL`.as('resourceId'),
 			resourceType: sql`NULL`.as('resourceType'),
 			resourceName: sql`NULL`.as('resourceName'),
-			operationType: tables.operationTypes.type,
+			operationType: tables.operationTypes.friendlyOperationType,
+			ledgerOperationType: tables.operationTypes.ledgerOperationType,
 			feePayer: tables.did.feePayer,
-			amount: tables.did.amount,
+			amount: sql`${tables.did.amount}::decimal / POW(10, ${tables.denom.exponent})`,
 			denom: tables.denom.friendlyDenom,
+			ledgerDenom: tables.denom.ledgerDenom,
 			blockHeight: tables.did.blockHeight,
 			transactionHash: tables.did.transactionHash,
 			createdAt: tables.did.createdAt,
@@ -212,10 +218,12 @@ export async function exportAllAnalytics(
 			resourceId: tables.resource.resourceId,
 			resourceType: tables.resource.resourceType,
 			resourceName: tables.resource.resourceName,
-			operationType: tables.operationTypes.type,
+			operationType: tables.operationTypes.friendlyOperationType,
+			ledgerOperationType: tables.operationTypes.ledgerOperationType,
 			feePayer: tables.resource.feePayer,
-			amount: tables.resource.amount,
+			amount: sql`${tables.resource.amount}::decimal / POW(10, ${tables.denom.exponent})`,
 			denom: tables.denom.friendlyDenom,
+			ledgerDenom: tables.denom.ledgerDenom,
 			blockHeight: tables.resource.blockHeight,
 			transactionHash: tables.resource.transactionHash,
 			createdAt: tables.resource.createdAt,

@@ -15,6 +15,13 @@
       "when": 1741392062249,
       "tag": "0001_hard_jane_foster",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1741705797047,
+      "tag": "0002_dazzling_colossus",
+      "breakpoints": true
     }
   ]
 }

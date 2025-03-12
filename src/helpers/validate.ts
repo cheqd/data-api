@@ -29,8 +29,10 @@ export function validateFeePayer(feePayer: string): boolean {
 // Validate DID ID format
 export function validateDidId(didId: string, network: Network): boolean {
 	const networkStr = network === Network.MAINNET ? 'mainnet' : 'testnet';
-	const uuidRegex = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
-	const didRegex = new RegExp(`^did:cheqd:${networkStr}:${uuidRegex}$`);
+
+	// Match did:cheqd:network: followed by alphanumeric chars and hyphens only
+	const didRegex = new RegExp(`^did:cheqd:${networkStr}:[a-zA-Z0-9-]+$`);
+
 	return didRegex.test(didId);
 }
 

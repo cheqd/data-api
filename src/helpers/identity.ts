@@ -155,7 +155,7 @@ export class SyncService {
 			const opType = await this.db
 				.select()
 				.from(tables.operationTypes)
-				.where(eq(tables.operationTypes.type, tx.operationType))
+				.where(eq(tables.operationTypes.ledgerOperationType, tx.operationType))
 				.limit(1);
 
 			if (opType.length === 0) {
@@ -347,7 +347,7 @@ export class SyncService {
 			const opType = await this.db
 				.select()
 				.from(tables.operationTypes)
-				.where(eq(tables.operationTypes.type, tx.operationType))
+				.where(eq(tables.operationTypes.ledgerOperationType, tx.operationType))
 				.limit(1);
 
 			if (opType.length === 0) {

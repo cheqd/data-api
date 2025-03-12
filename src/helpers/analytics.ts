@@ -1,4 +1,4 @@
-import { and, eq, gte, lte, count, desc } from 'drizzle-orm';
+import { and, eq, gte, lte, count, desc, sql } from 'drizzle-orm';
 import {
 	didMainnet,
 	didTestnet,
@@ -11,7 +11,7 @@ import {
 } from '../database/schema';
 import { AnalyticsQueryParams, AnalyticsResponse } from '../types/analytics';
 import { DrizzleClient } from '../database/client';
-import { OperationType } from '../types/bigDipper';
+import { DenomType, OperationType, FriendlyOperationType } from '../types/bigDipper';
 import { serializeBigInt } from './csv';
 import { Network } from '../types/network';
 import { validateDateRange } from './validate';
@@ -32,7 +32,8 @@ export function getTables(network: Network) {
 export function buildQueryConditions(
 	params: AnalyticsQueryParams,
 	table: typeof didMainnet | typeof didTestnet | typeof resourceMainnet | typeof resourceTestnet,
-	operationTypesTable: typeof operationTypesMainnet | typeof operationTypesTestnet
+	operationTypesTable: typeof operationTypesMainnet | typeof operationTypesTestnet,
+	denomTable: typeof denomMainnet | typeof denomTestnet
 ) {
 	const conditions = [];
 
@@ -55,7 +56,19 @@ export function buildQueryConditions(
 	}
 
 	if (params.operationType !== null) {
-		conditions.push(eq(operationTypesTable.type, params.operationType as OperationType));
+		conditions.push(eq(operationTypesTable.friendlyOperationType, params.operationType as FriendlyOperationType));
+	}
+
+	if (params.ledgerOperationType !== null) {
+		conditions.push(eq(operationTypesTable.ledgerOperationType, params.ledgerOperationType as OperationType));
+	}
+
+	if (params.ledgerDenom !== null) {
+		conditions.push(eq(denomTable.ledgerDenom, params.ledgerDenom as DenomType));
+	}
+
+	if (params.denom !== null) {
+		conditions.push(eq(denomTable.friendlyDenom, params.denom));
 	}
 
 	return conditions;
@@ -114,7 +127,7 @@ export async function fetchDidAnalytics(
 	const tables = getTables(network);
 
 	// Build base conditions with network
-	const conditions = buildQueryConditions(params, tables.did, tables.operationTypes);
+	const conditions = buildQueryConditions(params, tables.did, tables.operationTypes, tables.denom);
 
 	// Calculate pagination
 	const offset = getPaginationOffset(params);
@@ -122,10 +135,11 @@ export async function fetchDidAnalytics(
 	const items = await db
 		.select({
 			didId: tables.did.didId,
-			operationType: tables.operationTypes.type,
+			operationType: tables.operationTypes.friendlyOperationType,
 			feePayer: tables.did.feePayer,
-			amount: tables.did.amount,
+			amount: sql`${tables.did.amount}::decimal / POW(10, ${tables.denom.exponent})`,
 			denom: tables.denom.friendlyDenom,
+			ledgerDenom: tables.denom.ledgerDenom,
 			blockHeight: tables.did.blockHeight,
 			transactionHash: tables.did.transactionHash,
 			createdAt: tables.did.createdAt,
@@ -146,6 +160,7 @@ export async function fetchDidAnalytics(
 		})
 		.from(tables.did)
 		.leftJoin(tables.operationTypes, eq(tables.did.operationType, tables.operationTypes.id))
+		.leftJoin(tables.denom, eq(tables.did.denom, tables.denom.id))
 		.where(and(...conditions))
 		.then((result) => result[0].value);
 
@@ -160,7 +175,7 @@ export async function fetchResourceAnalytics(
 	const tables = getTables(network);
 
 	// Build base conditions with network
-	const conditions = buildQueryConditions(params, tables.resource, tables.operationTypes);
+	const conditions = buildQueryConditions(params, tables.resource, tables.operationTypes, tables.denom);
 
 	// Calculate pagination
 	const offset = getPaginationOffset(params);
@@ -170,11 +185,12 @@ export async function fetchResourceAnalytics(
 			resourceId: tables.resource.resourceId,
 			resourceType: tables.resource.resourceType,
 			resourceName: tables.resource.resourceName,
-			operationType: tables.operationTypes.type,
+			operationType: tables.operationTypes.friendlyOperationType,
 			didId: tables.resource.didId,
 			feePayer: tables.resource.feePayer,
-			amount: tables.resource.amount,
+			amount: sql`${tables.resource.amount}::decimal / POW(10, ${tables.denom.exponent})`,
 			denom: tables.denom.friendlyDenom,
+			ledgerDenom: tables.denom.ledgerDenom,
 			blockHeight: tables.resource.blockHeight,
 			transactionHash: tables.resource.transactionHash,
 			createdAt: tables.resource.createdAt,
@@ -195,6 +211,7 @@ export async function fetchResourceAnalytics(
 		})
 		.from(tables.resource)
 		.leftJoin(tables.operationTypes, eq(tables.resource.operationType, tables.operationTypes.id))
+		.leftJoin(tables.denom, eq(tables.resource.denom, tables.denom.id))
 		.where(and(...conditions))
 		.then((result) => result[0].value);
 

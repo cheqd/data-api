@@ -82,8 +82,8 @@ export const resourceMainnet = pgTable(
 
 export const denomMainnet = pgTable('denom_mainnet', {
 	id: serial('id').primaryKey().notNull(),
-	ledgerDenom: varchar('ledger_denom').notNull().unique(),
-	friendlyDenom: denomsEnumMainnet('friendly_denom').notNull(),
+	ledgerDenom: denomsEnumMainnet('ledger_denom').unique().notNull().default(DenomTypes.NCHEQ),
+	friendlyDenom: varchar('friendly_denom').notNull().default('CHEQ'),
 	exponent: integer('exponent').notNull(),
 	description: varchar('description').notNull(),
 	createdAt: timestamp('created_at', { mode: 'date', withTimezone: true }).notNull().defaultNow(),
@@ -92,7 +92,8 @@ export const denomMainnet = pgTable('denom_mainnet', {
 
 export const operationTypesMainnet = pgTable('operation_types_mainnet', {
 	id: serial('id').primaryKey().notNull(),
-	type: operationTypeEnumMainnet('type').unique().notNull(),
+	ledgerOperationType: operationTypeEnumMainnet('ledger_operation_type').unique().notNull(),
+	friendlyOperationType: varchar('friendly_operation_type').notNull().default('friendly'),
 	description: varchar('description').notNull(),
 	createdAt: timestamp('created_at', { mode: 'date', withTimezone: true }).notNull().defaultNow(),
 	updatedAt: timestamp('updated_at', { mode: 'date', withTimezone: true }),
@@ -149,8 +150,8 @@ export const resourceTestnet = pgTable(
 
 export const denomTestnet = pgTable('denom_testnet', {
 	id: serial('id').primaryKey().notNull(),
-	ledgerDenom: varchar('ledger_denom').notNull().unique(),
-	friendlyDenom: denomsEnumTestnet('friendly_denom').notNull(),
+	ledgerDenom: denomsEnumTestnet('ledger_denom').unique().notNull().default(DenomTypes.NCHEQ),
+	friendlyDenom: varchar('friendly_denom').notNull().default('ncheq'),
 	exponent: integer('exponent').notNull(),
 	description: varchar('description').notNull(),
 	createdAt: timestamp('created_at', { mode: 'date', withTimezone: true }).notNull().defaultNow(),
@@ -159,7 +160,8 @@ export const denomTestnet = pgTable('denom_testnet', {
 
 export const operationTypesTestnet = pgTable('operation_types_testnet', {
 	id: serial('id').primaryKey().notNull(),
-	type: operationTypeEnumTestnet('type').unique().notNull(),
+	ledgerOperationType: operationTypeEnumTestnet('ledger_operation_type').unique().notNull(),
+	friendlyOperationType: varchar('friendly_operation_type').notNull().default('friendly'),
 	description: varchar('description').notNull(),
 	createdAt: timestamp('created_at', { mode: 'date', withTimezone: true }).notNull().defaultNow(),
 	updatedAt: timestamp('updated_at', { mode: 'date', withTimezone: true }),
