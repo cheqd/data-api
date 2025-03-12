@@ -11,14 +11,14 @@ export async function handler(request: IRequest, env: Env): Promise<Response> {
 		throw new Error('No address specified or wrong address format.');
 	}
 
-	let api = new NodeApi(env.REST_API);
+	const api = new NodeApi(env.REST_API);
 	const account = await api.getAccountInfo(address);
 
 	if (!isVestingAccount(account['@type'])) {
 		throw new Error(`Only vesting accounts are supported. Accounts type '${account['@type']}'.`);
 	}
 
-	let vested_coins = calculateVesting(account)?.vested;
+	const vested_coins = calculateVesting(account)?.vested;
 
-	return new Response(convertToMainTokenDenom(vested_coins!!, env.TOKEN_EXPONENT));
+	return new Response(convertToMainTokenDenom(vested_coins!, env.TOKEN_EXPONENT));
 }

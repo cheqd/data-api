@@ -10,7 +10,7 @@ export class GraphQLClient {
 			req = options;
 		}
 
-		let resp = await fetch(this.base_url, {
+		const resp = await fetch(this.base_url, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -18,7 +18,7 @@ export class GraphQLClient {
 			body: JSON.stringify(req),
 		});
 
-		let json = (await resp.json()) as any;
+		const json = (await resp.json()) as any;
 
 		if (json.errors) {
 			throw new Error(`Query failed: ${JSON.stringify(json.errors)}`);
