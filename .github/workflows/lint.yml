@@ -39,9 +39,6 @@ jobs:
         LOG_LEVEL: WARN
         VALIDATE_ALL_CODEBASE: true
         MULTI_STATUS: true
-        
-        JAVASCRIPT_ES_CONFIG_FILE: eslint.config.mjs
-        TYPESCRIPT_ES_CONFIG_FILE: eslint.config.mjs
 
         VALIDATE_GITHUB_ACTIONS: true
         VALIDATE_JAVASCRIPT_ES: true
