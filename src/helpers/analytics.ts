@@ -14,7 +14,7 @@ import { DrizzleClient } from '../database/client';
 import { serializeBigInt } from './csv';
 import { Network } from '../types/network';
 import { validateDateRange } from './validate';
-
+import { DenomType, OperationType } from '../types/bigDipper';
 export const DEFAULT_LIMIT = 100;
 
 // Network-based table mapping
@@ -59,11 +59,11 @@ export function buildQueryConditions(
 	}
 
 	if (params.ledgerOperationType !== null) {
-		conditions.push(ilike(operationTypesTable.ledgerOperationType, params.ledgerOperationType));
+		conditions.push(eq(operationTypesTable.ledgerOperationType, params.ledgerOperationType as OperationType));
 	}
 
 	if (params.ledgerDenom !== null) {
-		conditions.push(ilike(denomTable.ledgerDenom, params.ledgerDenom));
+		conditions.push(eq(denomTable.ledgerDenom, params.ledgerDenom as DenomType));
 	}
 
 	if (params.denom !== null) {

@@ -120,28 +120,86 @@ Total account balance for specified account, in CHEQ.
 
 The standard Cosmos SDK REST API for account balances returns JSON with the account balances along with its denomination, usually the lowest denomination. This is hard to parse in applications such as Google Sheets (e.g., to monitor the account balance by fetching a response from a REST API directly in Google Sheets). This API returns a plain number that can be directly plugged into such applications, without having to parse JSON.
 
-### 🚨 Arbitrage
+### 📊 Identity Analytics
 
-#### Endpoint
+#### Endpoints
 
-- Results filtered by threshold value: [`data-api.cheqd.io/arbitrage`](https://data-api.cheqd.io/arbitrage)
-- Unfiltered results: [`data-api.cheqd.io/arbitrage/all`](https://data-api.cheqd.io/arbitrage/all)
+##### Mainnet
+
+* **DID Documents**: [`data-api.cheqd.io/analytics/mainnet/did`](https://data-api.cheqd.io/analytics/mainnet/did)
+* **DID-Linked Resources (DLRs)**: [`data-api.cheqd.io/analytics/mainnet/resource`](https://data-api.cheqd.io/analytics/mainnet/resource)
+* **DIDs and DLRs combined** (harder to paginate): [`data-api.cheqd.io/analytics/mainnet`](https://data-api.cheqd.io/analytics/mainnet)
+
+##### Testnet
+
+* **DID Documents**: [`data-api.cheqd.io/analytics/testnet/did`](https://data-api.cheqd.io/analytics/testnet/did)
+* **DID-Linked Resources (DLRs)**: [`data-api.cheqd.io/analytics/testnet/resource`](https://data-api.cheqd.io/analytics/mainnet/resource)
+* **DIDs and DLRs combined** (harder to paginate): [`data-api.cheqd.io/analytics/testnet`](https://data-api.cheqd.io/analytics/mainnet)
 
 #### Response
 
-Returns current price of CHEQ token among different markets along with an evaluation of whether they are at risk of arbitrage opportunities.
+Returns the identity transactions data for the specified network in JSON format.
+By default, the endpoint returns the data for the **last 30 days**.
+
+If `did` or `resource` is not specified, it will both DID and DLR analytics data, sorted by date in descending order.
+By default, the response is paginated with a limit of **100 results per page**. It's harder to paginate through responses on the combined endpoints, so where possible it is recommended to query DIDs and DLRs separately.
+
+#### Optional Query Parameters
+
+These optional query paramaters can be used to filter the results that are returned from the API.
+
+* `startDate`: Start date for the analytics data. If you provide *just* this parameter, the *current* date will be considered the end date.
+* `endDate`: End date for the analytics data. If you provide *just* this parameter, the start date will be considered as 30 days prior to this date.
+* `operationType`: Operation type for the analytics data. It accepts the following values:
+  * `createDid`
+  * `updateDid`
+  * `deactivateDid`
+  * `createResource`
+* `ledgerOperationType`: Ledger operation type for the analytics data. (Only relevant if the underlying operation types on ledger go through a breaking change in version number and you want to filter by specific operation type. Otherwise, use above.)
+  * `cheqd.did.v2.MsgCreateDid`
+  * `cheqd.did.v2.MsgUpdateDid`
+  * `cheqd.did.v2.MsgDeactivateDid`
+  * `cheqd.resource.v2.MsgCreateResource`
+* `denom`: Friendly denomination used for paying fees, e.g. `CHEQ` or `USDC`. Note that by default the results are returned in **main denomination**, i.e., the on-ledger value in `ncheq` is convert to CHEQ.
+* `ledgerDenom`: Ledger denomination used for paying fees, e.g. `ncheq` or `ibc/498A0751C798A0D9A389AA3691123DADA57DAA4FE165D5C75894505B876BA6E4`.
+* `feePayer`: Fee payer address, e.g., `cheqd1...xx`.
+* `success` (boolean; default: `true`): Whether transaction was successful or not. By default, only successful transactions are returned. Allows for specifically fetching failed transaction details.
+* `page` (default: `1`): Page number for pagination.
+* `limit` (default: `100`): Number of results per page.
 
 #### Rationale
 
-The CHEQ token trades on multiple markets/exchanges (e.g., [Osmosis](https://app.osmosis.zone), [Gate.io](https://www.gate.io/trade/CHEQ_USDT), [BitMart](https://www.bitmart.com/trade/en?layout=basic&symbol=CHEQ_USDT), [LBank](https://www.lbank.info/exchange/cheq/usdt), [Uniswap](https://app.uniswap.org/#/swap?inputCurrency=0x70edf1c215d0ce69e7f16fd4e6276ba0d99d4de7&outputCurrency=0xdac17f958d2ee523a2206206994597c13d831ec7&chain=mainnet)). This is typically established as CHEQ along with another token pair or currency.
+The purpose of this API is to provide more granular data and help us to understand the usage of identity modules and how they are used by the community.
 
-Fluctuations in the exchange rate between CHEQ and other tokens pairs can give rise to opportunities for arbitrage. Having a significant market arbitrage among different exchanges creates a [market inefficiencies](https://www.investopedia.com/terms/i/inefficientmarket.asp). Extreme market inefficiencies result [market failure](https://www.investopedia.com/terms/m/marketfailure.asp) and [deadweight loss](https://www.investopedia.com/terms/d/deadweightloss.asp).
+#### Example
 
-Having monitoring capabilities for arbitrage gives opportunities for the cheqd community to rectify potential liquidity issues and aware of exchange rate movements.
+```bash
+curl -X GET "https://data-api.cheqd.io/analytics/mainnet?startDate=2024-01-01&endDate=2024-01-31&operationType=createDid&denom=CHEQ&&success=true&limit=1"
+```
 
-#### Alerting via Zapier
+Response:
 
-To alert a significant market arbitrages for CHEQ listings on different exchanges, we pull latest markets data from the [CoinGecko API for cheqd's ticker page](https://www.coingecko.com/en/coins/cheqd-network) via our Market Monitoring API [Monitor Markets API](https://github.com/cheqd/market-monitoring). If an arbitrage threshold is exceeded, a webhook trigger is sent to [Zapier](https://zapier.com/) for alerting via different channels (such as Slack).
+```json
+{
+  "items": [
+    {
+      "didId": "did:cheqd:mainnet:f1a32c8b-bd76-450d-b5c2-46b1b92db74d",
+      "operationType": "createDid",
+      "feePayer": "cheqd15yqrljq6h7u8et30hqrwwaz8f9m62jvztlpc9t",
+      "amount": 50,
+      "denom": "CHEQ",
+      "blockHeight": "11709907",
+      "transactionHash": "36EEBB3E4551CC9BB1A70FACB9775AB8DD12F5ABF931A60322558C03F91822B9",
+      "createdAt": "2024-01-25T19:49:35.093Z",
+      "success": true
+    }
+  ],
+  "totalCount": 7,
+  "page": 1,
+  "limit": 1,
+  "totalPages": 7
+}
+```
 
 ## 🧑‍💻🛠 Developer Guide
 

@@ -6,15 +6,11 @@ import { handler as liquidBalanceHandler } from './handlers/liquidBalance';
 import { handler as vestingBalanceHandler } from './handlers/vestingBalance';
 import { handler as vestedBalanceHandler } from './handlers/vestedBalance';
 import { handler as totalStakedCoinsHandler } from './handlers/totalStakedCoins';
-import { handler as allArbitrageOpportunitiesHandler } from './handlers/allArbitrageOpportunities';
-import { handler as arbitrageOpportunitiesHandler } from './handlers/arbitrageOpportunities';
 import { webhookTriggers } from './handlers/webhookTriggers';
 import { registerAnalyticsRoutes } from './routes/analytics';
 
 function registerRoutes(router: ReturnType<typeof Router>, env: Env, ctx: ExecutionContext) {
 	router.get('/', (request) => totalSupplyHandler(request, env));
-	router.get('/arbitrage', (request) => arbitrageOpportunitiesHandler(request, env));
-	router.get('/arbitrage/all', (request) => allArbitrageOpportunitiesHandler(request, env));
 	router.get('/balances/liquid/:address', (request) => liquidBalanceHandler(request, env));
 	router.get('/balances/total/:address', (request) => totalBalanceHandler(request, env));
 	router.get('/balances/vested/:address', (request) => vestedBalanceHandler(request, env));
