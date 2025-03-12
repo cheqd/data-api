@@ -8,10 +8,10 @@ const DEFAULT_POSTGRES_TIMEOUT = 30000;
 export type DrizzleClient = NodePgDatabase<typeof schema>;
 
 interface DbEnv {
-  HYPERDRIVE: {
-    connectionString: string;
-  };
-  ENVIRONMENT: string;
+	HYPERDRIVE: {
+		connectionString: string;
+	};
+	ENVIRONMENT: string;
 }
 
 export async function dbInit(env?: DbEnv): Promise<{ db: DrizzleClient; client: Client }> {
