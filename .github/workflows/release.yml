@@ -1,4 +1,4 @@
-name: "Deploy"
+name: "Release"
 on:
   workflow_call:
 defaults:
@@ -7,39 +7,42 @@ defaults:
 
 jobs:
   
-  staging-deploy:
-    name: "Cloudflare - Staging"
+  release-npm:
+    name: "Semantic Release"
     runs-on: ubuntu-latest
-    environment:
-      name: staging
-      url: https://data-api-staging.cheqd.io/
 
     steps:
       - uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           persist-credentials: false
-      
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
+          cache: "npm"
 
-      - name: Publish to Cloudflare
-        uses: cloudflare/wrangler-action@v3
+      - name: "Obtain Github App token"
+        id: app-token
+        uses: getsentry/action-github-app-token@v3.0.0
         with:
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          wranglerVersion: '3.112.0'
-          preCommands: npm ci
-          command: publish --env staging
-          secrets: |
-            WEBHOOK_URL
+          app_id: ${{ secrets.BOT_APP_ID }}
+          private_key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
+
+      - name: "Clean install dependencies"
+        run: npm ci
+
+      - name: "Build"
+        run: npm run build
+
+      - name: "Execute Semantic Release"
+        run: npx semantic-release
         env:
-          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   production-deploy:
-    name: "Cloudflare - Production"
+    name: "Deploy Production"
     if: ${{ github.ref_name == 'main' }}
     runs-on: ubuntu-latest
     environment:
@@ -49,7 +52,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
           persist-credentials: false
       
       - uses: actions/setup-node@v4
