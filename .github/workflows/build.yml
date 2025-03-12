@@ -1,0 +1,24 @@
+name: "Build & Test"
+on:
+  workflow_call:
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    name: "Build Node.js"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: "Execute build"
+        run: |
+          npm ci
+          npm run build
