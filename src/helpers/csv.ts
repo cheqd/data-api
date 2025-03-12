@@ -1,11 +1,11 @@
 import { Network, EntityType } from '../types/network';
 import { DrizzleClient } from '../database/client';
-import { AnalyticsQueryParams } from '../types/analytics';
+import { AnalyticsQueryParams, AnalyticsItem } from '../types/analytics';
 import { getTables, buildQueryConditions } from './analytics';
 import { eq, and, desc, sql } from 'drizzle-orm';
 
 // Convert data to CSV format
-export function convertToCSV(data: any[]): string {
+export function convertToCSV(data: AnalyticsItem[]): string {
 	if (!data || !data.length) {
 		return 'No data available';
 	}
@@ -92,7 +92,8 @@ export function generateExportFilename(
 		.substring(0, 255); // Limit filename length
 }
 
-export function serializeBigInt(data: any): any {
+// Replace the serializeBigInt function with type-safe version
+export function serializeBigInt<T>(data: T): T {
 	return JSON.parse(JSON.stringify(data, (_, value) => (typeof value === 'bigint' ? value.toString() : value)));
 }
 
