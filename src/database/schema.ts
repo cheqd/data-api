@@ -38,7 +38,7 @@ export const didMainnet = pgTable(
 	{
 		id: serial('id').primaryKey().notNull(),
 		didId: varchar('did_id', { length: 54 }).notNull(),
-		operationType: bigint('operationType', { mode: 'bigint' })
+		operationType: bigint('operation_type', { mode: 'bigint' })
 			.notNull()
 			.references(() => operationTypesMainnet.id, { onDelete: 'no action', onUpdate: 'no action' }),
 		feePayer: varchar('fee_payer', { length: 44 }).notNull(),
