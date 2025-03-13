@@ -50,9 +50,9 @@ export function buildQueryConditions(
 		conditions.push(ilike(table.didId, params.didId));
 	}
 
-	if (params.success !== null) {
-		conditions.push(eq(table.success, params.success));
-	}
+	// Use default value of true for success if not explicitly provided
+	const successValue = params.success !== null ? params.success : true;
+	conditions.push(eq(table.success, successValue));
 
 	if (params.operationType !== null) {
 		conditions.push(ilike(operationTypesTable.friendlyOperationType, params.operationType));
