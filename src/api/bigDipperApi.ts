@@ -19,27 +19,37 @@ export class BigDipperApi {
 		try {
 			const query = `query TotalSupply {
 				supply {
-					coins
+						coins {
+						denom
+						amount
+					}
 				}
 			}`;
 
 			let result = 0;
-			const resp = await this.graphql_client.query<{
-				data: TotalSupplyResponse;
+			const response = await this.graphql_client.query<{
+				supply: TotalSupplyResponse['supply'];
 			}>(query);
 
-			// Use let for processing rather than trying to reassign const values
-			if (resp?.data?.supply?.[0]?.coins) {
-				const ncheqCoin = resp.data.supply[0].coins.find((coin) => coin.denom === 'ncheq');
+			console.log('Total supply response:', JSON.stringify(response));
+
+			if (response?.supply?.[0]?.coins) {
+				const ncheqCoin = response.supply[0].coins.find((coin) => coin.denom === 'ncheq');
 				if (ncheqCoin?.amount) {
 					result = Number(ncheqCoin.amount);
+					console.log(`Found ncheq coin with amount: ${result}`);
+				} else {
+					// Log available coins for debugging
+					console.log('Available coins:', JSON.stringify(response.supply[0].coins));
 				}
+			} else {
+				console.log('Supply data structure not as expected:', JSON.stringify(response));
 			}
 
 			return result;
 		} catch (error) {
 			console.error('Error fetching total supply:', error);
-			return 0;
+			throw error; // Re-throw to let the handler handle it
 		}
 	}
 

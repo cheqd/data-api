@@ -16,7 +16,15 @@ export async function handler(_request: IRequest, env: Env): Promise<Response> {
 			});
 		}
 
-		return new Response(convertToMainTokenDenom(total_supply, env.TOKEN_EXPONENT));
+		// Return a properly formatted JSON response
+		return new Response(
+			JSON.stringify({
+				totalSupply: convertToMainTokenDenom(total_supply, env.TOKEN_EXPONENT),
+			}),
+			{
+				headers: { 'Content-Type': 'application/json' },
+			}
+		);
 	} catch (error) {
 		console.error('Error fetching total supply:', error);
 		return new Response(JSON.stringify({ error: 'Internal server error' }), {
