@@ -184,16 +184,13 @@ export async function exportAllAnalytics(
 	// Fetch DIDs
 	const didItems = await db
 		.select({
-			type: sql`'DID'`.as('type'), // Add a type column to distinguish records
-			id: tables.did.didId,
 			didId: tables.did.didId,
-			resourceId: sql`NULL`.as('resourceId'),
-			resourceType: sql`NULL`.as('resourceType'),
-			resourceName: sql`NULL`.as('resourceName'),
 			operationType: tables.operationTypes.friendlyOperationType,
+			ledgerOperationType: tables.operationTypes.ledgerOperationType,
 			feePayer: tables.did.feePayer,
 			amount: sql`${tables.did.amount}::decimal / POW(10, ${tables.denom.exponent})`,
 			denom: tables.denom.friendlyDenom,
+			ledgerDenom: tables.denom.ledgerDenom,
 			blockHeight: tables.did.blockHeight,
 			transactionHash: tables.did.transactionHash,
 			createdAt: tables.did.createdAt,
@@ -208,16 +205,16 @@ export async function exportAllAnalytics(
 	// Fetch Resources
 	const resourceItems = await db
 		.select({
-			type: sql`'Resource'`.as('type'), // Add a type column to distinguish records
-			id: tables.resource.resourceId,
 			didId: tables.resource.didId,
 			resourceId: tables.resource.resourceId,
 			resourceType: tables.resource.resourceType,
 			resourceName: tables.resource.resourceName,
 			operationType: tables.operationTypes.friendlyOperationType,
+			ledgerOperationType: tables.operationTypes.ledgerOperationType,
 			feePayer: tables.resource.feePayer,
 			amount: sql`${tables.resource.amount}::decimal / POW(10, ${tables.denom.exponent})`,
 			denom: tables.denom.friendlyDenom,
+			ledgerDenom: tables.denom.ledgerDenom,
 			blockHeight: tables.resource.blockHeight,
 			transactionHash: tables.resource.transactionHash,
 			createdAt: tables.resource.createdAt,
@@ -229,11 +226,16 @@ export async function exportAllAnalytics(
 		.where(and(...resourceConditions))
 		.orderBy(desc(tables.resource.createdAt));
 
-	// Combine and sort all items
-	const allItems = [...didItems, ...resourceItems].sort(
-		(a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-	);
-
-	// Convert to CSV
-	return convertToCSV(serializeBigInt(allItems));
+	// Use different exports for different entity types so they have correct headers
+	if (params.didId) {
+		// If filtering by DID ID, prioritize DID exports
+		const allItems = [...didItems, ...resourceItems].sort(
+			(a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+		);
+		return convertToCSV(serializeBigInt(allItems));
+	} else {
+		// Use only DID items with the original column structure to ensure consistent CSV headers
+		const items = [...didItems].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+		return convertToCSV(serializeBigInt(items));
+	}
 }
