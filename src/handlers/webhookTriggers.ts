@@ -25,9 +25,3 @@ function getHour(): number {
 	const hour = Number(new Date().getHours() + 1); // getHours() returns 0-23
 	return hour;
 }
-
-function getRandomGroup(group: number): number {
-	const min = 1;
-	const max = Math.floor(group);
-	return Math.floor(Math.random() * (max - min + 1)) + min;
-}
