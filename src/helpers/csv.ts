@@ -145,14 +145,16 @@ export async function exportResourceAnalytics(
 	// Execute query without pagination
 	const items = await db
 		.select({
+			didId: tables.resource.didId, // Now first
 			resourceId: tables.resource.resourceId,
 			resourceType: tables.resource.resourceType,
 			resourceName: tables.resource.resourceName,
 			operationType: tables.operationTypes.friendlyOperationType,
-			didId: tables.resource.didId,
+			ledgerOperationType: tables.operationTypes.ledgerOperationType,
 			feePayer: tables.resource.feePayer,
 			amount: sql`${tables.resource.amount}::decimal / POW(10, ${tables.denom.exponent})`,
 			denom: tables.denom.friendlyDenom,
+			ledgerDenom: tables.denom.ledgerDenom,
 			blockHeight: tables.resource.blockHeight,
 			transactionHash: tables.resource.transactionHash,
 			createdAt: tables.resource.createdAt,
@@ -184,7 +186,11 @@ export async function exportAllAnalytics(
 	// Fetch DIDs
 	const didItems = await db
 		.select({
+			type: sql`'DID'`.as('type'),
 			didId: tables.did.didId,
+			resourceId: sql`NULL`.as('resourceId'),
+			resourceType: sql`NULL`.as('resourceType'),
+			resourceName: sql`NULL`.as('resourceName'),
 			operationType: tables.operationTypes.friendlyOperationType,
 			ledgerOperationType: tables.operationTypes.ledgerOperationType,
 			feePayer: tables.did.feePayer,
@@ -202,9 +208,10 @@ export async function exportAllAnalytics(
 		.where(and(...didConditions))
 		.orderBy(desc(tables.did.createdAt));
 
-	// Fetch Resources
+	// Fetch Resources with the same structure as DIDs for consistent headers
 	const resourceItems = await db
 		.select({
+			type: sql`'Resource'`.as('type'),
 			didId: tables.resource.didId,
 			resourceId: tables.resource.resourceId,
 			resourceType: tables.resource.resourceType,
