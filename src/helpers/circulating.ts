@@ -52,12 +52,18 @@ export async function updateCachedBalance(addr: string, grpN: number, env: Env) 
 }
 
 export async function getCirculatingSupply(env: Env): Promise<number> {
-	const gql_client = new GraphQLClient(env.GRAPHQL_API);
-	const bd_api = new BigDipperApi(gql_client);
-	const total_supply_ncheq = await bd_api.getTotalSupply();
-	const total_supply = Number(convertToMainTokenDenom(total_supply_ncheq, env.TOKEN_EXPONENT));
-
 	try {
+		const gql_client = new GraphQLClient(env.GRAPHQL_API);
+		const bd_api = new BigDipperApi(gql_client);
+		const total_supply_ncheq = await bd_api.getTotalSupply();
+
+		if (total_supply_ncheq === null || total_supply_ncheq === undefined || total_supply_ncheq === 0) {
+			console.error('Failed to retrieve total supply data for calculating circulating supply');
+			throw new Error('Failed to retrieve total supply data');
+		}
+
+		const total_supply = Number(convertToMainTokenDenom(total_supply_ncheq, env.TOKEN_EXPONENT));
+
 		const cached = await env.CIRCULATING_SUPPLY_WATCHLIST.list();
 		console.log(`Total cached entries: ${cached.keys.length}`);
 		let shareholders_total_balance = Number(0);

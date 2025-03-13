@@ -16,30 +16,57 @@ export class BigDipperApi {
 	constructor(public readonly graphql_client: GraphQLClient) {}
 
 	async getTotalSupply(): Promise<number> {
-		const query = `query TotalSupply {
-      supply {
-        coins
-      }
-    }`;
+		try {
+			const query = `query TotalSupply {
+				supply {
+					coins
+				}
+			}`;
 
-		const resp = await this.graphql_client.query<{
-			data: TotalSupplyResponse;
-		}>(query);
+			let result = 0;
+			const resp = await this.graphql_client.query<{
+				data: TotalSupplyResponse;
+			}>(query);
 
-		return Number(resp.data.supply[0].coins.find((coin) => coin.denom === 'ncheq')?.amount || '0');
+			// Use let for processing rather than trying to reassign const values
+			if (resp?.data?.supply?.[0]?.coins) {
+				const ncheqCoin = resp.data.supply[0].coins.find((coin) => coin.denom === 'ncheq');
+				if (ncheqCoin?.amount) {
+					result = Number(ncheqCoin.amount);
+				}
+			}
+
+			return result;
+		} catch (error) {
+			console.error('Error fetching total supply:', error);
+			return 0;
+		}
 	}
 
 	getTotalStakedCoins = async (): Promise<string> => {
-		const query = `query StakingInfo{
-            staking_pool {
-                bonded_tokens
-            }
-        }`;
+		try {
+			const query = `query StakingInfo{
+				staking_pool {
+					bonded_tokens
+				}
+			}`;
 
-		const resp = await this.graphql_client.query<{
-			data: TotalStakedCoinsResponse;
-		}>(query);
-		return resp.data.staking_pool[0].bonded_tokens;
+			// Default value
+			let result = '0';
+
+			const resp = await this.graphql_client.query<{
+				data: TotalStakedCoinsResponse;
+			}>(query);
+
+			if (resp?.data?.staking_pool?.[0]?.bonded_tokens) {
+				result = resp.data.staking_pool[0].bonded_tokens;
+			}
+
+			return result;
+		} catch (error) {
+			console.error('Error fetching total staked coins:', error);
+			return '0';
+		}
 	};
 
 	async getDids(limit = 100, offset = 0, minHeight = 0): Promise<TransactionDetails[]> {

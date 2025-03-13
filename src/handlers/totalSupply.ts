@@ -4,8 +4,24 @@ import { convertToMainTokenDenom } from '../helpers/currency';
 import { GraphQLClient } from '../helpers/graphql';
 
 export async function handler(_request: IRequest, env: Env): Promise<Response> {
-	const gql_client = new GraphQLClient(env.GRAPHQL_API);
-	const bd_api = new BigDipperApi(gql_client);
-	const total_supply = await bd_api.getTotalSupply();
-	return new Response(convertToMainTokenDenom(total_supply, env.TOKEN_EXPONENT));
+	try {
+		const gql_client = new GraphQLClient(env.GRAPHQL_API);
+		const bd_api = new BigDipperApi(gql_client);
+		const total_supply = await bd_api.getTotalSupply();
+
+		if (total_supply === null || total_supply === undefined || total_supply === 0) {
+			return new Response(JSON.stringify({ error: 'Failed to retrieve total supply data' }), {
+				status: 500,
+				headers: { 'Content-Type': 'application/json' },
+			});
+		}
+
+		return new Response(convertToMainTokenDenom(total_supply, env.TOKEN_EXPONENT));
+	} catch (error) {
+		console.error('Error fetching total supply:', error);
+		return new Response(JSON.stringify({ error: 'Internal server error' }), {
+			status: 500,
+			headers: { 'Content-Type': 'application/json' },
+		});
+	}
 }
