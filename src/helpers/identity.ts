@@ -13,24 +13,16 @@ import { Network } from '../types/network';
 import { TransactionDetails } from '../types/bigDipper';
 import { eq, and, max } from 'drizzle-orm';
 import { Client } from 'pg';
-import { dbInit, dbClose } from '../database/client';
+import { dbInit, dbClose, DrizzleClient } from '../database/client';
 import { GraphQLClient } from './graphql';
 
 interface DbInstance {
-	db: any;
+	db: DrizzleClient;
 	client: Client;
 }
 
-// Define table mappings based on network type
-const TABLES: Record<
-	Network,
-	{
-		did: any;
-		resource: any;
-		denom: any;
-		operationTypes: any;
-	}
-> = {
+// Define table mappings based on network type without explicit type aliases
+const TABLES = {
 	[Network.MAINNET]: {
 		did: didMainnet,
 		resource: resourceMainnet,
