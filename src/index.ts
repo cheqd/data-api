@@ -36,7 +36,7 @@ export default {
 		registerRoutes(router, env, ctx);
 		return router.handle(request).catch((error) => handleError(error));
 	},
-	async scheduled(controller: ScheduledController, env: Env, ctx: ExecutionContext) {
+	async scheduled(_controller: ScheduledController, env: Env, _ctx: ExecutionContext) {
 		return await webhookTriggers(env);
 	},
 };
