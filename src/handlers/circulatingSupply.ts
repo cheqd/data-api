@@ -1,7 +1,6 @@
-import { IRequest } from 'itty-router';
 import { getCirculatingSupply } from '../helpers/circulating';
 
-export async function handler(request: IRequest, env: Env): Promise<Response> {
+export async function handler(env: Env): Promise<Response> {
 	try {
 		const circulating_supply = await getCirculatingSupply(env);
 		return new Response(circulating_supply.toString());
