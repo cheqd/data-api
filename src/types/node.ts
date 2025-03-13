@@ -102,7 +102,16 @@ export interface UnbondingResponse {
 	};
 }
 
+// Define the structure of rewards record
+interface ValidatorRewards {
+	validator_address: string;
+	reward: {
+		denom: string;
+		amount: string;
+	}[];
+}
+
 export interface RewardsResponse {
-	rewards: Record<string, any>[];
+	rewards: ValidatorRewards[];
 	total: Coin[];
 }
