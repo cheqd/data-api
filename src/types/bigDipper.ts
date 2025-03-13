@@ -109,3 +109,15 @@ export enum FriendlyOperationType {
 	DEACTIVATE_DID = 'deactivateDid',
 	CREATE_RESOURCE = 'createResource',
 }
+
+// GraphQL related types
+export type GraphQLVariables = Record<string, unknown>;
+
+export interface GraphQLRequest {
+	query: string;
+	variables?: GraphQLVariables;
+}
+
+export interface GraphQLResponseBase {
+	errors?: Array<{ message: string; locations?: unknown[]; path?: string[]; extensions?: unknown }>;
+}
