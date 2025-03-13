@@ -12,7 +12,7 @@ clientConfig.ssl = {
 	ca: fs.readFileSync('/tmp/do-cert.pem').toString(),
 };
 
-let client = new Client(clientConfig);
+const client = new Client(clientConfig);
 
 client.connect();
 const db = drizzle(client, { logger: true });

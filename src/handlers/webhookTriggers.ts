@@ -22,12 +22,12 @@ export async function syncIdentityData(env: Env) {
 
 function getHour(): number {
 	// This function only works when CIRCULATING_SUPPLY_GROUPS is set to 24
-	let hour = Number(new Date().getHours() + 1); // getHours() returns 0-23
+	const hour = Number(new Date().getHours() + 1); // getHours() returns 0-23
 	return hour;
 }
 
 function getRandomGroup(group: number): number {
-	let min = 1;
-	let max = Math.floor(group);
+	const min = 1;
+	const max = Math.floor(group);
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }

@@ -16,13 +16,13 @@ export class BigDipperApi {
 	constructor(public readonly graphql_client: GraphQLClient) {}
 
 	async getTotalSupply(): Promise<number> {
-		let query = `query TotalSupply {
+		const query = `query TotalSupply {
       supply {
         coins
       }
     }`;
 
-		let resp = await this.graphql_client.query<{
+		const resp = await this.graphql_client.query<{
 			data: TotalSupplyResponse;
 		}>(query);
 
@@ -30,7 +30,7 @@ export class BigDipperApi {
 	}
 
 	getTotalStakedCoins = async (): Promise<string> => {
-		let query = `query StakingInfo{
+		const query = `query StakingInfo{
             staking_pool {
                 bonded_tokens
             }
