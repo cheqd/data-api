@@ -217,7 +217,7 @@ export class SyncService {
 
 			// Insert DID data
 			try {
-				const insertResult = await this.db.insert(tables.did).values({
+				await this.db.insert(tables.did).values({
 					didId: tx.didId,
 					operationType: opType[0].id,
 					feePayer: tx.feePayer,
