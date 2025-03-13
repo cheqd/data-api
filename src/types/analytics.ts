@@ -40,16 +40,6 @@ export interface ResourceAnalyticsItem extends BaseAnalyticsItem {
 // Combined type for analytics items
 export type AnalyticsItem = DidAnalyticsItem | ResourceAnalyticsItem;
 
-// For CSV export with combined items
-export interface ExportAnalyticsItem extends BaseAnalyticsItem {
-	type?: string;
-	id?: string;
-	didId: string | null;
-	resourceId?: string | null;
-	resourceType?: string | null;
-	resourceName?: string | null;
-}
-
 export interface AnalyticsResponse {
 	items: AnalyticsItem[];
 	totalCount: number;

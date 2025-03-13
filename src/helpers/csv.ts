@@ -1,6 +1,6 @@
 import { Network, EntityType } from '../types/network';
 import { DrizzleClient } from '../database/client';
-import { AnalyticsQueryParams, ExportAnalyticsItem } from '../types/analytics';
+import { AnalyticsQueryParams } from '../types/analytics';
 import { getTables, buildQueryConditions } from './analytics';
 import { eq, and, desc, sql } from 'drizzle-orm';
 
@@ -232,7 +232,7 @@ export async function exportAllAnalytics(
 	// Combine and sort all items
 	const allItems = [...didItems, ...resourceItems].sort(
 		(a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-	) as ExportAnalyticsItem[];
+	);
 
 	// Convert to CSV
 	return convertToCSV(serializeBigInt(allItems));
