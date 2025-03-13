@@ -1,0 +1,38 @@
+name: "Deploy Staging"
+on:
+  workflow_call:
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  
+  staging-deploy:
+    name: "Cloudflare - Staging"
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://data-api-staging.cheqd.io/
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Publish to Cloudflare
+        uses: cloudflare/wrangler-action@v3
+        with:
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          wranglerVersion: '3.112.0'
+          preCommands: npm ci
+          command: publish --env staging
+          secrets: |
+            WEBHOOK_URL
+        env:
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}

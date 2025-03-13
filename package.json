@@ -1,42 +1,68 @@
 {
-  "name": "data-api",
-  "version": "1.1.0",
-  "private": true,
-  "license": "Apache-2.0",
-  "source": "src/index.ts",
-  "author": "Cheqd Foundation Limited (https://github.com/cheqd)",
-  "repository": "https://github.com/cheqd/data-api.git",
-  "bugs": {
-    "url": "https://github.com/cheqd/data-api/issues"
-  },
-  "homepage": "https://github.com/cheqd/data-api#readme",
-  "scripts": {
-    "start": "npx wrangler dev",
-    "publish": "npx wrangler publish",
-    "format": "prettier --write '**/*.{js,ts,cjs,mjs}'",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit push"
-  },
-  "dependencies": {
-    "drizzle-orm": "^0.40.0",
-    "itty-router": "^3.0.12",
-    "pg": "^8.14.0"
-  },
-  "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250311.0",
-    "@types/node": "^20.17.24",
-    "@types/pg": "^8.11.11",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
-    "drizzle-kit": "^0.30.5",
-    "eslint": "^8.57.1",
-    "eslint-config-prettier": "^10.1.1",
-    "eslint-config-typescript": "^3.0.0",
-    "prettier": "^3.5.3",
-    "typescript": "^5.8.2",
-    "wrangler": "^3.114.1"
-  },
-  "engines": {
-    "node": ">=20.0.0"
-  }
+	"name": "data-api",
+	"version": "1.1.0",
+	"private": true,
+	"license": "Apache-2.0",
+	"source": "src/index.ts",
+	"author": "Cheqd Foundation Limited (https://github.com/cheqd)",
+	"repository": "https://github.com/cheqd/data-api.git",
+	"bugs": {
+		"url": "https://github.com/cheqd/data-api/issues"
+	},
+	"homepage": "https://github.com/cheqd/data-api#readme",
+	"scripts": {
+		"build": "wrangler deploy --dry-run --outdir=dist",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev --env staging",
+		"db:generate": "drizzle-kit generate",
+		"db:migrate": "drizzle-kit push",
+		"db:migrate:ci": "drizzle-kit migrate --force",
+		"db:seed": "tsx src/database/scripts/seed.ts",
+		"format": "prettier --write '**/*.{js,ts,cjs,mjs,json}'",
+		"lint": "eslint . --config .github/linters/eslint.config.mjs",
+		"lint:fix": "eslint . --fix --config .github/linters/eslint.config.mjs",
+		"publish": "npx wrangler publish",
+		"start": "npx wrangler dev",
+		"up": "npx drizzle-kit up"
+	},
+	"files": [
+		"dist/**/*",
+		"LICENSE",
+		"package.json",
+		"README.md"
+	],
+	"dependencies": {
+		"drizzle-orm": "^0.40.0",
+		"itty-router": "^3.0.12",
+		"pg": "^8.14.0"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20250311.0",
+		"@eslint/eslintrc": "^3.3.0",
+		"@eslint/js": "^9.12.0",
+		"@semantic-release/changelog": "^6.0.3",
+		"@semantic-release/commit-analyzer": "^13.0.1",
+		"@semantic-release/git": "^10.0.1",
+		"@semantic-release/github": "^11.0.1",
+		"@semantic-release/npm": "^12.0.1",
+		"@semantic-release/release-notes-generator": "^14.0.3",
+		"@types/node": "^20.17.24",
+		"@types/pg": "^8.11.11",
+		"@typescript-eslint/eslint-plugin": "^8.26.1",
+		"@typescript-eslint/parser": "^8.26.1",
+		"conventional-changelog-conventionalcommits": "^8.0.0",
+		"drizzle-kit": "^0.30.5",
+		"eslint": "^9.22.0",
+		"eslint-config-prettier": "^10.1.1",
+		"eslint-config-typescript": "^3.0.0",
+		"eslint-plugin-drizzle": "^0.2.3",
+		"eslint-plugin-prettier": "^5.2.3",
+		"prettier": "^3.5.3",
+		"semantic-release": "^24.2.3",
+		"typescript": "^5.8.2",
+		"wrangler": "^3.114.1"
+	},
+	"engines": {
+		"node": ">=20.0.0"
+	}
 }

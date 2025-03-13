@@ -7,7 +7,14 @@ const DEFAULT_POSTGRES_TIMEOUT = 30000;
 
 export type DrizzleClient = NodePgDatabase<typeof schema>;
 
-export async function dbInit(env?: any): Promise<{ db: any; client: Client }> {
+interface DbEnv {
+	HYPERDRIVE: {
+		connectionString: string;
+	};
+	ENVIRONMENT: string;
+}
+
+export async function dbInit(env?: DbEnv): Promise<{ db: DrizzleClient; client: Client }> {
 	try {
 		// Create a single PostgreSQL client
 		const connectionString = env.HYPERDRIVE.connectionString;

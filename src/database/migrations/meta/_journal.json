@@ -1,34 +1,34 @@
 {
-  "version": "7",
-  "dialect": "postgresql",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "7",
-      "when": 1741197616979,
-      "tag": "0000_salty_machine_man",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1741392062249,
-      "tag": "0001_hard_jane_foster",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1741705797047,
-      "tag": "0002_dazzling_colossus",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1741774436871,
-      "tag": "0003_overjoyed_elektra",
-      "breakpoints": true
-    }
-  ]
+	"version": "7",
+	"dialect": "postgresql",
+	"entries": [
+		{
+			"idx": 0,
+			"version": "7",
+			"when": 1741197616979,
+			"tag": "0000_salty_machine_man",
+			"breakpoints": true
+		},
+		{
+			"idx": 1,
+			"version": "7",
+			"when": 1741392062249,
+			"tag": "0001_hard_jane_foster",
+			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "7",
+			"when": 1741705797047,
+			"tag": "0002_dazzling_colossus",
+			"breakpoints": true
+		},
+		{
+			"idx": 3,
+			"version": "7",
+			"when": 1741774436871,
+			"tag": "0003_overjoyed_elektra",
+			"breakpoints": true
+		}
+	]
 }

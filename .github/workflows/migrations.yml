@@ -1,0 +1,72 @@
+name: "Database migrations"
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "src/database/migrations/*"
+    branches:
+      - develop
+      - main
+defaults:
+  run:
+    shell: bash
+
+jobs:
+
+  staging-migrations:
+    name: "Staging DB migrations"
+    runs-on: ubuntu-latest
+    if: ${{ github.ref_name == 'develop' }}
+    environment:
+      name: staging
+      url: https://data-api-staging.cheqd.io
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: "Store DO certificate"
+        run: echo "${DO_CERTIFICATE}" > /tmp/do-cert.pem
+        env:
+          DO_CERTIFICATE: ${{ secrets.DO_CERT }}
+
+      - name: "Execute migrations and seed the static data"
+        run: |
+          npm ci
+          npm run db:migrate:ci
+          npm run db:seed
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+
+  production-migrations:
+    name: "Production DB migrations"
+    runs-on: ubuntu-latest
+    if: ${{ github.ref_name == 'main' }}
+    environment:
+      name: production
+      url: https://data-api.cheqd.io
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: "Store DO certificate"
+        run: echo "${DO_CERTIFICATE}" > /tmp/do-cert.pem
+        env:
+          DO_CERTIFICATE: ${{ secrets.DO_CERT }}
+
+      - name: "Execute migrations and seed the static data"
+        run: |
+          npm ci
+          npm run db:migrate:ci
+          npm run db:seed
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
