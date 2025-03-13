@@ -311,7 +311,7 @@ Other environments can be targetted (if defined in `wrangler.toml`) by specifyin
 wrangler publish --env staging
 ```
 
-CI/CD deployments can be achieved using the [`wrangler` Github Action](https://github.com/cloudflare/wrangler-action). The [`deploy.yml` Github Action in this repo](https://github.com/cheqd/data-api/blob/main/.github/workflows/deploy.yml) provides an example of this can be achieved in practice.
+CI/CD deployments can be achieved using the [`wrangler` Github Action](https://github.com/cloudflare/wrangler-action). The [`staging.yml`](https://github.com/cheqd/data-api/blob/main/.github/workflows/staging.yml) and [`release.yml`](https://github.com/cheqd/data-api/blob/main/.github/workflows/release.yml) Github Actions in this repo provides an example of this can be achieved in practice.
 
 ## 🐞 Bug reports & 🤔 feature requests
 
