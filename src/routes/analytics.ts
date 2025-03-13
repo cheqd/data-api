@@ -1,11 +1,18 @@
-import { IRequest } from 'itty-router';
+import { IRequest, Router } from 'itty-router';
 import { handler as handleAnalyticsRequest } from '../handlers/analytics';
-import { Network, VALID_NETWORKS, EntityType, VALID_ENTITY_TYPES, VALID_ANALYTICS_PATHS } from '../types/network';
+import {
+	Network,
+	VALID_NETWORKS,
+	EntityType,
+	VALID_ENTITY_TYPES,
+	VALID_ANALYTICS_PATHS,
+	AnalyticsPathType,
+} from '../types/network';
 
 /**
  * Registers analytics-related routes to the router
  */
-export function registerAnalyticsRoutes(router: any, env: Env, ctx: ExecutionContext) {
+export function registerAnalyticsRoutes(router: ReturnType<typeof Router>, env: Env, ctx: ExecutionContext) {
 	// Base analytics endpoint
 	router.get('/analytics/:network', (request: IRequest) => {
 		const { network } = request.params;
@@ -41,7 +48,7 @@ export function registerAnalyticsRoutes(router: any, env: Env, ctx: ExecutionCon
 		}
 
 		// Validate path
-		if (!VALID_ANALYTICS_PATHS.includes(path as any)) {
+		if (!VALID_ANALYTICS_PATHS.includes(path as AnalyticsPathType)) {
 			return new Response(
 				JSON.stringify({
 					error: `Invalid path. Use ${VALID_ANALYTICS_PATHS.join(', ')}.`,
