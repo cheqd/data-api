@@ -1,6 +1,6 @@
 {
 	"name": "data-api",
-	"version": "2.0.0",
+	"version": "2.0.1-develop.1",
 	"private": true,
 	"license": "Apache-2.0",
 	"source": "src/index.ts",
