@@ -233,16 +233,11 @@ export async function exportAllAnalytics(
 		.where(and(...resourceConditions))
 		.orderBy(desc(tables.resource.createdAt));
 
-	// Use different exports for different entity types so they have correct headers
-	if (params.didId) {
-		// If filtering by DID ID, prioritize DID exports
-		const allItems = [...didItems, ...resourceItems].sort(
-			(a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-		);
-		return convertToCSV(serializeBigInt(allItems));
-	} else {
-		// Use only DID items with the original column structure to ensure consistent CSV headers
-		const items = [...didItems].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-		return convertToCSV(serializeBigInt(items));
-	}
+	// Combine and sort all items
+	const allItems = [...didItems, ...resourceItems].sort(
+		(a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+	);
+
+	// Convert to CSV
+	return convertToCSV(serializeBigInt(allItems));
 }
