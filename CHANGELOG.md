@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.1](https://github.com/cheqd/data-api/compare/2.0.0...2.0.1) (2025-03-14)
+
+### Bug Fixes
+
+* Resolve ESLint issues to improve code quality [DEV-4792] ([#274](https://github.com/cheqd/data-api/issues/274)) ([0c2c7ba](https://github.com/cheqd/data-api/commit/0c2c7ba6d4b254bfe25d900d80fbc5ed28b9a89d))
+
 ## [2.0.1-develop.1](https://github.com/cheqd/data-api/compare/2.0.0...2.0.1-develop.1) (2025-03-14)
 
 ### Bug Fixes
