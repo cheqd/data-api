@@ -10,14 +10,14 @@ import { webhookTriggers } from './handlers/webhookTriggers';
 import { registerAnalyticsRoutes } from './routes/analytics';
 
 function registerRoutes(router: ReturnType<typeof Router>, env: Env, ctx: ExecutionContext) {
-	router.get('/', (request) => totalSupplyHandler(request, env));
+	router.get('/', () => totalSupplyHandler(env));
 	router.get('/balances/liquid/:address', (request) => liquidBalanceHandler(request, env));
 	router.get('/balances/total/:address', (request) => totalBalanceHandler(request, env));
 	router.get('/balances/vested/:address', (request) => vestedBalanceHandler(request, env));
 	router.get('/balances/vesting/:address', (request) => vestingBalanceHandler(request, env));
-	router.get('/supply/circulating', (request) => circulatingSupplyHandler(request, env));
-	router.get('/supply/staked', (request) => totalStakedCoinsHandler(request, env));
-	router.get('/supply/total', (request) => totalSupplyHandler(request, env));
+	router.get('/supply/circulating', () => circulatingSupplyHandler(env));
+	router.get('/supply/staked', () => totalStakedCoinsHandler(env));
+	router.get('/supply/total', () => totalSupplyHandler(env));
 
 	// Register analytics routes
 	registerAnalyticsRoutes(router, env, ctx);
@@ -36,7 +36,7 @@ export default {
 		registerRoutes(router, env, ctx);
 		return router.handle(request).catch((error) => handleError(error));
 	},
-	async scheduled(controller: ScheduledController, env: Env, ctx: ExecutionContext) {
+	async scheduled(_controller: ScheduledController, env: Env, _ctx: ExecutionContext) {
 		return await webhookTriggers(env);
 	},
 };

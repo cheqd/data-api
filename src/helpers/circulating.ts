@@ -15,8 +15,8 @@ export async function updateCirculatingSupply(groupNumber: number, env: Env) {
 
 		for (const key of cached.keys) {
 			const parts = extractPrefixAndKey(key.name);
-			let addr = parts.address;
-			let grpN = parts.groupNumber;
+			const addr = parts.address;
+			const grpN = parts.groupNumber;
 
 			const found = await env.CIRCULATING_SUPPLY_WATCHLIST.get(`group_${grpN}:${addr}`);
 			if (found) {
@@ -29,8 +29,9 @@ export async function updateCirculatingSupply(groupNumber: number, env: Env) {
 				}
 			}
 		}
-	} catch (e) {
-		console.log('Error at: ', 'updateCirculatingSupply');
+	} catch (error: unknown) {
+		const errorMessage = error instanceof Error ? error.message : String(error);
+		console.log(`Error updating circulating supply for group ${groupNumber}: ${errorMessage}`);
 	}
 }
 
@@ -43,15 +44,16 @@ export async function updateCachedBalance(addr: string, grpN: number, env: Env) 
 		await env.CIRCULATING_SUPPLY_WATCHLIST.put(`group_${grpN}:${addr}`, data);
 
 		console.log(`account "${addr}" balance updated. (${data})`);
-	} catch (e: any) {
-		console.log(`error updateCachedBalance: ${e}`);
+	} catch (error: unknown) {
+		const errorMessage = error instanceof Error ? error.message : String(error);
+		console.log(`Error updating cached balance for address ${addr}: ${errorMessage}`);
 	}
 }
 
 export async function getCirculatingSupply(env: Env): Promise<number> {
-	let gql_client = new GraphQLClient(env.GRAPHQL_API);
-	let bd_api = new BigDipperApi(gql_client);
-	let total_supply_ncheq = await bd_api.getTotalSupply();
+	const gql_client = new GraphQLClient(env.GRAPHQL_API);
+	const bd_api = new BigDipperApi(gql_client);
+	const total_supply_ncheq = await bd_api.getTotalSupply();
 	const total_supply = Number(convertToMainTokenDenom(total_supply_ncheq, env.TOKEN_EXPONENT));
 
 	try {
@@ -59,7 +61,7 @@ export async function getCirculatingSupply(env: Env): Promise<number> {
 		console.log(`Total cached entries: ${cached.keys.length}`);
 		let shareholders_total_balance = Number(0);
 		for (const key of cached.keys) {
-			let data: AccountBalanceInfos | null = await env.CIRCULATING_SUPPLY_WATCHLIST.get(key.name, {
+			const data: AccountBalanceInfos | null = await env.CIRCULATING_SUPPLY_WATCHLIST.get(key.name, {
 				type: 'json',
 			});
 
@@ -71,9 +73,10 @@ export async function getCirculatingSupply(env: Env): Promise<number> {
 		console.log('Total supply', total_supply);
 		console.log(`Watchlist total balance: ${shareholders_total_balance}`);
 
-		let circulating_supply = total_supply - shareholders_total_balance;
+		const circulating_supply = total_supply - shareholders_total_balance;
 		return circulating_supply;
-	} catch (e: any) {
-		throw new Error(e.toString);
+	} catch (error: unknown) {
+		const errorMessage = error instanceof Error ? error.message : String(error);
+		throw new Error(`Failed to calculate circulating supply: ${errorMessage}`);
 	}
 }

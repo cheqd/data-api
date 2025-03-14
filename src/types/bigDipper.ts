@@ -72,7 +72,7 @@ export interface ResourcesResponse {
 	message: Message[];
 }
 
-export interface TransactionDetails {
+export interface DidTransactionDetails {
 	transactionHash: string;
 	blockHeight: number;
 	operationType: OperationType;
@@ -81,9 +81,21 @@ export interface TransactionDetails {
 	feePayer: string;
 	amount: string;
 	denom: string;
-	resourceId?: string;
-	resourceType?: string;
-	resourceName?: string;
+	success: boolean;
+}
+
+export interface ResourceTransactionDetails {
+	transactionHash: string;
+	blockHeight: number;
+	operationType: OperationType;
+	timestamp: string;
+	didId: string;
+	feePayer: string;
+	amount: string;
+	denom: string;
+	resourceId: string;
+	resourceType: string;
+	resourceName: string;
 	success: boolean;
 }
 
@@ -108,4 +120,16 @@ export enum FriendlyOperationType {
 	UPDATE_DID = 'updateDid',
 	DEACTIVATE_DID = 'deactivateDid',
 	CREATE_RESOURCE = 'createResource',
+}
+
+// GraphQL related types
+export type GraphQLVariables = Record<string, unknown>;
+
+export interface GraphQLRequest {
+	query: string;
+	variables?: GraphQLVariables;
+}
+
+export interface GraphQLResponseBase {
+	errors?: Array<{ message: string; locations?: unknown[]; path?: string[]; extensions?: unknown }>;
 }

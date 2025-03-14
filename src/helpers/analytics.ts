@@ -9,7 +9,7 @@ import {
 	denomMainnet,
 	denomTestnet,
 } from '../database/schema';
-import { AnalyticsQueryParams, AnalyticsResponse } from '../types/analytics';
+import { AnalyticsQueryParams, AnalyticsResponse, AnalyticsItem } from '../types/analytics';
 import { DrizzleClient } from '../database/client';
 import { serializeBigInt } from './csv';
 import { Network } from '../types/network';
@@ -74,7 +74,7 @@ export function buildQueryConditions(
 }
 
 // Format response
-function formatResponse(items: any[], totalCount: number, params: AnalyticsQueryParams): AnalyticsResponse {
+function formatResponse(items: AnalyticsItem[], totalCount: number, params: AnalyticsQueryParams): AnalyticsResponse {
 	return {
 		items: serializeBigInt(items),
 		totalCount,

@@ -5,7 +5,7 @@ import { getTables, buildQueryConditions } from './analytics';
 import { eq, and, desc, sql } from 'drizzle-orm';
 
 // Convert data to CSV format
-export function convertToCSV(data: any[]): string {
+export function convertToCSV(data: Record<string, unknown>[]): string {
 	if (!data || !data.length) {
 		return 'No data available';
 	}
@@ -92,7 +92,7 @@ export function generateExportFilename(
 		.substring(0, 255); // Limit filename length
 }
 
-export function serializeBigInt(data: any): any {
+export function serializeBigInt<T>(data: T): T {
 	return JSON.parse(JSON.stringify(data, (_, value) => (typeof value === 'bigint' ? value.toString() : value)));
 }
 
@@ -145,14 +145,16 @@ export async function exportResourceAnalytics(
 	// Execute query without pagination
 	const items = await db
 		.select({
+			didId: tables.resource.didId, // Now first
 			resourceId: tables.resource.resourceId,
 			resourceType: tables.resource.resourceType,
 			resourceName: tables.resource.resourceName,
 			operationType: tables.operationTypes.friendlyOperationType,
-			didId: tables.resource.didId,
+			ledgerOperationType: tables.operationTypes.ledgerOperationType,
 			feePayer: tables.resource.feePayer,
 			amount: sql`${tables.resource.amount}::decimal / POW(10, ${tables.denom.exponent})`,
 			denom: tables.denom.friendlyDenom,
+			ledgerDenom: tables.denom.ledgerDenom,
 			blockHeight: tables.resource.blockHeight,
 			transactionHash: tables.resource.transactionHash,
 			createdAt: tables.resource.createdAt,
@@ -184,16 +186,17 @@ export async function exportAllAnalytics(
 	// Fetch DIDs
 	const didItems = await db
 		.select({
-			type: sql`'DID'`.as('type'), // Add a type column to distinguish records
-			id: tables.did.didId,
+			type: sql`'DID'`.as('type'),
 			didId: tables.did.didId,
 			resourceId: sql`NULL`.as('resourceId'),
 			resourceType: sql`NULL`.as('resourceType'),
 			resourceName: sql`NULL`.as('resourceName'),
 			operationType: tables.operationTypes.friendlyOperationType,
+			ledgerOperationType: tables.operationTypes.ledgerOperationType,
 			feePayer: tables.did.feePayer,
 			amount: sql`${tables.did.amount}::decimal / POW(10, ${tables.denom.exponent})`,
 			denom: tables.denom.friendlyDenom,
+			ledgerDenom: tables.denom.ledgerDenom,
 			blockHeight: tables.did.blockHeight,
 			transactionHash: tables.did.transactionHash,
 			createdAt: tables.did.createdAt,
@@ -205,19 +208,20 @@ export async function exportAllAnalytics(
 		.where(and(...didConditions))
 		.orderBy(desc(tables.did.createdAt));
 
-	// Fetch Resources
+	// Fetch Resources with the same structure as DIDs for consistent headers
 	const resourceItems = await db
 		.select({
-			type: sql`'Resource'`.as('type'), // Add a type column to distinguish records
-			id: tables.resource.resourceId,
+			type: sql`'Resource'`.as('type'),
 			didId: tables.resource.didId,
 			resourceId: tables.resource.resourceId,
 			resourceType: tables.resource.resourceType,
 			resourceName: tables.resource.resourceName,
 			operationType: tables.operationTypes.friendlyOperationType,
+			ledgerOperationType: tables.operationTypes.ledgerOperationType,
 			feePayer: tables.resource.feePayer,
 			amount: sql`${tables.resource.amount}::decimal / POW(10, ${tables.denom.exponent})`,
 			denom: tables.denom.friendlyDenom,
+			ledgerDenom: tables.denom.ledgerDenom,
 			blockHeight: tables.resource.blockHeight,
 			transactionHash: tables.resource.transactionHash,
 			createdAt: tables.resource.createdAt,

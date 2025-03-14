@@ -11,7 +11,7 @@ export async function handler(request: IRequest, env: Env): Promise<Response> {
 		throw new Error('No address specified or wrong address format.');
 	}
 
-	let api = new NodeApi(env.REST_API);
+	const api = new NodeApi(env.REST_API);
 	const account = await api.getAccountInfo(address);
 
 	if (!isVestingAccount(account['@type'])) {
@@ -19,26 +19,26 @@ export async function handler(request: IRequest, env: Env): Promise<Response> {
 	}
 
 	if (isDelayedVestingAccount(account?.['@type'])) {
-		let balance =
+		const balance =
 			account?.base_vesting_account?.base_account?.sequence !== '0'
 				? Number(
 						(await (await api.getAvailableBalance(address)).find((b) => b.denom === 'ncheq')?.amount) ?? '0'
 					)
 				: 0;
-		let rewards = Number((await await api.distributionGetRewards(address)) ?? '0');
-		let delegated = Number(
+		const rewards = Number((await await api.distributionGetRewards(address)) ?? '0');
+		const delegated = Number(
 			account?.base_vesting_account?.delegated_free?.find((d) => d.denom === 'ncheq')?.amount ?? '0'
 		);
 
 		return new Response(convertToMainTokenDenom(balance + rewards + delegated, env.TOKEN_EXPONENT));
 	}
 
-	let vested_coins = Number(calculateVesting(account)?.vested);
-	let balance = Number(
+	const vested_coins = Number(calculateVesting(account)?.vested);
+	const balance = Number(
 		(await (await api.getAvailableBalance(address)).find((b) => b.denom === 'ncheq')?.amount) ?? '0'
 	);
-	let rewards = Number((await api.distributionGetRewards(address)) ?? '0');
-	let liquid_coins = vested_coins + balance + rewards;
+	const rewards = Number((await api.distributionGetRewards(address)) ?? '0');
+	const liquid_coins = vested_coins + balance + rewards;
 
 	return new Response(convertToMainTokenDenom(liquid_coins, env.TOKEN_EXPONENT));
 }
