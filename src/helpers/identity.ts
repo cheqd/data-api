@@ -9,8 +9,9 @@ import {
 	operationTypesMainnet,
 	operationTypesTestnet,
 } from '../database/schema';
+import { DenomType } from '../types/bigDipper';
 import { Network } from '../types/network';
-import { TransactionDetails } from '../types/bigDipper';
+import { DidTransactionDetails, ResourceTransactionDetails } from '../types/bigDipper';
 import { eq, and, max } from 'drizzle-orm';
 import { Client } from 'pg';
 import { dbInit, dbClose, DrizzleClient } from '../database/client';
@@ -134,7 +135,7 @@ export class SyncService {
 		console.log(`Total DIDs processed: ${totalProcessed}, skipped: ${totalSkipped}`);
 	}
 
-	private async insertDid(tx: TransactionDetails) {
+	private async insertDid(tx: DidTransactionDetails) {
 		try {
 			console.log(
 				`Processing DID: tx=${tx.transactionHash}, did=${tx.didId}, type=${tx.operationType}, height=${tx.blockHeight}`
@@ -164,7 +165,7 @@ export class SyncService {
 				.where(
 					and(
 						eq(tables.did.transactionHash, tx.transactionHash),
-						eq(tables.did.operationType, opType[0].id),
+						eq(tables.did.operationType, BigInt(opType[0].id)),
 						eq(tables.did.didId, tx.didId)
 					)
 				)
@@ -197,7 +198,7 @@ export class SyncService {
 			const denomRecord = await this.db
 				.select()
 				.from(tables.denom)
-				.where(eq(tables.denom.ledgerDenom, tx.denom || 'ncheq'))
+				.where(eq(tables.denom.ledgerDenom, tx.denom as DenomType))
 				.limit(1);
 
 			if (denomRecord.length === 0) {
@@ -211,10 +212,10 @@ export class SyncService {
 			try {
 				await this.db.insert(tables.did).values({
 					didId: tx.didId,
-					operationType: opType[0].id,
+					operationType: BigInt(opType[0].id),
 					feePayer: tx.feePayer,
 					amount: BigInt(tx.amount),
-					denom: denomRecord[0].id,
+					denom: BigInt(denomRecord[0].id),
 					blockHeight: BigInt(tx.blockHeight),
 					transactionHash: tx.transactionHash,
 					createdAt: new Date(tx.timestamp),
@@ -326,7 +327,7 @@ export class SyncService {
 		console.log(`Total Resources processed: ${totalProcessed}, skipped: ${totalSkipped}`);
 	}
 
-	private async insertResource(tx: TransactionDetails): Promise<boolean> {
+	private async insertResource(tx: ResourceTransactionDetails): Promise<boolean> {
 		try {
 			console.log(
 				`Processing Resource: tx=${tx.transactionHash}, resource=${tx.resourceId}, type=${tx.operationType}, height=${tx.blockHeight}`
@@ -356,7 +357,7 @@ export class SyncService {
 				.where(
 					and(
 						eq(tables.resource.transactionHash, tx.transactionHash),
-						eq(tables.resource.operationType, opType[0].id),
+						eq(tables.resource.operationType, BigInt(opType[0].id)),
 						eq(tables.resource.resourceId, tx.resourceId)
 					)
 				)
@@ -391,7 +392,7 @@ export class SyncService {
 			const denomRecord = await this.db
 				.select()
 				.from(tables.denom)
-				.where(eq(tables.denom.ledgerDenom, tx.denom || 'ncheq'))
+				.where(eq(tables.denom.ledgerDenom, tx.denom as DenomType))
 				.limit(1);
 
 			if (denomRecord.length === 0) {
@@ -407,11 +408,11 @@ export class SyncService {
 					resourceId: tx.resourceId,
 					resourceType: tx.resourceType,
 					resourceName: tx.resourceName,
-					operationType: opType[0].id,
+					operationType: BigInt(opType[0].id),
 					didId: tx.didId,
 					feePayer: tx.feePayer,
 					amount: BigInt(tx.amount),
-					denom: denomRecord[0].id,
+					denom: BigInt(denomRecord[0].id),
 					blockHeight: BigInt(tx.blockHeight),
 					transactionHash: tx.transactionHash,
 					createdAt: new Date(tx.timestamp),

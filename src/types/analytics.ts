@@ -25,16 +25,32 @@ export interface BaseAnalyticsItem {
 }
 
 // DID-specific analytics item
-export interface DidAnalyticsItem extends BaseAnalyticsItem {
+export interface DidAnalyticsItem {
 	didId: string;
+	operationType: string | null;
+	feePayer: string;
+	amount: unknown;
+	denom: string | null;
+	blockHeight: bigint;
+	transactionHash: string;
+	createdAt: Date;
+	success: boolean;
 }
 
 // Resource-specific analytics item
-export interface ResourceAnalyticsItem extends BaseAnalyticsItem {
-	didId?: string;
+export interface ResourceAnalyticsItem {
 	resourceId: string;
 	resourceType: string;
 	resourceName: string;
+	operationType: string | null;
+	didId: string | null;
+	feePayer: string;
+	amount: unknown;
+	denom: string | null;
+	blockHeight: bigint;
+	transactionHash: string;
+	createdAt: Date;
+	success: boolean;
 }
 
 // Combined type for analytics items
