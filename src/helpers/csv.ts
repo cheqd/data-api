@@ -233,9 +233,11 @@ export async function exportAllAnalytics(
 		.where(and(...resourceConditions))
 		.orderBy(desc(tables.resource.createdAt));
 
-	// Always include both DIDs and resources
+	// Combine and sort all items
 	const allItems = [...didItems, ...resourceItems].sort(
 		(a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
 	);
+
+	// Convert to CSV
 	return convertToCSV(serializeBigInt(allItems));
 }
