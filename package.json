@@ -37,7 +37,7 @@
 		"pg": "^8.14.0"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20250311.0",
+		"@cloudflare/workers-types": "^4.20250421.0",
 		"@eslint/eslintrc": "^3.3.0",
 		"@eslint/js": "^9.12.0",
 		"@semantic-release/changelog": "^6.0.3",
