@@ -32,7 +32,7 @@
 		"README.md"
 	],
 	"dependencies": {
-		"drizzle-orm": "^0.40.0",
+		"drizzle-orm": "^0.42.0",
 		"itty-router": "^3.0.12",
 		"pg": "^8.14.0"
 	},
