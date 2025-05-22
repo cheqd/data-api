@@ -65,7 +65,7 @@ jobs:
         with:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          wranglerVersion: '3.112.0'
+          wranglerVersion: '4.16.1'
           preCommands: npm ci
           command: publish
           secrets: |
