@@ -50,7 +50,7 @@
 		"@types/pg": "^8.15.2",
 		"@typescript-eslint/eslint-plugin": "^8.32.1",
 		"@typescript-eslint/parser": "^8.32.1",
-		"conventional-changelog-conventionalcommits": "^8.0.0",
+		"conventional-changelog-conventionalcommits": "^9.0.0",
 		"drizzle-kit": "^0.30.6",
 		"eslint": "^9.27.0",
 		"eslint-config-prettier": "^10.1.5",
