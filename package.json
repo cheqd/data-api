@@ -32,35 +32,35 @@
 		"README.md"
 	],
 	"dependencies": {
-		"drizzle-orm": "^0.40.0",
+		"drizzle-orm": "^0.43.1",
 		"itty-router": "^3.0.12",
-		"pg": "^8.14.0"
+		"pg": "^8.16.0"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20250311.0",
-		"@eslint/eslintrc": "^3.3.0",
+		"@cloudflare/workers-types": "^4.20250522.0",
+		"@eslint/eslintrc": "^3.3.1",
 		"@eslint/js": "^9.12.0",
 		"@semantic-release/changelog": "^6.0.3",
 		"@semantic-release/commit-analyzer": "^13.0.1",
 		"@semantic-release/git": "^10.0.1",
-		"@semantic-release/github": "^11.0.1",
+		"@semantic-release/github": "^11.0.2",
 		"@semantic-release/npm": "^12.0.1",
 		"@semantic-release/release-notes-generator": "^14.0.3",
-		"@types/node": "^20.17.24",
-		"@types/pg": "^8.11.11",
-		"@typescript-eslint/eslint-plugin": "^8.26.1",
-		"@typescript-eslint/parser": "^8.26.1",
+		"@types/node": "^20.17.50",
+		"@types/pg": "^8.15.2",
+		"@typescript-eslint/eslint-plugin": "^8.32.1",
+		"@typescript-eslint/parser": "^8.32.1",
 		"conventional-changelog-conventionalcommits": "^8.0.0",
-		"drizzle-kit": "^0.30.5",
-		"eslint": "^9.22.0",
-		"eslint-config-prettier": "^10.1.1",
+		"drizzle-kit": "^0.30.6",
+		"eslint": "^9.27.0",
+		"eslint-config-prettier": "^10.1.5",
 		"eslint-config-typescript": "^3.0.0",
 		"eslint-plugin-drizzle": "^0.2.3",
-		"eslint-plugin-prettier": "^5.2.3",
+		"eslint-plugin-prettier": "^5.4.0",
 		"prettier": "^3.5.3",
-		"semantic-release": "^24.2.3",
-		"typescript": "^5.8.2",
-		"wrangler": "^3.114.1"
+		"semantic-release": "^24.2.4",
+		"typescript": "^5.8.3",
+		"wrangler": "^3.114.9"
 	},
 	"engines": {
 		"node": ">=20.0.0"
