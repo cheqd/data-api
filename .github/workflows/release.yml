@@ -24,7 +24,7 @@ jobs:
 
       - name: "Obtain Github App token"
         id: app-token
-        uses: getsentry/action-github-app-token@v3.0.0
+        uses: getsentry/action-github-app-token@v3
         with:
           app_id: ${{ secrets.BOT_APP_ID }}
           private_key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
@@ -58,7 +58,6 @@ jobs:
         with:
           node-version: 22
           cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
 
       - name: Publish to Cloudflare
         uses: cloudflare/wrangler-action@v3
