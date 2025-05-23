@@ -46,7 +46,7 @@
 		"@semantic-release/github": "^11.0.2",
 		"@semantic-release/npm": "^12.0.1",
 		"@semantic-release/release-notes-generator": "^14.0.3",
-		"@types/node": "^20.17.50",
+		"@types/node": "^22.15.21",
 		"@types/pg": "^8.15.2",
 		"@typescript-eslint/eslint-plugin": "^8.32.1",
 		"@typescript-eslint/parser": "^8.32.1",
@@ -60,9 +60,9 @@
 		"prettier": "^3.5.3",
 		"semantic-release": "^24.2.4",
 		"typescript": "^5.8.3",
-		"wrangler": "^3.114.9"
+		"wrangler": "^4.16.1"
 	},
 	"engines": {
-		"node": ">=20.0.0"
+		"node": ">=22.0.0"
 	}
 }
