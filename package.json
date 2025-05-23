@@ -21,7 +21,7 @@
 		"format": "prettier --write '**/*.{js,ts,cjs,mjs,json}'",
 		"lint": "eslint . --config .github/linters/eslint.config.mjs",
 		"lint:fix": "eslint . --fix --config .github/linters/eslint.config.mjs",
-		"publish": "npx wrangler publish",
+		"publish": "npx wrangler deploy",
 		"start": "npx wrangler dev",
 		"up": "npx drizzle-kit up"
 	},
