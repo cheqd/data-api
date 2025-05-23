@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.1.0-develop.1](https://github.com/cheqd/data-api/compare/2.0.1...2.1.0-develop.1) (2025-05-23)
+
+### Features
+
+* Upgrade project to Node.js v22 ([#318](https://github.com/cheqd/data-api/issues/318)) ([a911773](https://github.com/cheqd/data-api/commit/a911773d24d0a5eda597907080d42d66af63c33c))
+
 ## [2.0.1](https://github.com/cheqd/data-api/compare/2.0.0...2.0.1) (2025-03-14)
 
 ### Bug Fixes
