@@ -29,9 +29,8 @@ jobs:
         with:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          wranglerVersion: '4.16.1'
           preCommands: npm ci
-          command: publish --env staging
+          command: deploy --env staging
           secrets: |
             WEBHOOK_URL
         env:
