@@ -454,3 +454,7 @@ export async function syncNetworkData(network: Network, env: Env) {
 		await dbClose(dbInstance);
 	}
 }
+
+export function normalizeOperationType(type: string): string {
+	return type.startsWith('/') ? type.slice(1) : type;
+}
