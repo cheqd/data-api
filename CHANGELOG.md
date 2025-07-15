@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.1.1-develop.1](https://github.com/cheqd/data-api/compare/2.1.0...2.1.1-develop.1) (2025-07-15)
+
+### Bug Fixes
+
+* Fetch tx types from Big Dipper properly [DEV-5137] ([#346](https://github.com/cheqd/data-api/issues/346)) ([1247c8d](https://github.com/cheqd/data-api/commit/1247c8daabfd4d78c1481d58d9b5d081d37d4beb))
+
 ## [2.1.0](https://github.com/cheqd/data-api/compare/2.0.1...2.1.0) (2025-05-23)
 
 ### Features
