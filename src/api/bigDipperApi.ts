@@ -4,13 +4,14 @@ import {
 	TotalStakedCoinsResponse,
 	DidsResponse,
 	ResourcesResponse,
-	TransactionDetails,
+	DidTransactionDetails,
+	ResourceTransactionDetails,
 	OperationType,
-	OperationTypes,
 	DidDocPayload,
 	ResourcePayload,
 	Fee,
 } from '../types/bigDipper';
+import { normalizeOperationType } from '../helpers/identity';
 
 export class BigDipperApi {
 	constructor(public readonly graphql_client: GraphQLClient) {}
@@ -42,16 +43,12 @@ export class BigDipperApi {
 		return resp.data.staking_pool[0].bonded_tokens;
 	};
 
-	async getDids(limit = 100, offset = 0, minHeight = 0): Promise<TransactionDetails[]> {
+	async getDids(limit = 100, offset = 0, minHeight = 0): Promise<DidTransactionDetails[]> {
 		const query = `
       query GetDids($limit: Int!, $offset: Int!, $minHeight: bigint!) {
         message(
           where: {
-            type: {_in: [
-              "${OperationTypes.CREATE_DID}",
-              "${OperationTypes.UPDATE_DID}",
-              "${OperationTypes.DEACTIVATE_DID}"
-            ]},
+            type: {_iregex: "^/?cheqd.did.v2"},
             height: {_gt: $minHeight}
           }
           limit: $limit
@@ -89,7 +86,7 @@ export class BigDipperApi {
 			return {
 				transactionHash: msg.transaction_hash,
 				blockHeight: msg.height,
-				operationType: msg.type as OperationType,
+				operationType: normalizeOperationType(msg.type) as OperationType,
 				timestamp: msg.transaction.block.timestamp,
 				didId: payload.id,
 				feePayer: fee.payer,
@@ -100,14 +97,12 @@ export class BigDipperApi {
 		});
 	}
 
-	async getResources(limit = 100, offset = 0, minHeight = 0): Promise<TransactionDetails[]> {
+	async getResources(limit = 100, offset = 0, minHeight = 0): Promise<ResourceTransactionDetails[]> {
 		const query = `
       query GetResources($limit: Int!, $offset: Int!, $minHeight: bigint!) {
         message(
           where: {
-            type: {_in: [
-              "${OperationTypes.CREATE_RESOURCE}",
-            ]},
+            type: {_iregex: "^/?cheqd.resource.v2"},
             height: {_gt: $minHeight}
           }
           limit: $limit
@@ -145,7 +140,7 @@ export class BigDipperApi {
 			return {
 				transactionHash: msg.transaction_hash,
 				blockHeight: msg.height,
-				operationType: msg.type as OperationType,
+				operationType: normalizeOperationType(msg.type) as OperationType,
 				timestamp: msg.transaction.block.timestamp,
 				didId: payload.collection_id,
 				resourceId: payload.id,
