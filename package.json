@@ -48,7 +48,7 @@
 		"@semantic-release/release-notes-generator": "^14.0.3",
 		"@types/node": "^22.15.21",
 		"@types/pg": "^8.15.2",
-		"@typescript-eslint/eslint-plugin": "^8.32.1",
+		"@typescript-eslint/eslint-plugin": "^8.43.0",
 		"@typescript-eslint/parser": "^8.32.1",
 		"conventional-changelog-conventionalcommits": "^9.0.0",
 		"drizzle-kit": "^0.31.1",
