@@ -135,8 +135,8 @@ The standard Cosmos SDK REST API for account balances returns JSON with the acco
 ##### Testnet
 
 * **DID Documents**: [`data-api.cheqd.io/analytics/testnet/did`](https://data-api.cheqd.io/analytics/testnet/did)
-* **DID-Linked Resources (DLRs)**: [`data-api.cheqd.io/analytics/testnet/resource`](https://data-api.cheqd.io/analytics/mainnet/resource)
-* **DIDs and DLRs combined** (harder to paginate): [`data-api.cheqd.io/analytics/testnet`](https://data-api.cheqd.io/analytics/mainnet)
+* **DID-Linked Resources (DLRs)**: [`data-api.cheqd.io/analytics/testnet/resource`](https://data-api.cheqd.io/analytics/testnet/resource)
+* **DIDs and DLRs combined** (harder to paginate): [`data-api.cheqd.io/analytics/testnet`](https://data-api.cheqd.io/analytics/testnet)
 
 #### Response
 
@@ -150,8 +150,8 @@ By default, the response is paginated with a limit of **100 results per page**. 
 
 These optional query paramaters can be used to filter the results that are returned from the API.
 
-* `startDate`: Start date for the analytics data. If you provide *just* this parameter, the *current* date will be considered the end date.
-* `endDate`: End date for the analytics data. If you provide *just* this parameter, the start date will be considered as 30 days prior to this date.
+* `startDate`: Start date for the analytics data. If you provide **just** this parameter, the **current** date will be considered the end date.
+* `endDate`: End date for the analytics data. If you provide **just** this parameter, the start date will be considered as 30 days prior to this date.
 * `operationType`: Operation type for the analytics data. It accepts the following values:
   * `createDid`
   * `updateDid`
@@ -162,6 +162,7 @@ These optional query paramaters can be used to filter the results that are retur
   * `cheqd.did.v2.MsgUpdateDid`
   * `cheqd.did.v2.MsgDeactivateDid`
   * `cheqd.resource.v2.MsgCreateResource`
+* `didId`: Query by DID document ID. You can use this query parameter for both DIDs and DLRs.
 * `denom`: Friendly denomination used for paying fees, e.g. `CHEQ` or `USDC`. Note that by default the results are returned in **main denomination**, i.e., the on-ledger value in `ncheq` is convert to CHEQ.
 * `ledgerDenom`: Ledger denomination used for paying fees, e.g. `ncheq` or `ibc/498A0751C798A0D9A389AA3691123DADA57DAA4FE165D5C75894505B876BA6E4`.
 * `feePayer`: Fee payer address, e.g., `cheqd1...xx`.
