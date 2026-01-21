@@ -16,7 +16,7 @@
 		"dev": "wrangler dev --env staging",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit push",
-		"db:migrate:ci": "drizzle-kit migrate --force",
+		"db:migrate:ci": "drizzle-kit migrate",
 		"db:seed": "tsx src/database/scripts/seed.ts",
 		"format": "prettier --write '**/*.{js,ts,cjs,mjs,json}'",
 		"lint": "eslint . --config .github/linters/eslint.config.mjs",

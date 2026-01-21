@@ -37,7 +37,7 @@ jobs:
       - name: "Execute migrations and seed the static data"
         run: |
           npm ci
-          npm run db:migrate:ci
+          npm run db:migrate
           npm run db:seed
         env:
           DB_URL: ${{ secrets.DB_URL }}
