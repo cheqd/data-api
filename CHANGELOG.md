@@ -6,6 +6,12 @@
 
 * Fetch tx types from Big Dipper properly [DEV-5137] ([#346](https://github.com/cheqd/data-api/issues/346)) ([1247c8d](https://github.com/cheqd/data-api/commit/1247c8daabfd4d78c1481d58d9b5d081d37d4beb))
 
+## [2.1.1-develop.2](https://github.com/cheqd/data-api/compare/2.1.1-develop.1...2.1.1-develop.2) (2026-01-21)
+
+### Bug Fixes
+
+* Change fee amount column type to numeric [DEV-5668] ([#399](https://github.com/cheqd/data-api/issues/399)) ([5297b5e](https://github.com/cheqd/data-api/commit/5297b5e542ce85c66c22a8b4561e07f9b116b532))
+
 ## [2.1.1-develop.1](https://github.com/cheqd/data-api/compare/2.1.0...2.1.1-develop.1) (2025-07-15)
 
 ### Bug Fixes

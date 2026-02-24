@@ -2,6 +2,7 @@ import {
 	pgTable,
 	timestamp,
 	bigint,
+	numeric,
 	varchar,
 	serial,
 	boolean,
@@ -42,7 +43,7 @@ export const didMainnet = pgTable(
 			.notNull()
 			.references(() => operationTypesMainnet.id, { onDelete: 'no action', onUpdate: 'no action' }),
 		feePayer: varchar('fee_payer', { length: 44 }).notNull(),
-		amount: bigint('amount', { mode: 'bigint' }).notNull(),
+		amount: numeric('amount', { mode: 'number' }).notNull(),
 		denom: bigint('denom', { mode: 'bigint' })
 			.notNull()
 			.references(() => denomMainnet.id, { onDelete: 'no action', onUpdate: 'no action' }),
@@ -66,7 +67,7 @@ export const resourceMainnet = pgTable(
 			.references(() => operationTypesMainnet.id, { onDelete: 'no action', onUpdate: 'no action' }),
 		didId: varchar('did_id', { length: 54 }),
 		feePayer: varchar('fee_payer', { length: 44 }).notNull(),
-		amount: bigint('amount', { mode: 'bigint' }).notNull(),
+		amount: numeric('amount', { mode: 'number' }).notNull(),
 		denom: bigint('denom', { mode: 'bigint' })
 			.notNull()
 			.references(() => denomMainnet.id, { onDelete: 'no action', onUpdate: 'no action' }),
@@ -110,7 +111,7 @@ export const didTestnet = pgTable(
 			.notNull()
 			.references(() => operationTypesTestnet.id, { onDelete: 'no action', onUpdate: 'no action' }),
 		feePayer: varchar('fee_payer', { length: 44 }).notNull(),
-		amount: bigint('amount', { mode: 'bigint' }).notNull(),
+		amount: numeric('amount', { mode: 'number' }).notNull(),
 		denom: bigint('denom', { mode: 'bigint' })
 			.notNull()
 			.references(() => denomTestnet.id, { onDelete: 'no action', onUpdate: 'no action' }),
@@ -134,7 +135,7 @@ export const resourceTestnet = pgTable(
 			.references(() => operationTypesTestnet.id, { onDelete: 'no action', onUpdate: 'no action' }),
 		didId: varchar('did_id', { length: 54 }),
 		feePayer: varchar('fee_payer', { length: 44 }).notNull(),
-		amount: bigint('amount', { mode: 'bigint' }).notNull(),
+		amount: numeric('amount', { mode: 'number' }).notNull(),
 		denom: bigint('denom', { mode: 'bigint' })
 			.notNull()
 			.references(() => denomTestnet.id, { onDelete: 'no action', onUpdate: 'no action' }),
