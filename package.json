@@ -34,7 +34,7 @@
 	"dependencies": {
 		"drizzle-orm": "^0.45.1",
 		"itty-router": "^3.0.12",
-		"pg": "^8.16.0"
+		"pg": "^8.19.0"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20260210.0",
@@ -47,7 +47,7 @@
 		"@semantic-release/npm": "^12.0.1",
 		"@semantic-release/release-notes-generator": "^14.0.3",
 		"@types/node": "^22.15.21",
-		"@types/pg": "^8.15.2",
+		"@types/pg": "^8.18.0",
 		"@typescript-eslint/eslint-plugin": "^8.55.0",
 		"@typescript-eslint/parser": "^8.32.1",
 		"conventional-changelog-conventionalcommits": "^9.0.0",
