@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "command": "echo \"$CLAUDE_FILE_PATH\" | grep -qE '(package-lock\\.json|src/database/migrations/)' && echo 'BLOCK: Do not edit generated files (lock files, migrations)' && exit 1 || exit 0"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "command": "npx prettier --write \"$CLAUDE_FILE_PATH\" 2>/dev/null || true"
+      }
+    ]
+  }
+}
