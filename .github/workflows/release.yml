@@ -60,7 +60,7 @@ jobs:
           cache: 'npm'
 
       - name: Publish to Cloudflare
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@v4
         with:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
